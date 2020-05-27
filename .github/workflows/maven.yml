@@ -25,5 +25,3 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: /home/runner/work/cerberus/cerberus/target/cerberus-executable.jar
         asset_name: Cerberus-Executable
-        tag: ${{ github.ref }}
-        overwrite: true
