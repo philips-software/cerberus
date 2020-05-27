@@ -1,4 +1,5 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](https://opensource.org/licenses/MIT)
+
 # Cerberus
 
 Cerberus is a tool to measure code quality parameters, which can be used as a watch dog to observe code quality parameters like copy paste errors, suppressed warnings etc., and also to gate builds when the allowed thresholds for the parameters being observed is breached.

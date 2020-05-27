@@ -1,7 +1,6 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# This workflow will build Cerberus Executable and Uploads the generated binary to release
 
-name: Cerberus Quality Checks
+name: Compile And Assemble
 
 on:
   push:
@@ -11,20 +10,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Run all Quality Checks 
-      run: mvn clean package pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report
     - name: Build Binary Executable
-      run: mvn compile assembly:single
-    - name: Upload Binary Executable to Release 
+      run: mvn clean package site surefire-report:report compile assembly:single
+    - name: Upload Binary Executable to Release
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
