@@ -1,5 +1,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](https://opensource.org/licenses/MIT)
-
+![PMD Best Practices](https://github.com/philips-software/cerberus/workflows/PMD%20Best%20Practices/badge.svg)
+![Mutation Analysis 96%](https://github.com/philips-software/cerberus/workflows/Mutation%20Analysis%2096%25/badge.svg)
+![Duplicate Blocks 37 Tokens](https://github.com/philips-software/cerberus/workflows/Duplicate%20Blocks%2037%20Tokens/badge.svg)
+![Compile And Assemble](https://github.com/philips-software/cerberus/workflows/Compile%20And%20Assemble/badge.svg)
 # Cerberus
 
 Cerberus is a tool to measure code quality parameters, which can be used as a watch dog to observe code quality parameters like copy paste errors, suppressed warnings etc., and also to gate builds when the allowed thresholds for the parameters being observed is breached.
