@@ -19,11 +19,3 @@ jobs:
         java-version: 1.8
     - name: Build Binary Executable
       run: mvn clean package site surefire-report:report compile assembly:single
-    - name: Upload Binary Executable to Release
-      uses: svenstaro/upload-release-action@v1-release
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: /home/runner/work/cerberus/cerberus/target/cerberus-executable.jar
-        asset_name: 'Cerberus-Executable-${{ steps.current-time.outputs.time }}.jar'
-        tag: ${{ steps.current-time.outputs.time }}
-        overwrite: true
