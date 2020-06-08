@@ -26,7 +26,7 @@ To build Cerberus, you will need a JDK 8 and apache maven installed in your syst
 The final output of build is an executable JAR. We have created maven goals to achieve the same, review our POM file for more details.  
 
 1. Clone the repository
-`git clone https://gitlab.ta.philips.com/swcoe/cerberus.git`
+`git clone https://github.com/philips-software/cerberus.git`
 2. Build it using the following command
 `mvn clean package assembly:single`
 The executable jar will be generated in the target folder. 
