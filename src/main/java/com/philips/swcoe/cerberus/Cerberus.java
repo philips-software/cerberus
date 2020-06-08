@@ -14,7 +14,13 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.CERBERUS;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.VERSION;
 import static picocli.CommandLine.Model.UsageMessageSpec.SECTION_KEY_COMMAND_LIST;
 
-@Command(description = CERBERUS_DESCRIPTION, name = CERBERUS, version = VERSION, subcommands = { Duplicates.class, SuppressedWarnings.class, JavaCodeMetrics.class, JavaCodeMetricsWithDiff.class})
+@Command(description = CERBERUS_DESCRIPTION, name = CERBERUS, version = VERSION, subcommands = {
+        Duplicates.class,
+        SuppressedWarnings.class,
+        JavaCodeMetrics.class,
+        JavaCodeMetricsWithDiff.class,
+        FindProgrammingMistakes.class
+})
 public class Cerberus implements Callable<Integer> {
 
     public static void main(String[] args) {

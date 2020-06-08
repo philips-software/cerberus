@@ -57,6 +57,8 @@ public class CerberusTest extends CerberusBaseTest {
                         .append(NEW_LINE).append("  CPD            Detect duplicated blocks of code in your source code").append(NEW_LINE)
                         .append("  SWD            Detect all the warnings which are suppressed in your code")
                         .append(NEW_LINE).append("  JCMD           Java Code Metrics Detector")
-                        .append(NEW_LINE).append("  JCMD-DIFF      Java Code Metrics Detector with Diff").append(NEW_LINE).toString();
+                        .append(NEW_LINE).append("  JCMD-DIFF      Java Code Metrics Detector with Diff")
+                        .append(NEW_LINE).append("  FPM            Find Programming mistakes in code").append(NEW_LINE)
+                        .toString();
     }
 }

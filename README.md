@@ -43,7 +43,13 @@ Commands:
   SWD            Detect all the warnings which are suppressed in your code
   JCMD           Java Code Metrics Detector
   JCMD-DIFF      Java Code Metrics Detector with Diff
+  FPM            Find Programming mistakes in code
 ```
+
+### Usage of FPM 
+
+You can find detailed instructions on FPM ( Find Programming mistakes ) in your code 
+[here](docs/FPM.md)
 
 ### Dogfooding 
 To evaluate and confirm the quality of code changes made to Cerberus, you should run through all the gates and review the generated reports with:
@@ -101,3 +107,8 @@ mvn clean package pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report 
 
 1. [PMD]( https://pmd.github.io/ )
 2. [CPD](https://pmd.github.io/latest/pmd_userdocs_cpd.html#overview )
+
+## Inspiration 
+
+1. [Facebook Infer ](https://fbinfer.com/)
+2. [Bazel Build ](https://bazel.build/)

@@ -16,6 +16,8 @@ public final class DescriptionConstants {
     public static final String COULDNT_FIND_DIRECTORY = "Couldn't find directory";
     public static final String JAVA_CODE_METRICS_DETECTOR_DESCRIPTION = "Java Code Metrics Detector";
     public static final String JAVA_CODE_METRICS_DETECTOR_DESCRIPTION_WITH_DIFF = "Java Code Metrics Detector with Diff";
+    public static final String FIND_PROGRAMMING_MISTAKES_DESCRIPTION = "Find Programming mistakes in code";
+
     public static final String JAVA_PROGRAMMING_MISTAKES_DETECTOR_DESCRIPTION = "Java Programming Mistakes Detector";
     public static final String SUPPRESSED_WARNINGS_DETECTOR_DESCRIPTION = "Detect all the warnings which are suppressed in your code";
 
@@ -30,6 +32,8 @@ public final class DescriptionConstants {
     public static final String MINIMUM_TOKEN_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify minimum token length";
     public static final String LANGUAGE_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify language of the source code";
     public static final String REPORT_STRUCTURE_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify report structure vertical or horizontal";
+    public static final String LANGUAGE_VERSION_OPTION = "Specify Java language version";
+    public static final String RULESET_OPTION = "Specify absolute path to your ruleset";
 
     // Command line option description
     public static final String FILES_CMD_LINE_OPTION_DESCRIPTION = "Absolute Path to your source code.";
@@ -39,9 +43,10 @@ public final class DescriptionConstants {
     public static final String REPORT_FORMAT_CMD_LINE_OPTION_DESCRIPTION = "Report format.";
     public static final String REPORT_DELIMITER_CMD_LINE_OPTION_DESCRIPTION_CSV_PSV = "Report delimiter CSV for comma separated or PSV for pipe separated.";
     public static final String REPORT_STRUCTURE_CMD_LINE_OPTION_DESCRIPTION_VERTICAL_HORIZONTAL = "Report structure vertical or horizontal";
-
+    public static final String PROGRAMMING_LANGUAGE_USED_OPTION = "Language Of Source Code";
 
     public static final String MINIMUM_TOKEN_CMD_LINE_OPTION_DESCRIPTION = "The minimum token length which should be reported as a duplicate.";
     public static final String LANGUAGE_CMD_LINE_OPTION_DESCRIPTION = "Sources code language. ";
+
 
 }

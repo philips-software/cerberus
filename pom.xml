@@ -9,14 +9,13 @@
 	<packaging>jar</packaging>
 
 	<name>Cerberus</name>
-	<url>http://cerberus.swcoe.philips.com</url>
 	<description>
 		Cerberus is a tool to measure Code quality, built on java which enables developers to write maintainable, testable and scalable code.
 		Cerberus can be used as a watch dog to break the builds by utilizing multiple hounds to watch for copy paste, suppress warnings etc ....
 	</description>
 	<organization>
 		<name>Philips Software Centre Of Excellence</name>
-		<url>http://swcoe.philips.com</url>
+		<url>https://philips.com</url>
 	</organization>
 	<developers>
 		<developer>
@@ -94,14 +93,14 @@
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.pmd</groupId>
-			<artifactId>pmd-core</artifactId>
-			<version>${pmd.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.pmd</groupId>
 			<artifactId>pmd-java</artifactId>
 			<version>${pmd.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>net.sourceforge.pmd</groupId>
+            <artifactId>pmd-cpp</artifactId>
+            <version>${pmd.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>net.sourceforge.pmd</groupId>
 			<artifactId>pmd-jsp</artifactId>

@@ -50,6 +50,7 @@ public class AbstractCodeMetricsWriterService  {
         CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(
                 "FILE", "CLASS", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE"
         ).withDelimiter(delimiter);
+
         return new CSVPrinter(sw, csvFormat);
     }
 

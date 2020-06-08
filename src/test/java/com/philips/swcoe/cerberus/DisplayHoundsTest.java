@@ -24,7 +24,7 @@ class DisplayHoundsTest extends CerberusBaseTest {
     public void testRenderingHoundsOfCerberus() {
         String textTableString = getHelpStringToTest();
         String[] arrayOfTables = textTableString.split("\n");
-        assertTrue(arrayOfTables.length == 4);
+        assertTrue(arrayOfTables.length == 5);
     }
 
     @Test

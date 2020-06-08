@@ -57,6 +57,7 @@ public final class ProgramConstants {
     public static final String COPY_PASTE_DETECTOR = "CPD";
     public static final String JAVA_CODE_METRICS_DETECTOR = "JCMD";
     public static final String JAVA_CODE_METRICS_DETECTOR_WITH_DIFF = "JCMD-DIFF";
+    public static final String FIND_PROGRAMMING_MISTAKES = "FPM";
     public static final String JAVA_PROGRAMMING_MISTAKES_DETECTOR = "JPMD";
     public static final String SUPPRESSED_WARNINGS_DETECTOR = "SWD";
 
