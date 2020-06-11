@@ -32,15 +32,15 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
     @CommandLine.Option(names = PREVIOUS_FILES_OPTION, description = PREVIOUS_FILES_CMD_LINE_OPTION_DESCRIPTION)
     private String pathToPrevious;
 
-    @NotNull(message = REPORT_DELIMITER_OPTION_NOT_NULL_ARGUMENT_MESSAGE)
-    @Pattern(regexp = "csv|psv", flags = Pattern.Flag.CASE_INSENSITIVE)
-    @CommandLine.Option(names = DELIMITER_OPTION, description = REPORT_DELIMITER_CMD_LINE_OPTION_DESCRIPTION_CSV_PSV)
-    private String reportDelimiter;
+    @NotNull(message = REPORT_FORMAT_OPTION_NOT_NULL_ARGUMENT_MESSAGE)
+    @Pattern(regexp = "csv|psv|md|html", flags = Pattern.Flag.CASE_INSENSITIVE )
+    @CommandLine.Option(names = FORMAT_OPTION, description = REPORT_FORMAT_CMD_LINE_OPTION_DESCRIPTION_WITH_DETAILS)
+    private String reportFormat;
 
     @NotNull(message = REPORT_STRUCTURE_OPTION_NOT_NULL_ARGUMENT_MESSAGE)
     @Pattern(regexp = "vertical|horizontal", flags = Pattern.Flag.CASE_INSENSITIVE)
-    @CommandLine.Option(names = FORMAT_OPTION, description = REPORT_STRUCTURE_CMD_LINE_OPTION_DESCRIPTION_VERTICAL_HORIZONTAL)
-    private String reportFormat;
+    @CommandLine.Option(names = STRUCTURE_OPTION, description = REPORT_STRUCTURE_CMD_LINE_OPTION_DESCRIPTION_VERTICAL_HORIZONTAL)
+    private String metricFormat;
 
     @CommandLine.Option(names = CLASS_CONFIG, description = CONFIG_CMD_LINE_OPTION_DESCRIPTION)
     private String classConfigFile;
@@ -63,8 +63,8 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
         }
         CodeMetricsDiffService codeMetricsDiffService = new CodeMetricsDiffService(pathToPrevious, pathToCurrent);
         List<CodeMetricsClassResult> metricsResult = codeMetricsDiffService.getMetricsFromSourceCode();
-        char delimiter =  DelimeterForReport.valueOf(reportDelimiter.toUpperCase()).getDelimeter();
-        if("vertical".equalsIgnoreCase(reportFormat)) {
+        char delimiter =  DelimeterForReport.valueOf(reportFormat.toUpperCase()).getDelimeter();
+        if("vertical".equalsIgnoreCase(metricFormat)) {
             this.writeToUI(new CodeMetricsVerticalWriterService(classConfig, methodConfig, delimiter).generateMetricsReport(metricsResult));
         } else {
             this.writeToUI(new CodeMetricsHorizontalWriterService(classConfig, methodConfig, delimiter).generateMetricsReport(metricsResult));

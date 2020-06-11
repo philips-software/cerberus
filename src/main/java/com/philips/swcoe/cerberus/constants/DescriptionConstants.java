@@ -41,7 +41,7 @@ public final class DescriptionConstants {
     public static final String PREVIOUS_FILES_CMD_LINE_OPTION_DESCRIPTION = "Absolute Path to your source code which has previous version.";
     public static final String CONFIG_CMD_LINE_OPTION_DESCRIPTION = "Absolute Path to your config file which has all required configuration.";
     public static final String REPORT_FORMAT_CMD_LINE_OPTION_DESCRIPTION = "Report format.";
-    public static final String REPORT_DELIMITER_CMD_LINE_OPTION_DESCRIPTION_CSV_PSV = "Report delimiter CSV for comma separated or PSV for pipe separated.";
+    public static final String REPORT_FORMAT_CMD_LINE_OPTION_DESCRIPTION_WITH_DETAILS = "Report format CSV for comma separated format or PSV for pipe separated format or MD for markdown or HTML for html format.";
     public static final String REPORT_STRUCTURE_CMD_LINE_OPTION_DESCRIPTION_VERTICAL_HORIZONTAL = "Report structure vertical or horizontal";
     public static final String PROGRAMMING_LANGUAGE_USED_OPTION = "Language Of Source Code";
 

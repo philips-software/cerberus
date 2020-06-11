@@ -36,7 +36,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{});
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify Absolute Path to your source code which has previous version"));
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the delimiter of the report"));
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the format of the report"));
         assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the absolute path to your source code which has current version"));
         assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify report structure vertical or horizontal"));
     }
@@ -50,22 +50,22 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithMissedOutTwoParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", previousPath, "--delimiter", "abc"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", previousPath, "--format", "abc"});
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("Specify Absolute Path to your source code which has previous version"));
     }
 
     @Test
     public void testJSCMDWithInvalidReportDelimiter() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "abc"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "abc"});
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: must match \"csv|psv\""));
-        assertTrue(getModifiedErrorStream().toString().contains("Report delimiter CSV for comma separated or PSV for pipe separated"));
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: must match \"csv|psv|md|html\""));
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify report structure vertical or horizontal"));
     }
 
     @Test
     public void shouldPrintCSVReportInVerticalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "csv", "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--structure", "vertical"});
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString().contains("FILE,CLASS,TYPE,METRIC,NEW_VALUE,OLD_VALUE"));
         assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle,CLASS,LINES_OF_CODE,17,0"));
@@ -75,7 +75,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void shouldPrintPSVReportInVerticalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "psv", "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--structure", "vertical"});
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString().contains("FILE|CLASS|TYPE|METRIC|NEW_VALUE|OLD_VALUE"));
         assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle|CLASS|LINES_OF_CODE|17|0"));
@@ -83,9 +83,10 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus|CLASS|LINES_OF_CODE|0|27"));
     }
 
+
     @Test
     public void shouldPrintCSVReportInHorizontalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "csv", "--format", "horizontal"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--structure", "horizontal"});
         assertEquals(0, exitCode);
         List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(getModifiedOutputStream().toString());
         assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("NO_OF_MODIFIERS,1,0"));
@@ -107,7 +108,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void shouldPrintPSVReportInHorizontalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "psv", "--format", "horizontal"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--structure", "horizontal"});
         assertEquals(0, exitCode);
         List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(getModifiedOutputStream().toString());
         assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("NO_OF_MODIFIERS|1|0"));
@@ -129,7 +130,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithValidParameterForPSVReportWithConfig() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "psv", "--class-config", configPath, "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--class-config", configPath, "--structure", "vertical"});
         assertEquals(0, exitCode);
 
         List<String> expectedMetricsToDisplay = Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
@@ -145,7 +146,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithValidParameterForCSVReportWithConfig() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "csv", "--class-config", configPath, "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--class-config", configPath, "--structure", "vertical"});
         assertEquals(0, exitCode);
         List<String> expectedMetricsToDisplay = Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
         expectedMetricsToDisplay.stream().forEach(metric -> {
@@ -162,10 +163,10 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
                 "--current", currentPath,
                 "--previous", previousPath,
-                "--delimiter", "csv",
+                "--format", "csv",
                 "--class-config", "blahblah",
                 "--method-config", configPath,
-                "--format", "vertical"
+                "--structure", "vertical"
         });
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("Specify a valid absolute path"));
@@ -176,10 +177,10 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
                 "--current", currentPath,
                 "--previous", previousPath,
-                "--delimiter", "csv",
+                "--format", "csv",
                 "--class-config", configPath,
                 "--method-config", "blahblah",
-                "--format", "vertical"
+                "--structure", "vertical"
         });
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("Specify a valid absolute path"));
@@ -190,10 +191,10 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
                 "--current", currentPath,
                 "--previous", previousPath,
-                "--delimiter", "csv",
+                "--format", "csv",
                 "--class-config", configPath,
                 "--method-config", "blahblah",
-                "--format", "blahblah"
+                "--structure", "blahblah"
         });
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("must match \"vertical|horizontal\""));
