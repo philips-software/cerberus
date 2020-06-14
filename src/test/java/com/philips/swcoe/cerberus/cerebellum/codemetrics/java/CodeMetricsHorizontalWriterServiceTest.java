@@ -38,19 +38,19 @@ class CodeMetricsHorizontalWriterServiceTest {
 
     @Test
     public void shouldWriteClassMetricsandMethodMetricsInHorizontalFormatInCSV() throws Exception {
-        getCodeClassResult(',');
+        getCodeClassResult("CSV");
         String csvData = codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertEquals(15,  csvData.split(System.getProperty("line.separator")).length);
     }
 
-    private void getCodeClassResult(char c) throws IOException {
-        codeMetricsHorizontalWriterService = new CodeMetricsHorizontalWriterService(classConfig, methodConfig, c);
+    private void getCodeClassResult(String format) throws IOException {
+        codeMetricsHorizontalWriterService = new CodeMetricsHorizontalWriterService(classConfig, methodConfig, format);
         codeMetricsClassResultList = codeMetricsDiffService.getMetricsFromSourceCode();
     }
 
     @Test
     public void shouldRespectClassFilterInCSVReport() throws  Exception {
-        getCodeClassResult(',');
+        getCodeClassResult("CSV");
         String csvData = codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList);
         List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(csvData);
 
@@ -74,13 +74,13 @@ class CodeMetricsHorizontalWriterServiceTest {
 
     @Test
     public void shouldNotThrowAnExceptionWhenAllIsWellWhileWritingCSV() throws  Exception {
-        getCodeClassResult(',');
+        getCodeClassResult("CSV");
         assertDoesNotThrow(() -> codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList));
     }
 
     @Test
     public void shouldNotWriteClassMetricsOfClassesWhichAreNotChangedInCSV() throws  Exception {
-        getCodeClassResult(',');
+        getCodeClassResult("CSV");
         String csvData = codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertFalse(csvData.contains("Circle.java"));
         assertFalse(csvData.contains("Shape.java"));
@@ -89,14 +89,14 @@ class CodeMetricsHorizontalWriterServiceTest {
 
     @Test
     public void shouldWriteClassMetricsandMethodMetricsInHorizontalFormatInPSV() throws Exception {
-        getCodeClassResult('|');
+        getCodeClassResult("PSV");
         String csvData = codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertEquals(15,  csvData.split(System.getProperty("line.separator")).length);
     }
 
     @Test
     public void shouldRespectClassFilterInPSVReport() throws  Exception {
-        getCodeClassResult('|');
+        getCodeClassResult("PSV");
         String psvData = codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList);
 
         List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(psvData);
@@ -116,13 +116,13 @@ class CodeMetricsHorizontalWriterServiceTest {
 
     @Test
     public void shouldNotThrowAnExceptionWhenAllIsWellWhileWritingPSV() throws  Exception {
-        getCodeClassResult('|');
+        getCodeClassResult("PSV");
         assertDoesNotThrow(() -> codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList));
     }
 
     @Test
     public void shouldNotWriteClassMetricsOfClassesWhichAreNotChangedInPSV() throws  Exception {
-        getCodeClassResult('|');
+        getCodeClassResult("PSV");
         String csvData = codeMetricsHorizontalWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertFalse(csvData.contains("Circle.java"));
         assertFalse(csvData.contains("Shape.java"));

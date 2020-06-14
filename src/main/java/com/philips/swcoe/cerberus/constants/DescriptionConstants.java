@@ -27,6 +27,7 @@ public final class DescriptionConstants {
     public static final String PREVIOUS_FILES_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify Absolute Path to your source code which has previous version";
     public static final String INVALID_FILE_PATH = "Specify a valid absolute path";
 
+
     public static final String REPORT_FORMAT_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify the format of the report";
     public static final String REPORT_DELIMITER_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify the delimiter of the report";
     public static final String MINIMUM_TOKEN_OPTION_NOT_NULL_ARGUMENT_MESSAGE = "Specify minimum token length";
@@ -48,5 +49,7 @@ public final class DescriptionConstants {
     public static final String MINIMUM_TOKEN_CMD_LINE_OPTION_DESCRIPTION = "The minimum token length which should be reported as a duplicate.";
     public static final String LANGUAGE_CMD_LINE_OPTION_DESCRIPTION = "Sources code language. ";
 
+    // Other errors
+    public static final String INVALID_REPORT_FORMAT = "Markdown format can be used only with vertical metrics structure";
 
 }

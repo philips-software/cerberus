@@ -2,7 +2,7 @@ package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
-import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsResult;
+import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -224,25 +224,25 @@ public class CodeMetricsDiffServiceTest {
     }
 
     private void assertDoesNotThrowForEachClassMetric(CodeMetricsClassResult result) {
-        Stream<Method> methodStream = Arrays.stream(CodeMetricsClassResult.class.getMethods()).filter(method -> method.getReturnType().equals(CodeMetricsResult.class));
+        Stream<Method> methodStream = Arrays.stream(CodeMetricsClassResult.class.getMethods()).filter(method -> method.getReturnType().equals(CodeMetricsDiffResult.class));
         methodStream.forEach(method -> {
             assertDoesNotThrow(() -> {
-                CodeMetricsResult codeMetricsResult = (CodeMetricsResult) method.invoke(result);
-                assertNotNull(codeMetricsResult.getMetricName(), codeMetricsResult.getMetricName() + "Came out Null instead of value");
-                assertNotNull(codeMetricsResult.getNewValue(), codeMetricsResult.getMetricName() + "Came out Null for New Value ");
-                assertNotNull(codeMetricsResult.getOldValue(), codeMetricsResult.getMetricName() + "Came out Null for Old value ");
+                CodeMetricsDiffResult codeMetricsDiffResult = (CodeMetricsDiffResult) method.invoke(result);
+                assertNotNull(codeMetricsDiffResult.getMetricName(), codeMetricsDiffResult.getMetricName() + "Came out Null instead of value");
+                assertNotNull(codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for New Value ");
+                assertNotNull(codeMetricsDiffResult.getOldValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for Old value ");
             }, method.getName() + "Throwed Exception while invoking");
         });
     }
 
     private void assertDoesNotThrowForEachMethodMetric(CodeMetricsMethodResult result) {
-        Stream<Method> methodStream = Arrays.stream(CodeMetricsMethodResult.class.getMethods()).filter(method -> method.getReturnType().equals(CodeMetricsResult.class));
+        Stream<Method> methodStream = Arrays.stream(CodeMetricsMethodResult.class.getMethods()).filter(method -> method.getReturnType().equals(CodeMetricsDiffResult.class));
         methodStream.forEach(method -> {
             assertDoesNotThrow(() -> {
-                CodeMetricsResult codeMetricsResult = (CodeMetricsResult) method.invoke(result);
-                assertNotNull(codeMetricsResult.getMetricName(), codeMetricsResult.getMetricName() + "Came out Null instead of value");
-                assertNotNull(codeMetricsResult.getNewValue(), codeMetricsResult.getMetricName() + "Came out Null for New Value ");
-                assertNotNull(codeMetricsResult.getOldValue(), codeMetricsResult.getMetricName() + "Came out Null for Old value ");
+                CodeMetricsDiffResult codeMetricsDiffResult = (CodeMetricsDiffResult) method.invoke(result);
+                assertNotNull(codeMetricsDiffResult.getMetricName(), codeMetricsDiffResult.getMetricName() + "Came out Null instead of value");
+                assertNotNull(codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for New Value ");
+                assertNotNull(codeMetricsDiffResult.getOldValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for Old value ");
             }, method.getName() + "Throwed Exception while invoking");
         });
     }

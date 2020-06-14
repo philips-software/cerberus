@@ -7,53 +7,51 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class CodeMetricsClassResult {
+public class CodeMetricsClassResult implements CodeMetricsResult {
 
     private String file;
-
     private String className;
-
     private String type;
 
-    private CodeMetricsResult depthInheritanceTree;
-    private CodeMetricsResult weightMethodClass;
-    private CodeMetricsResult couplingBetweenObjects;
-    private CodeMetricsResult responseForClass;
-    private CodeMetricsResult numberOfStaticInvocations;
-    private CodeMetricsResult linesOfCode;
-    private CodeMetricsResult returnQty;
-    private CodeMetricsResult loopQty;
-    private CodeMetricsResult comparisonsQty;
-    private CodeMetricsResult tryCatchQty;
-    private CodeMetricsResult parenthesizedExpsQty;
-    private CodeMetricsResult stringLiteralsQty;
-    private CodeMetricsResult numbersQty;
-    private CodeMetricsResult assignmentsQty;
-    private CodeMetricsResult mathOperationsQty;
-    private CodeMetricsResult variablesQty;
-    private CodeMetricsResult maxNestedBlocks;
-    private CodeMetricsResult anonymousClassesQty;
-    private CodeMetricsResult subClassesQty;
-    private CodeMetricsResult lambdasQty;
-    private CodeMetricsResult uniqueWordsQty;
-    private CodeMetricsResult numberOfMethods;
-    private CodeMetricsResult numberOfStaticMethods;
-    private CodeMetricsResult numberOfPublicMethods;
-    private CodeMetricsResult numberOfPrivateMethods;
-    private CodeMetricsResult numberOfProtectedMethods;
-    private CodeMetricsResult numberOfDefaultMethods;
-    private CodeMetricsResult numberOfAbstractMethods;
-    private CodeMetricsResult numberOfFinalMethods;
-    private CodeMetricsResult numberOfSynchronizedMethods;
-    private CodeMetricsResult numberOfFields;
-    private CodeMetricsResult numberOfStaticFields;
-    private CodeMetricsResult numberOfPublicFields;
-    private CodeMetricsResult numberOfPrivateFields;
-    private CodeMetricsResult numberOfProtectedFields;
-    private CodeMetricsResult numberOfDefaultFields;
-    private CodeMetricsResult numberOfFinalFields;
-    private CodeMetricsResult numberOfSynchronizedFields;
-    private CodeMetricsResult modifiers;
+    private CodeMetricsDiffResult depthInheritanceTree;
+    private CodeMetricsDiffResult weightMethodClass;
+    private CodeMetricsDiffResult couplingBetweenObjects;
+    private CodeMetricsDiffResult responseForClass;
+    private CodeMetricsDiffResult numberOfStaticInvocations;
+    private CodeMetricsDiffResult linesOfCode;
+    private CodeMetricsDiffResult returnQty;
+    private CodeMetricsDiffResult loopQty;
+    private CodeMetricsDiffResult comparisonsQty;
+    private CodeMetricsDiffResult tryCatchQty;
+    private CodeMetricsDiffResult parenthesizedExpsQty;
+    private CodeMetricsDiffResult stringLiteralsQty;
+    private CodeMetricsDiffResult numbersQty;
+    private CodeMetricsDiffResult assignmentsQty;
+    private CodeMetricsDiffResult mathOperationsQty;
+    private CodeMetricsDiffResult variablesQty;
+    private CodeMetricsDiffResult maxNestedBlocks;
+    private CodeMetricsDiffResult anonymousClassesQty;
+    private CodeMetricsDiffResult subClassesQty;
+    private CodeMetricsDiffResult lambdasQty;
+    private CodeMetricsDiffResult uniqueWordsQty;
+    private CodeMetricsDiffResult numberOfMethods;
+    private CodeMetricsDiffResult numberOfStaticMethods;
+    private CodeMetricsDiffResult numberOfPublicMethods;
+    private CodeMetricsDiffResult numberOfPrivateMethods;
+    private CodeMetricsDiffResult numberOfProtectedMethods;
+    private CodeMetricsDiffResult numberOfDefaultMethods;
+    private CodeMetricsDiffResult numberOfAbstractMethods;
+    private CodeMetricsDiffResult numberOfFinalMethods;
+    private CodeMetricsDiffResult numberOfSynchronizedMethods;
+    private CodeMetricsDiffResult numberOfFields;
+    private CodeMetricsDiffResult numberOfStaticFields;
+    private CodeMetricsDiffResult numberOfPublicFields;
+    private CodeMetricsDiffResult numberOfPrivateFields;
+    private CodeMetricsDiffResult numberOfProtectedFields;
+    private CodeMetricsDiffResult numberOfDefaultFields;
+    private CodeMetricsDiffResult numberOfFinalFields;
+    private CodeMetricsDiffResult numberOfSynchronizedFields;
+    private CodeMetricsDiffResult modifiers;
 
     private List<CodeMetricsMethodResult> methodMetrics;
 

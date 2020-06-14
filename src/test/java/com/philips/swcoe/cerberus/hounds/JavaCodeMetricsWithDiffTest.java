@@ -17,7 +17,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     private String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
     private String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
-    private String configPath = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private String classConfig = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private String methodConfig = RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
     private JavaCodeMetricsWithDiff javaCodeMetricsWithDiff;
 
     @BeforeEach
@@ -71,6 +72,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle,CLASS,LINES_OF_CODE,17,0"));
         assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java,Shapes.Rectangle,CLASS,LINES_OF_CODE,37,27"));
         assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java,Shapes.Rhombus,CLASS,LINES_OF_CODE,0,27"));
+        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle::getHeight/0,METHOD,COMPLEXITY_OF_METHOD,1,0"));
+        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]\",METHOD,COMPLEXITY_OF_METHOD,0,1"));
     }
 
     @Test
@@ -81,6 +84,9 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle|CLASS|LINES_OF_CODE|17|0"));
         assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java|Shapes.Rectangle|CLASS|LINES_OF_CODE|37|27"));
         assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus|CLASS|LINES_OF_CODE|0|27"));
+        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle::getHeight/0|METHOD|COMPLEXITY_OF_METHOD|1|0"));
+        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java|Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]|METHOD|COMPLEXITY_OF_METHOD|0|1"));
+        assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus::setHeight/1[double]|METHOD|LINES_OF_CODE|0|3"));
     }
 
 
@@ -130,7 +136,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithValidParameterForPSVReportWithConfig() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--class-config", configPath, "--structure", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--class-config", classConfig, "--method-config", methodConfig, "--structure", "vertical"});
         assertEquals(0, exitCode);
 
         List<String> expectedMetricsToDisplay = Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
@@ -146,7 +152,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithValidParameterForCSVReportWithConfig() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--class-config", configPath, "--structure", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--class-config", classConfig, "--method-config", methodConfig, "--structure", "vertical"});
         assertEquals(0, exitCode);
         List<String> expectedMetricsToDisplay = Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
         expectedMetricsToDisplay.stream().forEach(metric -> {
@@ -165,7 +171,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
                 "--previous", previousPath,
                 "--format", "csv",
                 "--class-config", "blahblah",
-                "--method-config", configPath,
+                "--method-config", classConfig,
                 "--structure", "vertical"
         });
         assertNotEquals(0, exitCode);
@@ -178,7 +184,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
                 "--current", currentPath,
                 "--previous", previousPath,
                 "--format", "csv",
-                "--class-config", configPath,
+                "--class-config", classConfig,
                 "--method-config", "blahblah",
                 "--structure", "vertical"
         });
@@ -192,12 +198,26 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
                 "--current", currentPath,
                 "--previous", previousPath,
                 "--format", "csv",
-                "--class-config", configPath,
+                "--class-config", classConfig,
                 "--method-config", "blahblah",
                 "--structure", "blahblah"
         });
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("must match \"vertical|horizontal\""));
+    }
+
+    @Test
+    public void shouldThrowErrorForMarkdownInHorizontalFormat() throws Exception {
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
+                "--current", currentPath,
+                "--previous", previousPath,
+                "--format", "md",
+                "--class-config", classConfig,
+                "--method-config", methodConfig,
+                "--structure", "horizontal"
+        });
+        assertNotEquals(0, exitCode);
+        assertTrue(getModifiedErrorStream().toString().contains("Markdown format can be used only with vertical metrics structure"));
     }
 
     private String getLineToAssert(List<String> listOfData, String s) {

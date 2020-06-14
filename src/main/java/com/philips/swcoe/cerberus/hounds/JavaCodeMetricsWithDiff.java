@@ -61,15 +61,23 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
             this.validateFilePath(methodConfigFile);
             methodConfig = Files.readAllLines(new File(methodConfigFile).toPath(), Charset.defaultCharset());
         }
+        if(reportFormat.equalsIgnoreCase("md") || reportFormat.equalsIgnoreCase("html")) {
+            this.validateReportFormat(metricFormat);
+        }
         CodeMetricsDiffService codeMetricsDiffService = new CodeMetricsDiffService(pathToPrevious, pathToCurrent);
         List<CodeMetricsClassResult> metricsResult = codeMetricsDiffService.getMetricsFromSourceCode();
-        char delimiter =  DelimeterForReport.valueOf(reportFormat.toUpperCase()).getDelimeter();
         if("vertical".equalsIgnoreCase(metricFormat)) {
-            this.writeToUI(new CodeMetricsVerticalWriterService(classConfig, methodConfig, delimiter).generateMetricsReport(metricsResult));
+            this.writeToUI(new CodeMetricsVerticalWriterService(classConfig, methodConfig, reportFormat.toUpperCase()).generateMetricsReport(metricsResult));
         } else {
-            this.writeToUI(new CodeMetricsHorizontalWriterService(classConfig, methodConfig, delimiter).generateMetricsReport(metricsResult));
+            this.writeToUI(new CodeMetricsHorizontalWriterService(classConfig, methodConfig, reportFormat.toUpperCase()).generateMetricsReport(metricsResult));
         }
         return 0;
+    }
+
+    private void validateReportFormat(String metricFormat) {
+        if("horizontal".equalsIgnoreCase(metricFormat)) {
+            throw new CommandLine.ParameterException(spec.commandLine(), INVALID_REPORT_FORMAT);
+        }
     }
 }
 
