@@ -49,18 +49,21 @@ public class CodeMetricsVerticalWriterService extends AbstractCodeMetricsWriterS
 
     private void writeMetricsInMarkDown(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config) {
         if(doesItMatterToDisplay(codeMetricsDiffResult, getMetricsToDisplayFromConfig(config))) {
-            markdownPrinter.addRow(
-                    codeMetricsDiffResult.getFileName(),
-                    codeMetricsDiffResult.getConstructName(),
-                    codeMetricsDiffResult.getConstructType(),
-                    codeMetricsDiffResult.getMetricName(),
-                    codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getOldValue());
+            markdownPrinter.addRow(getCodeMetricsDiffResultToWrite(codeMetricsDiffResult));
         }
+    }
+
+    private Object[] getCodeMetricsDiffResultToWrite(CodeMetricsDiffResult codeMetricsDiffResult) {
+        return new Object[]{codeMetricsDiffResult.getFileName(),
+                codeMetricsDiffResult.getConstructName(),
+                codeMetricsDiffResult.getConstructType(),
+                codeMetricsDiffResult.getMetricName(),
+                codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getOldValue()};
     }
 
     private void writeMetricsInCSV(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config) throws IOException {
         if(doesItMatterToDisplay(codeMetricsDiffResult, getMetricsToDisplayFromConfig(config))) {
-            csvPrinter.printRecord( codeMetricsDiffResult.getFileName(), codeMetricsDiffResult.getConstructName(), codeMetricsDiffResult.getConstructType(), codeMetricsDiffResult.getMetricName(), codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getOldValue());
+            csvPrinter.printRecord(getCodeMetricsDiffResultToWrite(codeMetricsDiffResult));
         }
     }
 

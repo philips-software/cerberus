@@ -1,8 +1,8 @@
 package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
-import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
+import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -228,10 +228,8 @@ public class CodeMetricsDiffServiceTest {
         methodStream.forEach(method -> {
             assertDoesNotThrow(() -> {
                 CodeMetricsDiffResult codeMetricsDiffResult = (CodeMetricsDiffResult) method.invoke(result);
-                assertNotNull(codeMetricsDiffResult.getMetricName(), codeMetricsDiffResult.getMetricName() + "Came out Null instead of value");
-                assertNotNull(codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for New Value ");
-                assertNotNull(codeMetricsDiffResult.getOldValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for Old value ");
-            }, method.getName() + "Throwed Exception while invoking");
+                assertPropertiesOfCodeMetricsDiffResult(codeMetricsDiffResult);
+            }, method.getName() + "Thrown Exception while invoking");
         });
     }
 
@@ -240,10 +238,19 @@ public class CodeMetricsDiffServiceTest {
         methodStream.forEach(method -> {
             assertDoesNotThrow(() -> {
                 CodeMetricsDiffResult codeMetricsDiffResult = (CodeMetricsDiffResult) method.invoke(result);
-                assertNotNull(codeMetricsDiffResult.getMetricName(), codeMetricsDiffResult.getMetricName() + "Came out Null instead of value");
-                assertNotNull(codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for New Value ");
-                assertNotNull(codeMetricsDiffResult.getOldValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for Old value ");
-            }, method.getName() + "Throwed Exception while invoking");
+                assertPropertiesOfCodeMetricsDiffResult(codeMetricsDiffResult);
+            }, method.getName() + "Thrown Exception while invoking");
         });
     }
+
+    private void assertPropertiesOfCodeMetricsDiffResult(CodeMetricsDiffResult codeMetricsDiffResult) {
+        assertFalse(codeMetricsDiffResult.getFileName().contains(PATH_SEPARATOR));
+        assertNotNull(codeMetricsDiffResult.getConstructType(), codeMetricsDiffResult.getConstructName() + "Came out Null instead of Construct type");
+        assertNotNull(codeMetricsDiffResult.getFileName(), codeMetricsDiffResult.getConstructName() + "Came out Null instead of file name");
+        assertNotNull(codeMetricsDiffResult.getConstructName(), codeMetricsDiffResult.getConstructName() + "Came out Null instead of Construct name");
+        assertNotNull(codeMetricsDiffResult.getMetricName(), codeMetricsDiffResult.getMetricName() + "Came out Null instead of value");
+        assertNotNull(codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for New Value ");
+        assertNotNull(codeMetricsDiffResult.getOldValue(), codeMetricsDiffResult.getMetricName() + "Came out Null for Old value ");
+    }
+
 }

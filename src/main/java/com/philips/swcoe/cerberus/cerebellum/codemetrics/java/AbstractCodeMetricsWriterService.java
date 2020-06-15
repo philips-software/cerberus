@@ -45,8 +45,8 @@ public class AbstractCodeMetricsWriterService {
         return listOfMetricsToDisplay.contains(codeMetricsDiffResult.getMetricName()) || listOfMetricsToDisplay.isEmpty();
     }
 
-    protected List<String> getMetricsToDisplayFromConfig(List<String> methodConfig) {
-        return methodConfig.stream().filter(metricToDisplay -> !metricToDisplay.startsWith("#")).collect(Collectors.toList());
+    protected List<String> getMetricsToDisplayFromConfig(List<String> config) {
+        return config.stream().filter(metricToDisplay -> !metricToDisplay.startsWith("#")).collect(Collectors.toList());
     }
 
     protected CSVPrinter getVerticalPrinterWithDelimiter(String format, StringWriter sw) throws IOException {

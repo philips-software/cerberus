@@ -61,7 +61,7 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
             this.validateFilePath(methodConfigFile);
             methodConfig = Files.readAllLines(new File(methodConfigFile).toPath(), Charset.defaultCharset());
         }
-        if(reportFormat.equalsIgnoreCase("md") || reportFormat.equalsIgnoreCase("html")) {
+        if("md".equalsIgnoreCase(reportFormat) || "html".equalsIgnoreCase(reportFormat)) {
             this.validateReportFormat(metricFormat);
         }
         CodeMetricsDiffService codeMetricsDiffService = new CodeMetricsDiffService(pathToPrevious, pathToCurrent);
