@@ -1,12 +1,10 @@
 package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
-import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
-import com.philips.swcoe.cerberus.constants.ProgramConstants;
-import net.steppschuh.markdowngenerator.table.Table;
-import net.steppschuh.markdowngenerator.table.Table.Builder;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
+import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
+import com.philips.swcoe.cerberus.constants.ProgramConstants;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -14,8 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.steppschuh.markdowngenerator.table.Table;
+import net.steppschuh.markdowngenerator.table.Table.Builder;
 
-public class AbstractCodeMetricsWriterService {
+public class CodeMetricsWriterService {
 
     protected List<String> classConfig;
     protected List<String> methodConfig;
@@ -24,7 +24,7 @@ public class AbstractCodeMetricsWriterService {
     protected CSVPrinter csvPrinter;
     protected Builder markdownPrinter;
 
-    public AbstractCodeMetricsWriterService(List<String> classConfig, List<String> methodConfig, String format) throws IOException {
+    public CodeMetricsWriterService(List<String> classConfig, List<String> methodConfig, String format) throws IOException {
         reportWriter = new StringWriter();
         this.format = format;
         this.classConfig = classConfig;

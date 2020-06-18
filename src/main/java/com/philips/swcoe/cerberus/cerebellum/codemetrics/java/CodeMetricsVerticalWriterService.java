@@ -1,16 +1,16 @@
 package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
+import org.apache.log4j.Logger;
+
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsResult;
 import io.vavr.control.Try;
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.util.List;
 
-public class CodeMetricsVerticalWriterService extends AbstractCodeMetricsWriterService {
+public class CodeMetricsVerticalWriterService extends CodeMetricsWriterService {
 
     private static Logger log = Logger.getLogger(CodeMetricsVerticalWriterService.class);
 

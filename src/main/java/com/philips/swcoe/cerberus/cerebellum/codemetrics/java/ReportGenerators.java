@@ -12,25 +12,25 @@ import java.util.List;
 public enum ReportGenerators {
     PSV {
         @Override
-        public String render(AbstractCodeMetricsWriterService writerService) {
+        public String render(CodeMetricsWriterService writerService) {
             return writerService.reportWriter.toString();
         }
     },
     CSV {
         @Override
-        public String render(AbstractCodeMetricsWriterService writerService) {
+        public String render(CodeMetricsWriterService writerService) {
             return writerService.reportWriter.toString();
         }
     },
     MD {
         @Override
-        public String render(AbstractCodeMetricsWriterService writerService) {
+        public String render(CodeMetricsWriterService writerService) {
             return String.valueOf(writerService.markdownPrinter.build());
         }
     },
     HTML {
         @Override
-        public String render(AbstractCodeMetricsWriterService writerService) {
+        public String render(CodeMetricsWriterService writerService) {
             List<Extension> extensions = Arrays.asList(TablesExtension.create());
             Parser parser = Parser.builder()
                     .extensions(extensions)
@@ -43,5 +43,5 @@ public enum ReportGenerators {
         }
     };
 
-    public abstract String render(AbstractCodeMetricsWriterService writerService);
+    public abstract String render(CodeMetricsWriterService writerService);
 }

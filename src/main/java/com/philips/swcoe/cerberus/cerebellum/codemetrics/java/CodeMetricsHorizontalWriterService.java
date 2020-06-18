@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CodeMetricsHorizontalWriterService extends AbstractCodeMetricsWriterService  {
+public class CodeMetricsHorizontalWriterService extends CodeMetricsWriterService {
     private static Logger log = Logger.getLogger(CodeMetricsHorizontalWriterService.class);
 
     public CodeMetricsHorizontalWriterService(List<String> classConfig, List<String> methodConfig, String reportFormat) throws IOException {
