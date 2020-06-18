@@ -24,7 +24,7 @@ public class CodeMetricsWriterService {
     protected CSVPrinter csvPrinter;
     protected Builder markdownPrinter;
 
-    public CodeMetricsWriterService(List<String> classConfig, List<String> methodConfig, String format) throws IOException {
+    protected CodeMetricsWriterService(List<String> classConfig, List<String> methodConfig, String format) throws IOException {
         reportWriter = new StringWriter();
         this.format = format;
         this.classConfig = classConfig;

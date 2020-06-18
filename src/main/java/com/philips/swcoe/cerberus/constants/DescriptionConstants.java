@@ -50,6 +50,6 @@ public final class DescriptionConstants {
     public static final String LANGUAGE_CMD_LINE_OPTION_DESCRIPTION = "Sources code language. ";
 
     // Other errors
-    public static final String INVALID_REPORT_FORMAT = "Markdown format can be used only with vertical metrics structure";
+    public static final String INVALID_REPORT_FORMAT = "Markdown and HTML format can be used only with vertical metrics structure";
 
 }
