@@ -62,10 +62,10 @@ public class CodeMetricsDiffServiceTest {
         assertEquals("Triangle.java", result.get().getFile());
         assertEquals("Shapes.Triangle", result.get().getClassName());
         assertEquals(17, result.get().getLinesOfCode().getNewValue());
-        assertEquals(4, result.get().getNumberOfMethods().getNewValue());
-        assertEquals(4, result.get().getNumberOfPublicMethods().getNewValue());
-        assertEquals(2, result.get().getReturnQty().getNewValue());
-        assertEquals(0, result.get().getNumberOfProtectedMethods().getNewValue());
+        assertEquals(4, result.get().getMethodsCount().getNewValue());
+        assertEquals(4, result.get().getPublicMethodsCount().getNewValue());
+        assertEquals(2, result.get().getReturnCount().getNewValue());
+        assertEquals(0, result.get().getProtectedMethodsCount().getNewValue());
         assertEquals(2, result.get().getDepthInheritanceTree().getNewValue());
         assertEquals(4, result.get().getWeightMethodClass().getNewValue());
     }
@@ -86,31 +86,31 @@ public class CodeMetricsDiffServiceTest {
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForNumberOfMethods() throws Exception {
-        assertEquals(7, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfMethods().getOldValue());
-        assertEquals(10, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfMethods().getNewValue());
+        assertEquals(7, javaCodeMetricsResultToTest.apply("Rectangle.java").getMethodsCount().getOldValue());
+        assertEquals(10, javaCodeMetricsResultToTest.apply("Rectangle.java").getMethodsCount().getNewValue());
     }
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForNumberOfPrivateProperties() throws Exception {
-        assertEquals(2, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfPrivateFields().getOldValue());
+        assertEquals(2, javaCodeMetricsResultToTest.apply("Rectangle.java").getPrivateFieldsCount().getOldValue());
     }
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForNumberOfPublicMethods() throws Exception {
-        assertEquals(3, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfPublicMethods().getOldValue());
-        assertEquals(5, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfPublicMethods().getNewValue());
+        assertEquals(3, javaCodeMetricsResultToTest.apply("Rectangle.java").getPublicMethodsCount().getOldValue());
+        assertEquals(5, javaCodeMetricsResultToTest.apply("Rectangle.java").getPublicMethodsCount().getNewValue());
     }
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForNumberOfFields() throws Exception {
-        assertEquals(2, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfFields().getOldValue());
-        assertEquals(3, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfFields().getNewValue());
+        assertEquals(2, javaCodeMetricsResultToTest.apply("Rectangle.java").getFieldsCount().getOldValue());
+        assertEquals(3, javaCodeMetricsResultToTest.apply("Rectangle.java").getFieldsCount().getNewValue());
     }
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForNumberOfProtectedMethods() throws Exception {
-        assertEquals(2, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfProtectedMethods().getOldValue());
-        assertEquals(3, javaCodeMetricsResultToTest.apply("Rectangle.java").getNumberOfProtectedMethods().getNewValue());
+        assertEquals(2, javaCodeMetricsResultToTest.apply("Rectangle.java").getProtectedMethodsCount().getOldValue());
+        assertEquals(3, javaCodeMetricsResultToTest.apply("Rectangle.java").getProtectedMethodsCount().getNewValue());
     }
 
 
@@ -146,20 +146,20 @@ public class CodeMetricsDiffServiceTest {
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForRtnQuantity() throws Exception {
-        assertEquals(4, javaCodeMetricsResultToTest.apply("Rectangle.java").getReturnQty().getOldValue());
-        assertEquals(5, javaCodeMetricsResultToTest.apply("Rectangle.java").getReturnQty().getNewValue());
+        assertEquals(4, javaCodeMetricsResultToTest.apply("Rectangle.java").getReturnCount().getOldValue());
+        assertEquals(5, javaCodeMetricsResultToTest.apply("Rectangle.java").getReturnCount().getNewValue());
     }
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForComparisionQuantity() throws Exception {
-        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getComparisonsQty().getOldValue());
-        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getComparisonsQty().getNewValue());
+        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getComparisonsCount().getOldValue());
+        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getComparisonsCount().getNewValue());
     }
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForTryCatchQty() throws Exception {
-        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getTryCatchQty().getOldValue());
-        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getTryCatchQty().getNewValue());
+        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getTryCatchCount().getOldValue());
+        assertEquals(0, javaCodeMetricsResultToTest.apply("Rectangle.java").getTryCatchCount().getNewValue());
     }
 
     @Test

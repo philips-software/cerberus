@@ -10,23 +10,24 @@ public class CodeMetricsMethodResult implements CodeMetricsResult {
     private String methodName;
     private String type;
     private String file;
+
     private CodeMetricsDiffResult complexity;
-    private CodeMetricsDiffResult parametersQty;
     private CodeMetricsDiffResult linesOfCode;
-    private CodeMetricsDiffResult variablesQty;
     private CodeMetricsDiffResult startLineNo;
-    private CodeMetricsDiffResult loopQty;
-    private CodeMetricsDiffResult comparisonsQty;
-    private CodeMetricsDiffResult tryCatchQty;
-    private CodeMetricsDiffResult parenthesizedExpsQty;
-    private CodeMetricsDiffResult stringLiteralsQty;
-    private CodeMetricsDiffResult numbersQty;
-    private CodeMetricsDiffResult assignmentsQty;
-    private CodeMetricsDiffResult mathOperationsQty;
     private CodeMetricsDiffResult maxNestedBlocks;
-    private CodeMetricsDiffResult anonymousClassesQty;
-    private CodeMetricsDiffResult subClassesQty;
-    private CodeMetricsDiffResult lambdasQty;
-    private CodeMetricsDiffResult uniqueWordsQty;
+    private CodeMetricsDiffResult variablesCount;
+    private CodeMetricsDiffResult parametersCount;
+    private CodeMetricsDiffResult loopCount;
+    private CodeMetricsDiffResult comparisonsCount;
+    private CodeMetricsDiffResult tryCatchCount;
+    private CodeMetricsDiffResult parenthesizedExpsCount;
+    private CodeMetricsDiffResult stringLiteralsCount;
+    private CodeMetricsDiffResult numbersCount;
+    private CodeMetricsDiffResult assignmentsCount;
+    private CodeMetricsDiffResult mathOperationsCount;
+    private CodeMetricsDiffResult anonymousClassesCount;
+    private CodeMetricsDiffResult subClassesCount;
+    private CodeMetricsDiffResult lambdasCount;
+    private CodeMetricsDiffResult uniqueWordsCount;
     
 }

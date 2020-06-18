@@ -52,9 +52,7 @@ public class CodeMetricsWriterService {
     protected CSVPrinter getVerticalPrinterWithDelimiter(String format, StringWriter sw) throws IOException {
         try {
             char delimiter =  ProgramConstants.DelimeterForReport.valueOf(format.toUpperCase()).getDelimeter();
-            CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(
-                    "FILE", "CLASS", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE"
-            ).withDelimiter(delimiter);
+            CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(getReportHeaders()).withDelimiter(delimiter);
             return new CSVPrinter(sw, csvFormat);
         } catch(IllegalArgumentException e) {
             return null;
@@ -70,12 +68,16 @@ public class CodeMetricsWriterService {
     protected Builder getVerticalMarkdownPrinter() {
         Builder tableBuilder = new Builder();
         tableBuilder.withAlignments(Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER);
-        tableBuilder.addRow("FILE", "CLASS", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE");
+        tableBuilder.addRow(getReportHeaders());
         return tableBuilder;
     }
 
     protected String getReport() {
         return ReportGenerators.valueOf(format).render(this);
+    }
+
+    private String[] getReportHeaders() {
+        return new String[] {"FILE", "CLASS", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE"};
     }
 
 }
