@@ -48,8 +48,13 @@ Commands:
 
 ### Usage of FPM 
 
-You can find detailed instructions on FPM ( Find Programming mistakes ) in your code 
+You can find detailed instructions on  FPM ( Find Programming mistakes )  
 [here](docs/FPM.md)
+
+### Usage of JCMD-DIFF
+
+You can find detailed instructions on JCMD-DIFF ( Java Code Metrics Detector with Diff ) along with the explanation for each metric 
+[here](docs/JCMD.md)
 
 ### Dogfooding 
 To evaluate and confirm the quality of code changes made to Cerberus, you should run through all the gates and review the generated reports with:
