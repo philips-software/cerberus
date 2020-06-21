@@ -1,18 +1,17 @@
 /*
  * Copyright of Koninklijke Philips N.V. 2020
  */
+
 package com.philips.swcoe.cerberus.cerebellum.tokenizer;
 
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.COULDNT_FIND_DIRECTORY;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.SPACE;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import net.sourceforge.pmd.cpd.Language;
 import net.sourceforge.pmd.cpd.LanguageFactory;
 import net.sourceforge.pmd.cpd.SourceCode;

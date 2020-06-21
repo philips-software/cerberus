@@ -1,20 +1,23 @@
 /*
  * Copyright of Koninklijke Philips N.V. 2020
  */
+
 package com.philips.swcoe.cerberus.hounds;
+
+import static com.philips.swcoe.cerberus.constants.DescriptionConstants.FILES_CMD_LINE_OPTION_DESCRIPTION;
+import static com.philips.swcoe.cerberus.constants.DescriptionConstants.FILES_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
+import static com.philips.swcoe.cerberus.constants.DescriptionConstants.JAVA_CODE_METRICS_DETECTOR_DESCRIPTION;
+import static com.philips.swcoe.cerberus.constants.ProgramConstants.FILES_OPTION;
+import static com.philips.swcoe.cerberus.constants.ProgramConstants.JAVA_CODE_METRICS_DETECTOR;
+
+import javax.validation.constraints.NotNull;
 
 import com.github.mauricioaniche.ck.CKClassResult;
 import com.google.gson.GsonBuilder;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.CodeMetricsService;
-import picocli.CommandLine;
-
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import static com.philips.swcoe.cerberus.constants.DescriptionConstants.*;
-import static com.philips.swcoe.cerberus.constants.ProgramConstants.FILES_OPTION;
-import static com.philips.swcoe.cerberus.constants.ProgramConstants.JAVA_CODE_METRICS_DETECTOR;
+import picocli.CommandLine;
 
 @CommandLine.Command(name = JAVA_CODE_METRICS_DETECTOR, description = JAVA_CODE_METRICS_DETECTOR_DESCRIPTION)
 public class JavaCodeMetrics extends BaseCommand implements Callable<Integer> {

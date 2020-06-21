@@ -2,7 +2,9 @@
 ![PMD Best Practices](https://github.com/philips-software/cerberus/workflows/PMD%20Best%20Practices/badge.svg)
 ![Mutation Analysis 96%](https://github.com/philips-software/cerberus/workflows/Mutation%20Analysis%2096%25/badge.svg)
 ![Duplicate Blocks 37 Tokens](https://github.com/philips-software/cerberus/workflows/Duplicate%20Blocks%2037%20Tokens/badge.svg)
+![Checkstyle Adherence](https://github.com/philips-software/cerberus/workflows/Checkstyle%20Adherence/badge.svg)
 ![Compile And Assemble](https://github.com/philips-software/cerberus/workflows/Compile%20And%20Assemble/badge.svg)
+
 # Cerberus
 
 Cerberus is a tool to measure code quality parameters, which can be used as a watch dog to observe code quality parameters like copy paste errors, suppressed warnings etc., and also to gate builds when the allowed thresholds for the parameters being observed is breached.
@@ -59,7 +61,7 @@ You can find detailed instructions on JCMD-DIFF ( Java Code Metrics Detector wit
 ### Dogfooding 
 To evaluate and confirm the quality of code changes made to Cerberus, you should run through all the gates and review the generated reports with:
 
-`mvn clean package pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report`
+`mvn clean package checkstyle:check pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report`
 
 Afterwards, to use the actual JAR for yourself run the below command by checking out the master branch in this repository with:
 
@@ -101,7 +103,7 @@ You are always free to fork this repository and create a PR to develop branch an
 To prevent build breaks run the same maven goals that we run in our pipelines for all quality checks
 
 ```
-mvn clean package pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report compile assembly:single
+mvn clean package checkstyle:check pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report compile assembly:single
 ```
 
 ## License

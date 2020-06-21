@@ -24,7 +24,8 @@ public class CodeMetricsWriterService {
     protected CSVPrinter csvPrinter;
     protected Builder markdownPrinter;
 
-    protected CodeMetricsWriterService(List<String> classConfig, List<String> methodConfig, String format) throws IOException {
+    protected CodeMetricsWriterService(List<String> classConfig, List<String> methodConfig,
+                                       String format) throws IOException {
         reportWriter = new StringWriter();
         this.format = format;
         this.classConfig = classConfig;
@@ -32,42 +33,54 @@ public class CodeMetricsWriterService {
     }
 
     protected Stream<Method> getStreamMetricsMethods(Method... methods) {
-        Stream<Method> methodStream = Arrays.stream(methods).filter(method -> method.getReturnType().equals(CodeMetricsDiffResult.class));
+        Stream<Method> methodStream = Arrays.stream(methods)
+            .filter(method -> method.getReturnType().equals(CodeMetricsDiffResult.class));
         return methodStream;
     }
 
-    protected boolean isMetricEligibleToDisplay(CodeMetricsDiffResult codeMetricsDiffResult, List<String> metricsConfigured) {
-        Boolean hasMetricsChanged = codeMetricsDiffResult.getOldValue() != codeMetricsDiffResult.getNewValue();
+    protected boolean isMetricEligibleToDisplay(CodeMetricsDiffResult codeMetricsDiffResult,
+                                                List<String> metricsConfigured) {
+        Boolean hasMetricsChanged =
+            codeMetricsDiffResult.getOldValue() != codeMetricsDiffResult.getNewValue();
         return shouldWeDisplay(metricsConfigured, codeMetricsDiffResult) && hasMetricsChanged;
     }
 
-    protected boolean shouldWeDisplay(List<String> listOfMetricsToDisplay, CodeMetricsDiffResult codeMetricsDiffResult) {
-        return listOfMetricsToDisplay.contains(codeMetricsDiffResult.getMetricName()) || listOfMetricsToDisplay.isEmpty();
+    protected boolean shouldWeDisplay(List<String> listOfMetricsToDisplay,
+                                      CodeMetricsDiffResult codeMetricsDiffResult) {
+        return listOfMetricsToDisplay.contains(codeMetricsDiffResult.getMetricName())
+            || listOfMetricsToDisplay.isEmpty();
     }
 
     protected List<String> getMetricsToDisplayFromConfig(List<String> config) {
-        return config.stream().filter(metricToDisplay -> !metricToDisplay.startsWith("#")).collect(Collectors.toList());
+        return config.stream().filter(metricToDisplay -> !metricToDisplay.startsWith("#"))
+            .collect(Collectors.toList());
     }
 
-    protected CSVPrinter getVerticalPrinterWithDelimiter(String format, StringWriter sw) throws IOException {
+    protected CSVPrinter getVerticalPrinterWithDelimiter(String format, StringWriter sw)
+        throws IOException {
         try {
-            char delimiter =  ProgramConstants.DelimeterForReport.valueOf(format.toUpperCase()).getDelimeter();
-            CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(getReportHeaders()).withDelimiter(delimiter);
+            char delimiter =
+                ProgramConstants.DelimeterForReport.valueOf(format.toUpperCase()).getDelimeter();
+            CSVFormat csvFormat =
+                CSVFormat.DEFAULT.withHeader(getReportHeaders()).withDelimiter(delimiter);
             return new CSVPrinter(sw, csvFormat);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
-    protected CSVPrinter getHorizontalPrinterWithDelimiter(String format, StringWriter sw) throws IOException {
-        char delimiter =  ProgramConstants.DelimeterForReport.valueOf(format.toUpperCase()).getDelimeter();
+    protected CSVPrinter getHorizontalPrinterWithDelimiter(String format, StringWriter sw)
+        throws IOException {
+        char delimiter =
+            ProgramConstants.DelimeterForReport.valueOf(format.toUpperCase()).getDelimeter();
         CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(delimiter);
         return new CSVPrinter(sw, csvFormat);
     }
 
     protected Builder getVerticalMarkdownPrinter() {
         Builder tableBuilder = new Builder();
-        tableBuilder.withAlignments(Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER);
+        tableBuilder.withAlignments(Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER,
+            Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER);
         tableBuilder.addRow(getReportHeaders());
         return tableBuilder;
     }

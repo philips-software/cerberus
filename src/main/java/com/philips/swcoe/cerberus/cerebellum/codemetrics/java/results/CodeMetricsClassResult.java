@@ -1,9 +1,8 @@
 package com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results;
 
+import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

@@ -33,12 +33,12 @@ public enum ReportGenerators {
         public String render(CodeMetricsWriterService writerService) {
             List<Extension> extensions = Arrays.asList(TablesExtension.create());
             Parser parser = Parser.builder()
-                    .extensions(extensions)
-                    .build();
+                .extensions(extensions)
+                .build();
             Node document = parser.parse(String.valueOf(writerService.markdownPrinter.build()));
             HtmlRenderer renderer = HtmlRenderer.builder()
-                    .extensions(extensions)
-                    .build();
+                .extensions(extensions)
+                .build();
             return renderer.render(document);
         }
     };

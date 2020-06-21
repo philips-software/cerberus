@@ -29,5 +29,5 @@ public class CodeMetricsMethodResult implements CodeMetricsResult {
     private CodeMetricsDiffResult subClassesCount;
     private CodeMetricsDiffResult lambdasCount;
     private CodeMetricsDiffResult uniqueWordsCount;
-    
+
 }
