@@ -36,9 +36,9 @@ public class CodeMetricsWriterService {
         return methodStream;
     }
 
-    protected boolean doesItMatterToDisplay(CodeMetricsDiffResult codeMetricsDiffResult, List<String> methodMetricsToDisplay) {
-        Boolean doesItMatter = codeMetricsDiffResult.getOldValue() != codeMetricsDiffResult.getNewValue();
-        return shouldWeDisplay(methodMetricsToDisplay, codeMetricsDiffResult) && doesItMatter;
+    protected boolean isMetricEligibleToDisplay(CodeMetricsDiffResult codeMetricsDiffResult, List<String> metricsConfigured) {
+        Boolean hasMetricsChanged = codeMetricsDiffResult.getOldValue() != codeMetricsDiffResult.getNewValue();
+        return shouldWeDisplay(metricsConfigured, codeMetricsDiffResult) && hasMetricsChanged;
     }
 
     protected boolean shouldWeDisplay(List<String> listOfMetricsToDisplay, CodeMetricsDiffResult codeMetricsDiffResult) {

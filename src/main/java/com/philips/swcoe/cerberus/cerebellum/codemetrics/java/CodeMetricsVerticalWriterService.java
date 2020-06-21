@@ -48,7 +48,7 @@ public class CodeMetricsVerticalWriterService extends CodeMetricsWriterService {
     }
 
     private void writeMetricsInMarkDown(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config) {
-        if(doesItMatterToDisplay(codeMetricsDiffResult, getMetricsToDisplayFromConfig(config))) {
+        if(isMetricEligibleToDisplay(codeMetricsDiffResult, getMetricsToDisplayFromConfig(config))) {
             markdownPrinter.addRow(getCodeMetricsDiffResultToWrite(codeMetricsDiffResult));
         }
     }
@@ -62,7 +62,7 @@ public class CodeMetricsVerticalWriterService extends CodeMetricsWriterService {
     }
 
     private void writeMetricsInCSV(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config) throws IOException {
-        if(doesItMatterToDisplay(codeMetricsDiffResult, getMetricsToDisplayFromConfig(config))) {
+        if(isMetricEligibleToDisplay(codeMetricsDiffResult, getMetricsToDisplayFromConfig(config))) {
             csvPrinter.printRecord(getCodeMetricsDiffResultToWrite(codeMetricsDiffResult));
         }
     }

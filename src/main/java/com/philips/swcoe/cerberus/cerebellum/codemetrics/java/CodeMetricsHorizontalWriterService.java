@@ -74,7 +74,7 @@ public class CodeMetricsHorizontalWriterService extends CodeMetricsWriterService
 
     private void pushMetricsToWrite(CodeMetricsDiffResult codeMetricsDiffResult, List<String> dataToWrite, List<String> displayConfig) {
         List<String> metricsToDisplay = getMetricsToDisplayFromConfig(displayConfig);
-        if(doesItMatterToDisplay(codeMetricsDiffResult, metricsToDisplay)) {
+        if(isMetricEligibleToDisplay(codeMetricsDiffResult, metricsToDisplay)) {
             dataToWrite.add(codeMetricsDiffResult.getMetricName());
             dataToWrite.add(String.valueOf(codeMetricsDiffResult.getNewValue()));
             dataToWrite.add(String.valueOf(codeMetricsDiffResult.getOldValue()));
