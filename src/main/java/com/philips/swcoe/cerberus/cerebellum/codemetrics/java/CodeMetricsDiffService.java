@@ -1,16 +1,19 @@
 package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
+import static com.philips.swcoe.cerberus.constants.ProgramConstants.PATH_SEPARATOR;
 import com.github.mauricioaniche.ck.CK;
 import com.github.mauricioaniche.ck.CKClassResult;
 import com.github.mauricioaniche.ck.CKMethodResult;
-import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
+import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
-
-import static com.philips.swcoe.cerberus.constants.ProgramConstants.PATH_SEPARATOR;
 
 public class CodeMetricsDiffService {
 
@@ -23,7 +26,8 @@ public class CodeMetricsDiffService {
     }
 
     public List<CodeMetricsClassResult> getMetricsFromSourceCode() {
-        List<CodeMetricsClassResult> codeMetricsClassResultsList = new ArrayList<CodeMetricsClassResult>();
+        List<CodeMetricsClassResult> codeMetricsClassResultsList =
+            new ArrayList<CodeMetricsClassResult>();
         new CK().calculate(currentPath, false, result -> {
             CodeMetricsClassResult codeMetricsClassResult = new CodeMetricsClassResult();
             transformResults(result, codeMetricsClassResult, "new");
@@ -32,10 +36,11 @@ public class CodeMetricsDiffService {
 
         new CK().calculate(previousPath, false, result -> {
             Optional<CodeMetricsClassResult> existingNewResults = codeMetricsClassResultsList
-                    .stream()
-                    .filter(metrics -> metrics.getFile().contains((result.getFile().substring(result.getFile().lastIndexOf(PATH_SEPARATOR) + 1))))
-                    .findFirst();
-            if(existingNewResults.isPresent()) {
+                .stream()
+                .filter(metrics -> metrics.getFile().contains(
+                    (result.getFile().substring(result.getFile().lastIndexOf(PATH_SEPARATOR) + 1))))
+                .findFirst();
+            if (existingNewResults.isPresent()) {
                 transformResults(result, existingNewResults.get(), "old");
             } else {
                 CodeMetricsClassResult codeMetricsClassResult = new CodeMetricsClassResult();
@@ -47,119 +52,319 @@ public class CodeMetricsDiffService {
         return codeMetricsClassResultsList;
     }
 
-    private void transformResults(CKClassResult result, CodeMetricsClassResult codeMetricsClassResult, String valueType) {
+    private void transformResults(CKClassResult result,
+                                  CodeMetricsClassResult codeMetricsClassResult, String valueType) {
         transFormClassResult(result, codeMetricsClassResult, valueType);
         transFormMethodResult(result, codeMetricsClassResult, valueType);
     }
 
-    private void transFormMethodResult(CKClassResult result, CodeMetricsClassResult codeMetricsClassResult, String valueType) {
+    private void transFormMethodResult(CKClassResult result,
+                                       CodeMetricsClassResult codeMetricsClassResult,
+                                       String valueType) {
         Set<CKMethodResult> setOfMethodResults = result.getMethods();
-        List<CodeMetricsMethodResult> listOfMethodMetricsOfClass = new ArrayList<CodeMetricsMethodResult>();
+        List<CodeMetricsMethodResult> listOfMethodMetricsOfClass =
+            new ArrayList<CodeMetricsMethodResult>();
         setOfMethodResults.stream().forEach(methodResult -> {
-            CodeMetricsMethodResult codeMetricsMethodResult = getMethodMetricsResultForTransform(codeMetricsClassResult, methodResult);
+            CodeMetricsMethodResult codeMetricsMethodResult =
+                getMethodMetricsResultForTransform(codeMetricsClassResult, methodResult);
             setupMethodMetrics(result, valueType, methodResult, codeMetricsMethodResult);
             listOfMethodMetricsOfClass.add(codeMetricsMethodResult);
         });
         codeMetricsClassResult.setMethodMetrics(listOfMethodMetricsOfClass);
     }
 
-    private CodeMetricsMethodResult getMethodMetricsResultForTransform(CodeMetricsClassResult codeMetricsClassResult, CKMethodResult ckMethodResult ) {
-        Optional<CodeMetricsMethodResult> existingMethodMetrics = Optional.ofNullable(codeMetricsClassResult.getMethodMetrics()).map(Collection::stream).orElseGet(Stream::empty)
-                .filter(methodMetrics -> methodMetrics.getMethodName().contains(ckMethodResult.getMethodName())).findFirst();
-        if(existingMethodMetrics.isPresent()) {
+    private CodeMetricsMethodResult getMethodMetricsResultForTransform(
+        CodeMetricsClassResult codeMetricsClassResult, CKMethodResult ckMethodResult) {
+        Optional<CodeMetricsMethodResult> existingMethodMetrics =
+            Optional.ofNullable(codeMetricsClassResult.getMethodMetrics()).map(Collection::stream)
+                .orElseGet(Stream::empty)
+                .filter(methodMetrics -> methodMetrics.getMethodName()
+                    .contains(ckMethodResult.getMethodName())).findFirst();
+        if (existingMethodMetrics.isPresent()) {
             return existingMethodMetrics.get();
         } else {
             return new CodeMetricsMethodResult();
         }
     }
 
-    private void setupMethodMetrics(CKClassResult result, String valueType, CKMethodResult methodResult, CodeMetricsMethodResult codeMetricsMethodResult) {
+    private void setupMethodMetrics(CKClassResult result, String valueType,
+                                    CKMethodResult methodResult,
+                                    CodeMetricsMethodResult codeMetricsMethodResult) {
+        String filename =
+            result.getFile().substring(result.getFile().lastIndexOf(PATH_SEPARATOR) + 1);
+        String constructType = "METHOD";
         String className = result.getClassName();
-        codeMetricsMethodResult.setMethodName(className + "::" +methodResult.getMethodName());
-        if(methodResult.isConstructor()) {
-            codeMetricsMethodResult.setMethodName(className + ":CONSTRUCTOR:" +methodResult.getMethodName());
+        String constructName = className + "::" + methodResult.getMethodName();
+        if (methodResult.isConstructor()) {
+            constructName = className + ":CONSTRUCTOR:" + methodResult.getMethodName();
         }
-        codeMetricsMethodResult.setType("METHOD");
-        codeMetricsMethodResult.setFile(result.getFile().substring(result.getFile().lastIndexOf(PATH_SEPARATOR) + 1));
-        codeMetricsMethodResult.setComplexity(getCodeMetricsResultWithValue(methodResult.getWmc(), valueType, codeMetricsMethodResult.getComplexity(), "COMPLEXITY_OF_METHOD"));
-        codeMetricsMethodResult.setParametersQty(getCodeMetricsResultWithValue(methodResult.getParametersQty(), valueType, codeMetricsMethodResult.getParametersQty(), "NO_OF_PARAMETERS"));
-        codeMetricsMethodResult.setLinesOfCode(getCodeMetricsResultWithValue(methodResult.getLoc(), valueType, codeMetricsMethodResult.getLinesOfCode(), "LINES_OF_CODE"));
-        codeMetricsMethodResult.setStartLineNo(getCodeMetricsResultWithValue(methodResult.getStartLine(), valueType, codeMetricsMethodResult.getStartLineNo(), "START_LINE_NO"));
-        codeMetricsMethodResult.setComparisonsQty(getCodeMetricsResultWithValue(methodResult.getComparisonsQty(), valueType, codeMetricsMethodResult.getComparisonsQty(), "NO_OF_COMPARISONS"));
-        codeMetricsMethodResult.setTryCatchQty(getCodeMetricsResultWithValue(methodResult.getTryCatchQty(), valueType, codeMetricsMethodResult.getTryCatchQty(), "NO_OF_TRYCATCH_BLOCKS"));
-        codeMetricsMethodResult.setParenthesizedExpsQty(getCodeMetricsResultWithValue(methodResult.getParenthesizedExpsQty(), valueType, codeMetricsMethodResult.getParenthesizedExpsQty(), "NO_OF_PARENTHESIZED_EXPRESSIONS"));
-        codeMetricsMethodResult.setStringLiteralsQty(getCodeMetricsResultWithValue(methodResult.getStringLiteralsQty(), valueType, codeMetricsMethodResult.getStringLiteralsQty(), "NO_OF_STRING_LITERALS"));
-        codeMetricsMethodResult.setNumbersQty(getCodeMetricsResultWithValue(methodResult.getNumbersQty(), valueType, codeMetricsMethodResult.getNumbersQty(), "NO_OF_NOS"));
-        codeMetricsMethodResult.setAssignmentsQty(getCodeMetricsResultWithValue(methodResult.getAssignmentsQty(), valueType, codeMetricsMethodResult.getAssignmentsQty(), "NO_OF_ASSIGNMENTS"));
-        codeMetricsMethodResult.setMathOperationsQty(getCodeMetricsResultWithValue(methodResult.getMathOperationsQty(), valueType, codeMetricsMethodResult.getMathOperationsQty(), "NO_OF_MATH_OPERATIONS"));
-        codeMetricsMethodResult.setVariablesQty(getCodeMetricsResultWithValue(methodResult.getVariablesQty(), valueType, codeMetricsMethodResult.getVariablesQty(), "NO_OF_VARIABLES"));
-        codeMetricsMethodResult.setMaxNestedBlocks(getCodeMetricsResultWithValue(methodResult.getMaxNestedBlocks(), valueType, codeMetricsMethodResult.getMaxNestedBlocks(), "NO_OF_MAX_NESTED_BLOCKS"));
-        codeMetricsMethodResult.setAnonymousClassesQty(getCodeMetricsResultWithValue(methodResult.getAnonymousClassesQty(), valueType, codeMetricsMethodResult.getAnonymousClassesQty(), "NO_OF_ANONYMOUS_CLASSES"));
-        codeMetricsMethodResult.setSubClassesQty(getCodeMetricsResultWithValue(methodResult.getSubClassesQty(), valueType, codeMetricsMethodResult.getSubClassesQty(), "NO_OF_SUBCLASSES"));
-        codeMetricsMethodResult.setLambdasQty(getCodeMetricsResultWithValue(methodResult.getLambdasQty(), valueType, codeMetricsMethodResult.getLambdasQty(), "NO_OF_LAMBDAS"));
-        codeMetricsMethodResult.setLoopQty(getCodeMetricsResultWithValue(methodResult.getLoopQty(), valueType, codeMetricsMethodResult.getLoopQty(), "NO_OF_LOOPS"));
-        codeMetricsMethodResult.setUniqueWordsQty(getCodeMetricsResultWithValue(methodResult.getUniqueWordsQty(), valueType, codeMetricsMethodResult.getUniqueWordsQty(), "NO_OF_UNIQUE_WORDS"));
+        codeMetricsMethodResult.setMethodName(constructName);
+        codeMetricsMethodResult.setType(constructType);
+        codeMetricsMethodResult.setFile(filename);
+        codeMetricsMethodResult.setComplexity(
+            getCodeMetricsResultWithValue(methodResult.getWmc(), valueType,
+                codeMetricsMethodResult.getComplexity(), "COMPLEXITY_OF_METHOD", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setParametersCount(
+            getCodeMetricsResultWithValue(methodResult.getParametersQty(), valueType,
+                codeMetricsMethodResult.getParametersCount(), "NO_OF_PARAMETERS", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setLinesOfCode(
+            getCodeMetricsResultWithValue(methodResult.getLoc(), valueType,
+                codeMetricsMethodResult.getLinesOfCode(), "LINES_OF_CODE", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setStartLineNo(
+            getCodeMetricsResultWithValue(methodResult.getStartLine(), valueType,
+                codeMetricsMethodResult.getStartLineNo(), "START_LINE_NO", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setComparisonsCount(
+            getCodeMetricsResultWithValue(methodResult.getComparisonsQty(), valueType,
+                codeMetricsMethodResult.getComparisonsCount(), "NO_OF_COMPARISONS", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setTryCatchCount(
+            getCodeMetricsResultWithValue(methodResult.getTryCatchQty(), valueType,
+                codeMetricsMethodResult.getTryCatchCount(), "NO_OF_TRYCATCH_BLOCKS", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setParenthesizedExpsCount(
+            getCodeMetricsResultWithValue(methodResult.getParenthesizedExpsQty(), valueType,
+                codeMetricsMethodResult.getParenthesizedExpsCount(),
+                "NO_OF_PARENTHESIZED_EXPRESSIONS", constructName, constructType, filename));
+        codeMetricsMethodResult.setStringLiteralsCount(
+            getCodeMetricsResultWithValue(methodResult.getStringLiteralsQty(), valueType,
+                codeMetricsMethodResult.getStringLiteralsCount(), "NO_OF_STRING_LITERALS",
+                constructName, constructType, filename));
+        codeMetricsMethodResult.setNumbersCount(
+            getCodeMetricsResultWithValue(methodResult.getNumbersQty(), valueType,
+                codeMetricsMethodResult.getNumbersCount(), "NO_OF_NOS", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setAssignmentsCount(
+            getCodeMetricsResultWithValue(methodResult.getAssignmentsQty(), valueType,
+                codeMetricsMethodResult.getAssignmentsCount(), "NO_OF_ASSIGNMENTS", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setMathOperationsCount(
+            getCodeMetricsResultWithValue(methodResult.getMathOperationsQty(), valueType,
+                codeMetricsMethodResult.getMathOperationsCount(), "NO_OF_MATH_OPERATIONS",
+                constructName, constructType, filename));
+        codeMetricsMethodResult.setVariablesCount(
+            getCodeMetricsResultWithValue(methodResult.getVariablesQty(), valueType,
+                codeMetricsMethodResult.getVariablesCount(), "NO_OF_VARIABLES", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setMaxNestedBlocks(
+            getCodeMetricsResultWithValue(methodResult.getMaxNestedBlocks(), valueType,
+                codeMetricsMethodResult.getMaxNestedBlocks(), "NO_OF_MAX_NESTED_BLOCKS",
+                constructName, constructType, filename));
+        codeMetricsMethodResult.setAnonymousClassesCount(
+            getCodeMetricsResultWithValue(methodResult.getAnonymousClassesQty(), valueType,
+                codeMetricsMethodResult.getAnonymousClassesCount(), "NO_OF_ANONYMOUS_CLASSES",
+                constructName, constructType, filename));
+        codeMetricsMethodResult.setSubClassesCount(
+            getCodeMetricsResultWithValue(methodResult.getSubClassesQty(), valueType,
+                codeMetricsMethodResult.getSubClassesCount(), "NO_OF_SUBCLASSES", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setLambdasCount(
+            getCodeMetricsResultWithValue(methodResult.getLambdasQty(), valueType,
+                codeMetricsMethodResult.getLambdasCount(), "NO_OF_LAMBDAS", constructName,
+                constructType, filename));
+        codeMetricsMethodResult.setLoopCount(
+            getCodeMetricsResultWithValue(methodResult.getLoopQty(), valueType,
+                codeMetricsMethodResult.getLoopCount(), "NO_OF_LOOPS", constructName, constructType,
+                filename));
+        codeMetricsMethodResult.setUniqueWordsCount(
+            getCodeMetricsResultWithValue(methodResult.getUniqueWordsQty(), valueType,
+                codeMetricsMethodResult.getUniqueWordsCount(), "NO_OF_UNIQUE_WORDS", constructName,
+                constructType, filename));
     }
 
-    private void transFormClassResult(CKClassResult result, CodeMetricsClassResult codeMetricsClassResult, String valueType) {
-        codeMetricsClassResult.setFile(result.getFile().substring(result.getFile().lastIndexOf(PATH_SEPARATOR) + 1));
-        codeMetricsClassResult.setClassName(result.getClassName());
-        codeMetricsClassResult.setType(result.getType().toUpperCase());
-        codeMetricsClassResult.setDepthInheritanceTree(getCodeMetricsResultWithValue(result.getDit(), valueType, codeMetricsClassResult.getDepthInheritanceTree(), "DEPTH_INHERITANCE_TREE"));
-        codeMetricsClassResult.setWeightMethodClass(getCodeMetricsResultWithValue(result.getWmc(), valueType, codeMetricsClassResult.getWeightMethodClass(), "WEIGHT_METHOD_CLASS"));
-        codeMetricsClassResult.setCouplingBetweenObjects(getCodeMetricsResultWithValue(result.getCbo(), valueType, codeMetricsClassResult.getCouplingBetweenObjects(), "COUPLING_BETWEEN_OBJECTS"));
-        codeMetricsClassResult.setResponseForClass(getCodeMetricsResultWithValue(result.getRfc(), valueType, codeMetricsClassResult.getResponseForClass(), "RESPONSE_FOR_A_CLASS"));
-        codeMetricsClassResult.setNumberOfStaticInvocations(getCodeMetricsResultWithValue(result.getNosi(), valueType, codeMetricsClassResult.getNumberOfStaticInvocations(), "NO_OF_STATIC_INVOCATIONS"));
-        codeMetricsClassResult.setLinesOfCode(getCodeMetricsResultWithValue(result.getLoc(), valueType, codeMetricsClassResult.getLinesOfCode(), "LINES_OF_CODE"));
-        codeMetricsClassResult.setReturnQty(getCodeMetricsResultWithValue(result.getReturnQty(), valueType, codeMetricsClassResult.getReturnQty(), "NO_OF_RETURNS"));
-        codeMetricsClassResult.setLoopQty(getCodeMetricsResultWithValue(result.getLoopQty(), valueType, codeMetricsClassResult.getLoopQty(), "NO_OF_LOOPS"));
-        codeMetricsClassResult.setComparisonsQty(getCodeMetricsResultWithValue(result.getComparisonsQty(), valueType, codeMetricsClassResult.getComparisonsQty(), "NO_OF_COMPARISONS"));
-        codeMetricsClassResult.setTryCatchQty(getCodeMetricsResultWithValue(result.getTryCatchQty(), valueType, codeMetricsClassResult.getTryCatchQty(), "NO_OF_TRYCATCH_BLOCKS"));
-        codeMetricsClassResult.setParenthesizedExpsQty(getCodeMetricsResultWithValue(result.getParenthesizedExpsQty(), valueType, codeMetricsClassResult.getParenthesizedExpsQty(), "NO_OF_PARENTHESIZED_EXPRESSIONS"));
-        codeMetricsClassResult.setStringLiteralsQty(getCodeMetricsResultWithValue(result.getStringLiteralsQty(), valueType, codeMetricsClassResult.getStringLiteralsQty(), "NO_OF_STRING_LITERALS"));
-        codeMetricsClassResult.setNumbersQty(getCodeMetricsResultWithValue(result.getNumbersQty(), valueType, codeMetricsClassResult.getNumbersQty(), "NO_OF_NOS"));
-        codeMetricsClassResult.setAssignmentsQty(getCodeMetricsResultWithValue(result.getAssignmentsQty(), valueType, codeMetricsClassResult.getAssignmentsQty(), "NO_OF_ASSIGNMENTS"));
-        codeMetricsClassResult.setMathOperationsQty(getCodeMetricsResultWithValue(result.getMathOperationsQty(), valueType, codeMetricsClassResult.getMathOperationsQty(), "NO_OF_MATH_OPERATIONS"));
-        codeMetricsClassResult.setVariablesQty(getCodeMetricsResultWithValue(result.getVariablesQty(), valueType, codeMetricsClassResult.getVariablesQty(), "NO_OF_VARIABLES"));
-        codeMetricsClassResult.setMaxNestedBlocks(getCodeMetricsResultWithValue(result.getMaxNestedBlocks(), valueType, codeMetricsClassResult.getMaxNestedBlocks(), "NO_OF_MAX_NESTED_BLOCKS"));
-        codeMetricsClassResult.setAnonymousClassesQty(getCodeMetricsResultWithValue(result.getAnonymousClassesQty(), valueType, codeMetricsClassResult.getAnonymousClassesQty(), "NO_OF_ANONYMOUS_CLASSES"));
-        codeMetricsClassResult.setSubClassesQty(getCodeMetricsResultWithValue(result.getSubClassesQty(), valueType, codeMetricsClassResult.getSubClassesQty(), "NO_OF_SUBCLASSES"));
-        codeMetricsClassResult.setLambdasQty(getCodeMetricsResultWithValue(result.getLambdasQty(), valueType, codeMetricsClassResult.getLambdasQty(), "NO_OF_LAMBDAS"));
-        codeMetricsClassResult.setUniqueWordsQty(getCodeMetricsResultWithValue(result.getUniqueWordsQty(), valueType, codeMetricsClassResult.getUniqueWordsQty(), "NO_OF_UNIQUE_WORDS"));
-        codeMetricsClassResult.setNumberOfMethods(getCodeMetricsResultWithValue(result.getNumberOfMethods(), valueType, codeMetricsClassResult.getNumberOfMethods(), "NO_OF_METHODS"));
-        codeMetricsClassResult.setNumberOfStaticMethods(getCodeMetricsResultWithValue(result.getNumberOfStaticMethods(), valueType, codeMetricsClassResult.getNumberOfStaticMethods(), "NO_OF_STATIC_METHODS"));
-        codeMetricsClassResult.setNumberOfPublicMethods(getCodeMetricsResultWithValue(result.getNumberOfPublicMethods(), valueType, codeMetricsClassResult.getNumberOfPublicMethods(), "NO_OF_PUBLIC_METHODS"));
-        codeMetricsClassResult.setNumberOfPrivateMethods(getCodeMetricsResultWithValue(result.getNumberOfPrivateMethods(), valueType, codeMetricsClassResult.getNumberOfPrivateMethods(), "NO_OF_PRIVATE_METHODS"));
-        codeMetricsClassResult.setNumberOfProtectedMethods(getCodeMetricsResultWithValue(result.getNumberOfProtectedMethods(), valueType, codeMetricsClassResult.getNumberOfProtectedMethods(), "NO_OF_PROTECTED_METHODS"));
-        codeMetricsClassResult.setNumberOfDefaultMethods(getCodeMetricsResultWithValue(result.getNumberOfDefaultMethods(), valueType, codeMetricsClassResult.getNumberOfDefaultMethods(), "NO_OF_DEFAULT_METHODS"));
-        codeMetricsClassResult.setNumberOfAbstractMethods(getCodeMetricsResultWithValue(result.getNumberOfAbstractMethods(), valueType, codeMetricsClassResult.getNumberOfAbstractMethods(), "NO_OF_ABSTRACT_METHODS"));
-        codeMetricsClassResult.setNumberOfFinalMethods(getCodeMetricsResultWithValue(result.getNumberOfFinalMethods(), valueType, codeMetricsClassResult.getNumberOfFinalFields(), "NO_OF_FINAL_METHODS"));
-        codeMetricsClassResult.setNumberOfSynchronizedMethods(getCodeMetricsResultWithValue(result.getNumberOfSynchronizedMethods(), valueType, codeMetricsClassResult.getNumberOfSynchronizedFields(), "NO_OF_SYNCHRONIZED_METHODS"));
-        codeMetricsClassResult.setNumberOfFields(getCodeMetricsResultWithValue(result.getNumberOfFields(), valueType, codeMetricsClassResult.getNumberOfFields(), "NO_OF_FIELDS"));
-        codeMetricsClassResult.setNumberOfStaticFields(getCodeMetricsResultWithValue(result.getNumberOfStaticFields(), valueType, codeMetricsClassResult.getNumberOfStaticFields(), "NO_OF_STATIC_FIELDS"));
-        codeMetricsClassResult.setNumberOfPublicFields(getCodeMetricsResultWithValue(result.getNumberOfPublicFields(), valueType, codeMetricsClassResult.getNumberOfPublicFields(), "NO_OF_PUBLIC_FIELDS"));
-        codeMetricsClassResult.setNumberOfPrivateFields(getCodeMetricsResultWithValue(result.getNumberOfPrivateFields(), valueType, codeMetricsClassResult.getNumberOfPrivateFields(), "NO_OF_PRIVATE_FIELDS"));
-        codeMetricsClassResult.setNumberOfProtectedFields(getCodeMetricsResultWithValue(result.getNumberOfProtectedFields(), valueType, codeMetricsClassResult.getNumberOfProtectedFields(), "NO_OF_PROTECTED_FIELDS"));
-        codeMetricsClassResult.setNumberOfDefaultFields(getCodeMetricsResultWithValue(result.getNumberOfDefaultFields(), valueType, codeMetricsClassResult.getNumberOfDefaultFields(), "NO_OF_DEFAULT_FIELDS"));
-        codeMetricsClassResult.setNumberOfFinalFields(getCodeMetricsResultWithValue(result.getNumberOfFinalFields(), valueType, codeMetricsClassResult.getNumberOfFinalFields(), "NO_OF_FINAL_FIELDS"));
-        codeMetricsClassResult.setNumberOfSynchronizedFields(getCodeMetricsResultWithValue(result.getNumberOfSynchronizedFields(), valueType, codeMetricsClassResult.getNumberOfSynchronizedFields(), "NO_OF_SYNCHRONIZED_FIELDS"));
-        codeMetricsClassResult.setModifiers(getCodeMetricsResultWithValue(result.getModifiers(), valueType, codeMetricsClassResult.getModifiers(), "NO_OF_MODIFIERS"));
+    private void transFormClassResult(CKClassResult result,
+                                      CodeMetricsClassResult codeMetricsClassResult,
+                                      String valueType) {
+        String filename =
+            result.getFile().substring(result.getFile().lastIndexOf(PATH_SEPARATOR) + 1);
+        String constructName = result.getClassName();
+        String constructType = result.getType().toUpperCase();
+        codeMetricsClassResult.setFile(filename);
+        codeMetricsClassResult.setClassName(constructName);
+        codeMetricsClassResult.setType(constructType);
+        codeMetricsClassResult.setDepthInheritanceTree(
+            getCodeMetricsResultWithValue(result.getDit(), valueType,
+                codeMetricsClassResult.getDepthInheritanceTree(), "DEPTH_INHERITANCE_TREE",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setWeightMethodClass(
+            getCodeMetricsResultWithValue(result.getWmc(), valueType,
+                codeMetricsClassResult.getWeightMethodClass(), "WEIGHT_METHOD_CLASS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setCouplingBetweenObjects(
+            getCodeMetricsResultWithValue(result.getCbo(), valueType,
+                codeMetricsClassResult.getCouplingBetweenObjects(), "COUPLING_BETWEEN_OBJECTS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setResponseForClass(
+            getCodeMetricsResultWithValue(result.getRfc(), valueType,
+                codeMetricsClassResult.getResponseForClass(), "RESPONSE_FOR_A_CLASS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setNumberOfStaticInvocations(
+            getCodeMetricsResultWithValue(result.getNosi(), valueType,
+                codeMetricsClassResult.getNumberOfStaticInvocations(), "NO_OF_STATIC_INVOCATIONS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setLinesOfCode(
+            getCodeMetricsResultWithValue(result.getLoc(), valueType,
+                codeMetricsClassResult.getLinesOfCode(), "LINES_OF_CODE", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setReturnCount(
+            getCodeMetricsResultWithValue(result.getReturnQty(), valueType,
+                codeMetricsClassResult.getReturnCount(), "NO_OF_RETURNS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setLoopCount(
+            getCodeMetricsResultWithValue(result.getLoopQty(), valueType,
+                codeMetricsClassResult.getLoopCount(), "NO_OF_LOOPS", constructName, constructType,
+                filename));
+        codeMetricsClassResult.setComparisonsCount(
+            getCodeMetricsResultWithValue(result.getComparisonsQty(), valueType,
+                codeMetricsClassResult.getComparisonsCount(), "NO_OF_COMPARISONS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setTryCatchCount(
+            getCodeMetricsResultWithValue(result.getTryCatchQty(), valueType,
+                codeMetricsClassResult.getTryCatchCount(), "NO_OF_TRYCATCH_BLOCKS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setParenthesizedExpsCount(
+            getCodeMetricsResultWithValue(result.getParenthesizedExpsQty(), valueType,
+                codeMetricsClassResult.getParenthesizedExpsCount(),
+                "NO_OF_PARENTHESIZED_EXPRESSIONS", constructName, constructType, filename));
+        codeMetricsClassResult.setStringLiteralsCount(
+            getCodeMetricsResultWithValue(result.getStringLiteralsQty(), valueType,
+                codeMetricsClassResult.getStringLiteralsCount(), "NO_OF_STRING_LITERALS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setNumbersCount(
+            getCodeMetricsResultWithValue(result.getNumbersQty(), valueType,
+                codeMetricsClassResult.getNumbersCount(), "NO_OF_NOS", constructName, constructType,
+                filename));
+        codeMetricsClassResult.setAssignmentsCount(
+            getCodeMetricsResultWithValue(result.getAssignmentsQty(), valueType,
+                codeMetricsClassResult.getAssignmentsCount(), "NO_OF_ASSIGNMENTS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setMathOperationsCount(
+            getCodeMetricsResultWithValue(result.getMathOperationsQty(), valueType,
+                codeMetricsClassResult.getMathOperationsCount(), "NO_OF_MATH_OPERATIONS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setVariablesCount(
+            getCodeMetricsResultWithValue(result.getVariablesQty(), valueType,
+                codeMetricsClassResult.getVariablesCount(), "NO_OF_VARIABLES", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setMaxNestedBlocks(
+            getCodeMetricsResultWithValue(result.getMaxNestedBlocks(), valueType,
+                codeMetricsClassResult.getMaxNestedBlocks(), "NO_OF_MAX_NESTED_BLOCKS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setAnonymousClassesCount(
+            getCodeMetricsResultWithValue(result.getAnonymousClassesQty(), valueType,
+                codeMetricsClassResult.getAnonymousClassesCount(), "NO_OF_ANONYMOUS_CLASSES",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setSubClassesCount(
+            getCodeMetricsResultWithValue(result.getSubClassesQty(), valueType,
+                codeMetricsClassResult.getSubClassesCount(), "NO_OF_SUBCLASSES", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setLambdasCount(
+            getCodeMetricsResultWithValue(result.getLambdasQty(), valueType,
+                codeMetricsClassResult.getLambdasCount(), "NO_OF_LAMBDAS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setUniqueWordsCount(
+            getCodeMetricsResultWithValue(result.getUniqueWordsQty(), valueType,
+                codeMetricsClassResult.getUniqueWordsCount(), "NO_OF_UNIQUE_WORDS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfMethods(), valueType,
+                codeMetricsClassResult.getMethodsCount(), "NO_OF_METHODS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setStaticMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfStaticMethods(), valueType,
+                codeMetricsClassResult.getStaticMethodsCount(), "NO_OF_STATIC_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setPublicMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfPublicMethods(), valueType,
+                codeMetricsClassResult.getPublicMethodsCount(), "NO_OF_PUBLIC_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setPrivateMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfPrivateMethods(), valueType,
+                codeMetricsClassResult.getPrivateMethodsCount(), "NO_OF_PRIVATE_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setProtectedMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfProtectedMethods(), valueType,
+                codeMetricsClassResult.getProtectedMethodsCount(), "NO_OF_PROTECTED_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setDefaultMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfDefaultMethods(), valueType,
+                codeMetricsClassResult.getDefaultMethodsCount(), "NO_OF_DEFAULT_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setAbstractMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfAbstractMethods(), valueType,
+                codeMetricsClassResult.getAbstractMethodsCount(), "NO_OF_ABSTRACT_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setFinalMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfFinalMethods(), valueType,
+                codeMetricsClassResult.getFinalFieldsCount(), "NO_OF_FINAL_METHODS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setSynchronizedMethodsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfSynchronizedMethods(), valueType,
+                codeMetricsClassResult.getSynchronizedFieldsCount(), "NO_OF_SYNCHRONIZED_METHODS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfFields(), valueType,
+                codeMetricsClassResult.getFieldsCount(), "NO_OF_FIELDS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setStaticFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfStaticFields(), valueType,
+                codeMetricsClassResult.getStaticFieldsCount(), "NO_OF_STATIC_FIELDS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setPublicFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfPublicFields(), valueType,
+                codeMetricsClassResult.getPublicFieldsCount(), "NO_OF_PUBLIC_FIELDS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setPrivateFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfPrivateFields(), valueType,
+                codeMetricsClassResult.getPrivateFieldsCount(), "NO_OF_PRIVATE_FIELDS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setProtectedFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfProtectedFields(), valueType,
+                codeMetricsClassResult.getProtectedFieldsCount(), "NO_OF_PROTECTED_FIELDS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setDefaultFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfDefaultFields(), valueType,
+                codeMetricsClassResult.getDefaultFieldsCount(), "NO_OF_DEFAULT_FIELDS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setFinalFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfFinalFields(), valueType,
+                codeMetricsClassResult.getFinalFieldsCount(), "NO_OF_FINAL_FIELDS", constructName,
+                constructType, filename));
+        codeMetricsClassResult.setSynchronizedFieldsCount(
+            getCodeMetricsResultWithValue(result.getNumberOfSynchronizedFields(), valueType,
+                codeMetricsClassResult.getSynchronizedFieldsCount(), "NO_OF_SYNCHRONIZED_FIELDS",
+                constructName, constructType, filename));
+        codeMetricsClassResult.setModifiersCount(
+            getCodeMetricsResultWithValue(result.getModifiers(), valueType,
+                codeMetricsClassResult.getModifiersCount(), "NO_OF_MODIFIERS", constructName,
+                constructType, filename));
     }
 
-    private CodeMetricsResult getCodeMetricsResultWithValue(int value, String type, CodeMetricsResult existingResult, String metricName) {
-        CodeMetricsResult codeMetricsResult = getCodeMetricsResult(existingResult);
-        codeMetricsResult.setMetricName(metricName);
-        if(type == "new") {
-            codeMetricsResult.setNewValue(value);
+    private CodeMetricsDiffResult getCodeMetricsResultWithValue(int value, String type,
+                                                                CodeMetricsDiffResult existingResult,
+                                                                String metricName,
+                                                                String constructName,
+                                                                String constructType,
+                                                                String filename) {
+        CodeMetricsDiffResult codeMetricsDiffResult = getCodeMetricsResult(existingResult);
+        codeMetricsDiffResult.setConstructName(constructName);
+        codeMetricsDiffResult.setFileName(filename);
+        codeMetricsDiffResult.setConstructType(constructType);
+        codeMetricsDiffResult.setMetricName(metricName);
+        if (type == "new") {
+            codeMetricsDiffResult.setNewValue(value);
         } else {
-            codeMetricsResult.setOldValue(value);
+            codeMetricsDiffResult.setOldValue(value);
         }
-        return codeMetricsResult;
+        return codeMetricsDiffResult;
     }
 
-    private CodeMetricsResult getCodeMetricsResult(CodeMetricsResult existingResult) {
-        if(Objects.isNull(existingResult)) {
-            return new CodeMetricsResult();
+    private CodeMetricsDiffResult getCodeMetricsResult(CodeMetricsDiffResult existingResult) {
+        if (Objects.isNull(existingResult)) {
+            return new CodeMetricsDiffResult();
         } else {
             return existingResult;
         }

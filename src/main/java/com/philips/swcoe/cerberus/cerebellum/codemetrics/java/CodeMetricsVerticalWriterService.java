@@ -1,72 +1,78 @@
 package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
+import org.apache.log4j.Logger;
+
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
+import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsResult;
 import io.vavr.control.Try;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.util.List;
 
-public class CodeMetricsVerticalWriterService extends AbstractCodeMetricsWriterService {
+public class CodeMetricsVerticalWriterService extends CodeMetricsWriterService {
 
     private static Logger log = Logger.getLogger(CodeMetricsVerticalWriterService.class);
 
-    public CodeMetricsVerticalWriterService(List<String> classConfig, List<String> methodConfig, char delimiter) throws IOException {
-        super(classConfig, methodConfig, delimiter);
-        csvPrinter = getCsvPrinterVertical(this.delimiter, reportWriter);
+    public CodeMetricsVerticalWriterService(List<String> classConfig, List<String> methodConfig,
+                                            String reportFormat) throws IOException {
+        super(classConfig, methodConfig, reportFormat);
+        csvPrinter = getVerticalPrinterWithDelimiter(reportFormat, reportWriter);
+        markdownPrinter = getVerticalMarkdownPrinter();
     }
 
     public String generateMetricsReport(List<CodeMetricsClassResult> codeMetricsClassResults) {
-        codeMetricsClassResults.stream().forEach(javaCodeMetricsClassResult -> {
-            getStreamMetricsMethods(javaCodeMetricsClassResult.getClass().getMethods()).forEach(methodInClassResult -> {
-                Try.of(() -> (CodeMetricsResult) methodInClassResult.invoke(javaCodeMetricsClassResult))
-                                    .andThen(codeMetricsResultForClass -> Try.run(() -> writeClassMetrics(csvPrinter, javaCodeMetricsClassResult, codeMetricsResultForClass ))
-                                    .onFailure(exception -> log.trace(exception.getStackTrace())));
-            });
-            List<CodeMetricsMethodResult> codeMetricsMethodResults = javaCodeMetricsClassResult.getMethodMetrics();
+        codeMetricsClassResults.stream().forEach(codeMetricsClassResult -> {
+            processMetrics(codeMetricsClassResult, classConfig);
+            List<CodeMetricsMethodResult> codeMetricsMethodResults =
+                codeMetricsClassResult.getMethodMetrics();
             codeMetricsMethodResults.stream().forEach(codeMetricsMethodResult -> {
-                getStreamMetricsMethods(codeMetricsMethodResult.getClass().getMethods()).forEach(methodInMethodResult -> {
-                    Try.of(() -> (CodeMetricsResult) methodInMethodResult.invoke(codeMetricsMethodResult))
-                                    .andThen(codeMetricsResultForMethod -> Try.run(() -> writeMethodMetrics(csvPrinter, codeMetricsMethodResult, codeMetricsResultForMethod, javaCodeMetricsClassResult))
-                                    .onFailure(exception -> log.trace(exception.getStackTrace())));
-                });
+                processMetrics(codeMetricsMethodResult, methodConfig);
             });
         });
         return this.getReport();
     }
 
-    private void writeClassMetrics(CSVPrinter csvPrinter,
-                                   CodeMetricsClassResult codeMetricsClassResult,
-                                   CodeMetricsResult codeMetricsResult) throws IOException {
-        List<String> classMetricsToDisplay = getMetricsToDisplayFromConfig(classConfig);
-        if(doesItMatterToDisplay(codeMetricsResult, classMetricsToDisplay)) {
-            csvPrinter.printRecord(
-                    codeMetricsClassResult.getFile(),
-                    codeMetricsClassResult.getClassName(),
-                    codeMetricsClassResult.getType(),
-                    codeMetricsResult.getMetricName(),
-                    codeMetricsResult.getNewValue(),
-                    codeMetricsResult.getOldValue()
-            );
+    private void processMetrics(CodeMetricsResult codeMetricsResult, List<String> config) {
+        getStreamMetricsMethods(codeMetricsResult.getClass().getMethods())
+            .forEach(methodInResult -> {
+                Try.of(() -> (CodeMetricsDiffResult) methodInResult.invoke(codeMetricsResult))
+                    .andThen(codeMetricsResultForConstruct -> Try
+                        .run(() -> writeMetrics(codeMetricsResultForConstruct, config))
+                        .onFailure(exception -> log.trace(exception.getStackTrace())));
+            });
+    }
+
+    private void writeMetrics(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config)
+        throws IOException {
+        if (null == csvPrinter) {
+            writeMetricsInMarkDown(codeMetricsDiffResult, config);
+        } else {
+            writeMetricsInCSV(codeMetricsDiffResult, config);
         }
     }
 
-    private void writeMethodMetrics(CSVPrinter csvPrinter,
-                                    CodeMetricsMethodResult codeMetricsMethodResult,
-                                    CodeMetricsResult codeMetricsResult, CodeMetricsClassResult codeMetricsClassResult) throws IOException {
-        List<String> methodMetricsToDisplay = getMetricsToDisplayFromConfig(methodConfig);
-        if(doesItMatterToDisplay(codeMetricsResult, methodMetricsToDisplay)) {
-            csvPrinter.printRecord(
-                    codeMetricsClassResult.getFile(),
-                    codeMetricsClassResult.getClassName() + "::" + codeMetricsMethodResult.getMethodName(),
-                    "METHOD",
-                    codeMetricsResult.getMetricName(),
-                    codeMetricsResult.getNewValue(),
-                    codeMetricsResult.getOldValue()
-            );
+    private void writeMetricsInMarkDown(CodeMetricsDiffResult codeMetricsDiffResult,
+                                        List<String> config) {
+        if (isMetricEligibleToDisplay(codeMetricsDiffResult,
+            getMetricsToDisplayFromConfig(config))) {
+            markdownPrinter.addRow(getCodeMetricsDiffResultToWrite(codeMetricsDiffResult));
+        }
+    }
+
+    private Object[] getCodeMetricsDiffResultToWrite(CodeMetricsDiffResult codeMetricsDiffResult) {
+        return new Object[] {codeMetricsDiffResult.getFileName(),
+            codeMetricsDiffResult.getConstructName(),
+            codeMetricsDiffResult.getConstructType(),
+            codeMetricsDiffResult.getMetricName(),
+            codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getOldValue()};
+    }
+
+    private void writeMetricsInCSV(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config)
+        throws IOException {
+        if (isMetricEligibleToDisplay(codeMetricsDiffResult,
+            getMetricsToDisplayFromConfig(config))) {
+            csvPrinter.printRecord(getCodeMetricsDiffResultToWrite(codeMetricsDiffResult));
         }
     }
 

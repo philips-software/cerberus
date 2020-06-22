@@ -1,6 +1,7 @@
 /*
  * Copyright of Koninklijke Philips N.V. 2020
  */
+
 package com.philips.swcoe.cerberus.cerebellum.swd;
 
 import com.philips.swcoe.cerberus.cerebellum.swd.language.detectors.CppSuppressedWarningsDetector;
