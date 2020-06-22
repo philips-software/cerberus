@@ -1,23 +1,30 @@
 package com.philips.swcoe.cerberus.hounds;
 
-import com.google.common.base.Splitter;
-import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_CURRENT;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_PREVIOUS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import picocli.CommandLine;
 
+import com.google.common.base.Splitter;
+import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import picocli.CommandLine;
 
 public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     private String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
     private String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
-    private String configPath = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private String classConfig = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private String methodConfig = RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
     private JavaCodeMetricsWithDiff javaCodeMetricsWithDiff;
 
     @BeforeEach
@@ -36,7 +43,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{});
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify Absolute Path to your source code which has previous version"));
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the delimiter of the report"));
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the format of the report"));
         assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the absolute path to your source code which has current version"));
         assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify report structure vertical or horizontal"));
     }
@@ -50,42 +57,48 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithMissedOutTwoParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", previousPath, "--delimiter", "abc"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", previousPath, "--format", "abc"});
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("Specify Absolute Path to your source code which has previous version"));
     }
 
     @Test
     public void testJSCMDWithInvalidReportDelimiter() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "abc"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "abc"});
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: must match \"csv|psv\""));
-        assertTrue(getModifiedErrorStream().toString().contains("Report delimiter CSV for comma separated or PSV for pipe separated"));
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: must match \"csv|psv|md|html\""));
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify report structure vertical or horizontal"));
     }
 
     @Test
     public void shouldPrintCSVReportInVerticalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "csv", "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--structure", "vertical"});
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString().contains("FILE,CLASS,TYPE,METRIC,NEW_VALUE,OLD_VALUE"));
         assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle,CLASS,LINES_OF_CODE,17,0"));
         assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java,Shapes.Rectangle,CLASS,LINES_OF_CODE,37,27"));
         assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java,Shapes.Rhombus,CLASS,LINES_OF_CODE,0,27"));
+        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle::getHeight/0,METHOD,COMPLEXITY_OF_METHOD,1,0"));
+        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]\",METHOD,COMPLEXITY_OF_METHOD,0,1"));
     }
 
     @Test
     public void shouldPrintPSVReportInVerticalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "psv", "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--structure", "vertical"});
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString().contains("FILE|CLASS|TYPE|METRIC|NEW_VALUE|OLD_VALUE"));
         assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle|CLASS|LINES_OF_CODE|17|0"));
         assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java|Shapes.Rectangle|CLASS|LINES_OF_CODE|37|27"));
         assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus|CLASS|LINES_OF_CODE|0|27"));
+        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle::getHeight/0|METHOD|COMPLEXITY_OF_METHOD|1|0"));
+        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java|Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]|METHOD|COMPLEXITY_OF_METHOD|0|1"));
+        assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus::setHeight/1[double]|METHOD|LINES_OF_CODE|0|3"));
     }
+
 
     @Test
     public void shouldPrintCSVReportInHorizontalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "csv", "--format", "horizontal"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--structure", "horizontal"});
         assertEquals(0, exitCode);
         List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(getModifiedOutputStream().toString());
         assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("NO_OF_MODIFIERS,1,0"));
@@ -107,7 +120,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void shouldPrintPSVReportInHorizontalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "psv", "--format", "horizontal"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--structure", "horizontal"});
         assertEquals(0, exitCode);
         List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(getModifiedOutputStream().toString());
         assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("NO_OF_MODIFIERS|1|0"));
@@ -129,77 +142,106 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJCMDWithValidParameterForPSVReportWithConfig() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "psv", "--class-config", configPath, "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("psv", classConfig, methodConfig, "vertical"));
+
         assertEquals(0, exitCode);
+        assertDisplayOfMetricsBasedOnConfig("CLASS|");
+    }
 
-        List<String> expectedMetricsToDisplay = Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
-        expectedMetricsToDisplay.stream().forEach(metric -> {
-            assertTrue(getModifiedOutputStream().toString().contains("CLASS|" + metric));
-        });
+    @Test
+    public void testJCMDWithValidParameterForMDReportWithConfig() throws Exception {
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("md", classConfig, methodConfig, "vertical"));
+        assertEquals(0, exitCode);
+        assertDisplayOfMetricsBasedOnConfig("");
+    }
 
-        List<String> metricsWhichShouldNotDisplay = Arrays.asList("NO_OF_FIELDS", "NO_OF_COMPARISONS", "NO_OF_PARENTHESIZED_EXPRESSIONS", "DEPTH_INHERITANCE_TREE");
-        metricsWhichShouldNotDisplay.stream().forEach(metric -> {
-            assertFalse(getModifiedOutputStream().toString().contains("CLASS|" + metric));
-        });
+    @Test
+    public void testJCMDWithValidParameterForHTMLReportWithConfig() throws Exception {
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("html", classConfig, methodConfig, "vertical"));
+
+        assertEquals(0, exitCode);
+        assertDisplayOfMetricsBasedOnConfig("");
     }
 
     @Test
     public void testJCMDWithValidParameterForCSVReportWithConfig() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--delimiter", "csv", "--class-config", configPath, "--format", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("csv", classConfig, methodConfig, "vertical"));
         assertEquals(0, exitCode);
-        List<String> expectedMetricsToDisplay = Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
-        expectedMetricsToDisplay.stream().forEach(metric -> {
-            assertTrue(getModifiedOutputStream().toString().contains(metric));
-        });
-        List<String> metricsWhichShouldNotDisplay = Arrays.asList("NO_OF_PROTECTED_METHODS", "NO_OF_METHODS", "RESPONSE_FOR_A_CLASS", "DEPTH_INHERITANCE_TREE");
-        metricsWhichShouldNotDisplay.stream().forEach(metric -> {
-            assertFalse(getModifiedOutputStream().toString().contains(metric));
-        });
+        assertDisplayOfMetricsBasedOnConfig("");
     }
 
     @Test
     public void shouldThrowErrorForBadClassConfigFile() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
-                "--current", currentPath,
-                "--previous", previousPath,
-                "--delimiter", "csv",
-                "--class-config", "blahblah",
-                "--method-config", configPath,
-                "--format", "vertical"
-        });
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("csv", "blahblah", classConfig, "vertical"));
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("Specify a valid absolute path"));
     }
 
     @Test
     public void shouldThrowErrorForBadMethodConfigFile() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
-                "--current", currentPath,
-                "--previous", previousPath,
-                "--delimiter", "csv",
-                "--class-config", configPath,
-                "--method-config", "blahblah",
-                "--format", "vertical"
-        });
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("csv", classConfig, "blahblah", "vertical"));
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("Specify a valid absolute path"));
     }
 
     @Test
     public void shouldThrowErrorForBadReportFormat() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{
-                "--current", currentPath,
-                "--previous", previousPath,
-                "--delimiter", "csv",
-                "--class-config", configPath,
-                "--method-config", "blahblah",
-                "--format", "blahblah"
-        });
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("csv", classConfig, "blahblah", "blahblah"));
         assertNotEquals(0, exitCode);
         assertTrue(getModifiedErrorStream().toString().contains("must match \"vertical|horizontal\""));
     }
 
+    @Test
+    public void shouldThrowErrorForMarkdownInHorizontalFormat() throws Exception {
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("md", classConfig, methodConfig, "horizontal"));
+        assertNotEquals(0, exitCode);
+        assertTrue(getModifiedErrorStream().toString().contains("Markdown and HTML format can be used only with vertical metrics structure"));
+    }
+
+    @Test
+    public void shouldThrowErrorForHTMLInHorizontalFormat() throws Exception {
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            getArgsForHound("html", classConfig, methodConfig, "horizontal"));
+        assertNotEquals(0, exitCode);
+        assertTrue(getModifiedErrorStream().toString().contains("Markdown and HTML format can be used only with vertical metrics structure"));
+    }
+
     private String getLineToAssert(List<String> listOfData, String s) {
         return listOfData.stream().filter((line) -> line.contains(s)).findFirst().get();
+    }
+
+
+    private String[] getArgsForHound(String csv, String classConfig, String methodConfig,
+                                     String vertical) {
+        return new String[] {
+            "--current", currentPath,
+            "--previous", previousPath,
+            "--format", csv,
+            "--class-config", classConfig,
+            "--method-config", methodConfig,
+            "--structure", vertical
+        };
+    }
+
+
+    private void assertDisplayOfMetricsBasedOnConfig(String prefix) {
+        List<String> expectedMetricsToDisplay = Arrays
+            .asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
+        expectedMetricsToDisplay.stream().forEach(metric -> {
+            assertTrue(getModifiedOutputStream().toString().contains(prefix + metric));
+        });
+
+        List<String> metricsWhichShouldNotDisplay = Arrays.asList("NO_OF_FIELDS", "NO_OF_COMPARISONS", "NO_OF_PARENTHESIZED_EXPRESSIONS", "DEPTH_INHERITANCE_TREE");
+        metricsWhichShouldNotDisplay.stream().forEach(metric -> {
+            assertFalse(getModifiedOutputStream().toString().contains(prefix + metric));
+        });
     }
 }

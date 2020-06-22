@@ -4,15 +4,13 @@ name: PMD Best Practices
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, development ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, development ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8

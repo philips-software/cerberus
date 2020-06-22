@@ -1,17 +1,19 @@
 /*
  * Copyright of Koninklijke Philips N.V. 2020
  */
+
 package com.philips.swcoe.cerberus;
 
+import static com.philips.swcoe.cerberus.constants.ProgramConstants.DOUBLE_SPACE;
+
 import org.apache.commons.lang3.StringUtils;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Help.Column;
 import picocli.CommandLine.Help.TextTable;
 import picocli.CommandLine.IHelpSectionRenderer;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Model.UsageMessageSpec;
-
-import static com.philips.swcoe.cerberus.constants.ProgramConstants.DOUBLE_SPACE;
 
 public class DisplayHounds implements IHelpSectionRenderer {
 
@@ -22,8 +24,11 @@ public class DisplayHounds implements IHelpSectionRenderer {
             return StringUtils.EMPTY;
         }
 
-        TextTable textTable = TextTable.forColumns(help.ansi(), new Column(15, 2, Column.Overflow.SPAN), new Column(spec.usageMessage().width() - 15, 2, Column.Overflow.WRAP));
-        textTable.setAdjustLineBreaksForWideCJKCharacters(spec.usageMessage().adjustLineBreaksForWideCJKCharacters());
+        TextTable textTable = TextTable
+            .forColumns(help.ansi(), new Column(15, 2, Column.Overflow.SPAN),
+                new Column(spec.usageMessage().width() - 15, 2, Column.Overflow.WRAP));
+        textTable.setAdjustLineBreaksForWideCJKCharacters(
+            spec.usageMessage().adjustLineBreaksForWideCJKCharacters());
 
         for (CommandLine subcommand : spec.subcommands().values()) {
             addHierarchy(subcommand, textTable, StringUtils.EMPTY);

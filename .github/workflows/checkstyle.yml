@@ -1,12 +1,13 @@
-# This workflow will build Cerberus and perform Mutation Analysis
+# This workflow will run checkstyle for style guide of Cerberus
 
-name: Mutation Analysis 96%
+name: Checkstyle Adherence
 
 on:
   push:
     branches: [ master, development ]
   pull_request:
     branches: [ master, development ]
+
 
 jobs:
   build:
@@ -20,4 +21,4 @@ jobs:
         with:
           java-version: 1.8
       - name: Run all Quality Checks
-        run: mvn clean package pitest:mutationCoverage pitest:report
+        run: mvn clean package checkstyle:check

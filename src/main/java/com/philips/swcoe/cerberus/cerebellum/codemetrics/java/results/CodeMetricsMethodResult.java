@@ -5,28 +5,29 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CodeMetricsMethodResult {
+public class CodeMetricsMethodResult implements CodeMetricsResult {
 
     private String methodName;
     private String type;
     private String file;
-    private CodeMetricsResult complexity;
-    private CodeMetricsResult parametersQty;
-    private CodeMetricsResult linesOfCode;
-    private CodeMetricsResult variablesQty;
-    private CodeMetricsResult startLineNo;
-    private CodeMetricsResult loopQty;
-    private CodeMetricsResult comparisonsQty;
-    private CodeMetricsResult tryCatchQty;
-    private CodeMetricsResult parenthesizedExpsQty;
-    private CodeMetricsResult stringLiteralsQty;
-    private CodeMetricsResult numbersQty;
-    private CodeMetricsResult assignmentsQty;
-    private CodeMetricsResult mathOperationsQty;
-    private CodeMetricsResult maxNestedBlocks;
-    private CodeMetricsResult anonymousClassesQty;
-    private CodeMetricsResult subClassesQty;
-    private CodeMetricsResult lambdasQty;
-    private CodeMetricsResult uniqueWordsQty;
-    
+
+    private CodeMetricsDiffResult complexity;
+    private CodeMetricsDiffResult linesOfCode;
+    private CodeMetricsDiffResult startLineNo;
+    private CodeMetricsDiffResult maxNestedBlocks;
+    private CodeMetricsDiffResult variablesCount;
+    private CodeMetricsDiffResult parametersCount;
+    private CodeMetricsDiffResult loopCount;
+    private CodeMetricsDiffResult comparisonsCount;
+    private CodeMetricsDiffResult tryCatchCount;
+    private CodeMetricsDiffResult parenthesizedExpsCount;
+    private CodeMetricsDiffResult stringLiteralsCount;
+    private CodeMetricsDiffResult numbersCount;
+    private CodeMetricsDiffResult assignmentsCount;
+    private CodeMetricsDiffResult mathOperationsCount;
+    private CodeMetricsDiffResult anonymousClassesCount;
+    private CodeMetricsDiffResult subClassesCount;
+    private CodeMetricsDiffResult lambdasCount;
+    private CodeMetricsDiffResult uniqueWordsCount;
+
 }
