@@ -1,15 +1,17 @@
 package com.philips.swcoe.cerberus.hounds;
 
-import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class BaseCommandTest extends CerberusBaseTest {
 
@@ -34,7 +36,7 @@ class BaseCommandTest extends CerberusBaseTest {
     void testThrowingIOException() throws IOException {
         BaseCommand mockBaseCommand = mock(BaseCommand.class);
         Mockito.doThrow(new IOException()).when(mockBaseCommand).writeToUI("mock message");
-        assertThrows(IOException.class,() -> {
+        assertThrows(IOException.class, () -> {
             mockBaseCommand.writeToUI("mock message");
         });
     }

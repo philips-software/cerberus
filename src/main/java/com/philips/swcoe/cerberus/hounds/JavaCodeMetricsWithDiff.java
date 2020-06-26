@@ -27,10 +27,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.CodeMetricsDiffService;
-import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.CodeMetricsHorizontalWriterService;
-import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.CodeMetricsVerticalWriterService;
+import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.ReportWriters;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -68,18 +68,8 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
     @Override
     public Integer call() throws Exception {
         this.validate();
-        List<String> classConfig = new ArrayList<>();
-        if (classConfigFile != null) {
-            this.validateFilePath(classConfigFile);
-            classConfig =
-                Files.readAllLines(new File(classConfigFile).toPath(), Charset.defaultCharset());
-        }
-        List<String> methodConfig = new ArrayList<>();
-        if (methodConfigFile != null) {
-            this.validateFilePath(methodConfigFile);
-            methodConfig =
-                Files.readAllLines(new File(methodConfigFile).toPath(), Charset.defaultCharset());
-        }
+        List<String> classConfig = getConfigIfExists(classConfigFile);
+        List<String> methodConfig = getConfigIfExists(methodConfigFile);
         if ("md".equalsIgnoreCase(reportFormat) || "html".equalsIgnoreCase(reportFormat)) {
             this.validateReportFormat(metricFormat);
         }
@@ -87,14 +77,20 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
             new CodeMetricsDiffService(pathToPrevious, pathToCurrent);
         List<CodeMetricsClassResult> metricsResult =
             codeMetricsDiffService.getMetricsFromSourceCode();
-        if ("vertical".equalsIgnoreCase(metricFormat)) {
-            this.writeToUI(new CodeMetricsVerticalWriterService(classConfig, methodConfig,
-                reportFormat.toUpperCase()).generateMetricsReport(metricsResult));
-        } else {
-            this.writeToUI(new CodeMetricsHorizontalWriterService(classConfig, methodConfig,
-                reportFormat.toUpperCase()).generateMetricsReport(metricsResult));
-        }
+        this.writeToUI(ReportWriters.valueOf(metricFormat).get(classConfig, methodConfig,
+            reportFormat, metricsResult));
         return 0;
+    }
+
+    private List<String> getConfigIfExists(String classConfigFile)
+        throws IOException {
+        List<String> config = new ArrayList<>();
+        if (classConfigFile != null) {
+            this.validateFilePath(classConfigFile);
+            config =
+                Files.readAllLines(new File(classConfigFile).toPath(), Charset.defaultCharset());
+        }
+        return config;
     }
 
     private void validateReportFormat(String metricFormat) {

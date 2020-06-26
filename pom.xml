@@ -316,6 +316,7 @@
 						<targetJdk>${java.required.version}</targetJdk>
 						<rulesets>
 							<ruleset>/category/java/bestpractices.xml</ruleset>
+							<ruleset>code-quality-rules/pmd-cerberus-rules.xml</ruleset>
 						</rulesets>
 					</configuration>
 					<executions>

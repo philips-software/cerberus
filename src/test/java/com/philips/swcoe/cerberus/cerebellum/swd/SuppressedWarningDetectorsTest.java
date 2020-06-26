@@ -1,15 +1,17 @@
 /*
  * Copyright of Koninklijke Philips N.V. 2020
  */
+
 package com.philips.swcoe.cerberus.cerebellum.swd;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import com.philips.swcoe.cerberus.cerebellum.swd.language.detectors.CppSuppressedWarningsDetector;
 import com.philips.swcoe.cerberus.cerebellum.swd.language.detectors.CsharpSuppressedWarningsDetector;
 import com.philips.swcoe.cerberus.cerebellum.swd.language.detectors.JavaSuppressedWarningsDetector;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SuppressedWarningDetectorsTest {
 
@@ -33,7 +35,7 @@ public class SuppressedWarningDetectorsTest {
 
     @Test
     public void testThrowsExceptionForUnknown() throws Exception {
-        assertThrows(IllegalArgumentException.class,() -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             SuppressedWarningDetectors.valueOf("unknown").create();
         });
     }
