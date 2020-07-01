@@ -41,6 +41,23 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
     }
 
     @Test
+    public void shouldNotThrowErrorWhenLanguageIsSpecifiedInLowerCase() throws Exception {
+        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
+        int exitCode = new CommandLine(suppressedWarnings)
+            .execute("--files", pathToTestSource, "--language", "java");
+        assertEquals(0, exitCode);
+    }
+
+    @Test
+    public void shouldThrowErrorWhenUnSupportedLanguageIsSpecified() throws Exception {
+        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
+        int exitCode = new CommandLine(suppressedWarnings)
+            .execute("--files", pathToTestSource, "--language", "go");
+        assertEquals(2, exitCode);
+        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Unsupported language, Please specify 'java' for java language, 'cs' for csharp language and 'cpp' for C++"));
+    }
+
+    @Test
     public void testSuppressedWarningsWithOutParams() throws Exception {
         SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
         int exitCode = new CommandLine(suppressedWarnings).execute();
