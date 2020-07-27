@@ -30,13 +30,12 @@ public class BaseCommand {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<BaseCommand>> violations = validator.validate(this);
-
         if (!violations.isEmpty()) {
             StringBuilder errorMsg = new StringBuilder();
-            for (ConstraintViolation<BaseCommand> violation : violations) {
+            violations.stream().forEach(violation -> {
                 errorMsg.append(ERROR).append(COLON).append(SPACE).append(violation.getMessage())
                     .append(NEW_LINE);
-            }
+            });
             throw new CommandLine.ParameterException(spec.commandLine(), errorMsg.toString());
         }
     }
@@ -49,8 +48,10 @@ public class BaseCommand {
 
     protected void validateFilePath(String filePath) {
         File file = new File(filePath);
-        if ((!file.exists() || file.isDirectory())) {
+        if ((!file.canRead())) {
             throw new CommandLine.ParameterException(spec.commandLine(), INVALID_FILE_PATH);
         }
     }
+
+
 }

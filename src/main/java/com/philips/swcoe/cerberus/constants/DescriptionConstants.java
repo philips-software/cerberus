@@ -37,6 +37,8 @@ public final class DescriptionConstants {
         "Specify minimum token length";
     public static final String LANGUAGE_OPTION_NOT_NULL_ARGUMENT_MESSAGE =
         "Specify language of the source code";
+    public static final String ALLOWED_LANGUAGES_EXCEPTION_MESSAGE =
+        "Unsupported language, Please specify 'java' for java language, 'cs' for csharp language and 'cpp' for C++";
     public static final String REPORT_STRUCTURE_OPTION_NOT_NULL_ARGUMENT_MESSAGE =
         "Specify report structure vertical or horizontal";
     public static final String LANGUAGE_VERSION_OPTION = "Specify Java language version";
