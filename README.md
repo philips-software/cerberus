@@ -25,17 +25,17 @@ We asked ourselves the same question! Why create a new tool when there were many
 
 ## How to use Ceberus? 
 ### Build Cerberus from source
-To build Cerberus, you will need a JDK 8 and apache maven installed in your system. 
-The final output of build is an executable JAR. We have created maven goals to achieve the same, review our POM file for more details.  
+To build Cerberus, you will need a JDK 8 installed in your system. 
+The final output of build is an executable JAR. We have created gradle tasks to achieve the same, review our build.gradle file for more details.  
 
 1. Clone the repository
 `git clone https://github.com/philips-software/cerberus.git`
 2. Build it using the following command
-`mvn clean package assembly:single`
-The executable jar will be generated in the target folder. 
+`./gradlew clean build shadowJar`
+The executable jar will be generated in the build/libs folder. 
 
 ### Run Cerberus as a command line tool
-Once the jar is built, use the jar and execute Cerberus
+Once the jar gets generated,  use the jar to run Cerberus
 
 ```
 $ java -jar cerberus.project-1.0.0-SNAPSHOT.jar
@@ -62,25 +62,23 @@ You can find detailed instructions on JCMD-DIFF ( Java Code Metrics Detector wit
 ### Dogfooding 
 To evaluate and confirm the quality of code changes made to Cerberus, you should run through all the gates and review the generated reports with:
 
-`mvn clean package checkstyle:check pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report`
-
-Afterwards, to use the actual JAR for yourself run the below command by checking out the master branch in this repository with:
-
-`mvn clean assembly:single`
+`./gradlew clean build pitest`
 
 The above command runs following tests
 
 1. Runs Automated tests
-2. Code coverage using Cobertura
-3. PMD for programming mistakes 
-4. CPD for copy paste detection 
-5. Mutation testing
+2. PMD for programming mistakes 
+3. CPD for copy paste detection 
+4. Checkstyle on source and tests 
+5. Code coverage using Jacoco
+5. Mutation testing using pitest
 
-We run the same maven goals in our pipeline as well. 
+We run the same Quality checks in our pipeline as well. 
 
-As mentioned above, Mutation testing is integrated into the pom.xml with a defined gating % in the pom.xml. To run the mutation testing alone, run the below command
+As mentioned above, Mutation testing is integrated into the build with a defined gating % . To run the mutation testing alone, run the below command
 
-`mvn compile org.pitest:pitest-maven:mutationCoverage`
+`./gradlew pitest`
+
 
 ### Dockerizing Cerberus
 
@@ -101,10 +99,10 @@ Once the image is built, you can actually spin up the container using the comman
 ### To Contribute 
 
 You are always free to fork this repository and create a PR to develop branch and ask for reviewer, Once approved it gets merged to develop branch . 
-To prevent build breaks run the same maven goals that we run in our pipelines for all quality checks
+To prevent build breaks run the same quality checks using gradle that we run in our pipelines for all quality checks
 
 ```
-mvn clean package checkstyle:check pmd:check pmd:cpd-check pitest:mutationCoverage pitest:report site surefire-report:report compile assembly:single
+./gradlew clean build pitest shadowJar 
 ```
 
 ## License
