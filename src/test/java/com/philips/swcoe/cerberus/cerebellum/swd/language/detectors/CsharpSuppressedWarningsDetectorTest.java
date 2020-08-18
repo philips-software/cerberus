@@ -47,8 +47,8 @@ public class CsharpSuppressedWarningsDetectorTest {
         aswd.detect(tokenizer);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         String fileWithCommentedOutWarning1 =
-            System.getProperty("user.dir") + path + DIRECTORY_3 + PATH_SEPARATOR + SUB_DIRECTORY_1 +
-                PATH_SEPARATOR + COMMENTED_OUT_PRAGMA_CS + DOT + CSHARP_EXT;
+            System.getProperty("user.dir") + path + DIRECTORY_3 + PATH_SEPARATOR + SUB_DIRECTORY_1
+                + PATH_SEPARATOR + COMMENTED_OUT_PRAGMA_CS + DOT + CSHARP_EXT;
         assertFalse(suppressedWarnings.containsKey(fileWithCommentedOutWarning1));
     }
 

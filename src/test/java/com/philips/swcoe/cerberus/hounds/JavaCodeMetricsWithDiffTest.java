@@ -21,10 +21,10 @@ import picocli.CommandLine;
 
 public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
-    private String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
-    private String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
-    private String classConfig = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
-    private String methodConfig =
+    private final String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
+    private final String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
+    private final String classConfig = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private final String methodConfig =
         RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
     private JavaCodeMetricsWithDiff javaCodeMetricsWithDiff;
 
@@ -99,7 +99,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString().contains(
             "Triangle.java,Shapes.Triangle::getHeight/0,METHOD,COMPLEXITY_OF_METHOD,1,0"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Rectangle.java,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]\",METHOD,COMPLEXITY_OF_METHOD,0,1"));
+            "Rectangle.java,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]\",METHOD,"
+                + "COMPLEXITY_OF_METHOD,0,1"));
     }
 
     @Test
@@ -119,7 +120,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString().contains(
             "Triangle.java|Shapes.Triangle::getHeight/0|METHOD|COMPLEXITY_OF_METHOD|1|0"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Rectangle.java|Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]|METHOD|COMPLEXITY_OF_METHOD|0|1"));
+            "Rectangle.java|Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,"
+                + "double]|METHOD|COMPLEXITY_OF_METHOD|0|1"));
         assertTrue(getModifiedOutputStream().toString()
             .contains("Rhombus.java|Shapes.Rhombus::setHeight/1[double]|METHOD|LINES_OF_CODE|0|3"));
     }

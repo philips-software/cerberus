@@ -21,7 +21,6 @@
     </rule>
     <rule ref="category/java/design.xml/AvoidThrowingNullPointerException"/>
     <rule ref="category/java/design.xml/GodClass"/>
-    <rule ref="category/java/design.xml/LoosePackageCoupling"/>
     <rule ref="category/java/design.xml/NPathComplexity">
         <properties>
             <property name="reportLevel" value="10"/>

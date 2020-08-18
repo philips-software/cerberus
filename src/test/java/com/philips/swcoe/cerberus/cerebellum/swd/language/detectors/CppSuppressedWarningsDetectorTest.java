@@ -48,13 +48,13 @@ public class CppSuppressedWarningsDetectorTest {
         aswd.detect(tokenizer);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         String fileWithCommentedOutWarning1 =
-            System.getProperty("user.dir") + path + SUB_DIRECTORY_ONE + PATH_SEPARATOR +
-                SUB_DIRECTORY_TWO + PATH_SEPARATOR + MULTI_LINE_COMMENT_TEST_CPP + DOT
+            System.getProperty("user.dir") + path + SUB_DIRECTORY_ONE + PATH_SEPARATOR
+                + SUB_DIRECTORY_TWO + PATH_SEPARATOR + MULTI_LINE_COMMENT_TEST_CPP + DOT
                 + CPP_EXT;
         assertFalse(suppressedWarnings.containsKey(fileWithCommentedOutWarning1));
         String fileWithCommentedOutWarning2 =
-            System.getProperty("user.dir") + path + SUB_DIRECTORY_TWO + PATH_SEPARATOR +
-                SINGLE_LINE_COMMENT_TEST_CPP + CPP_EXT;
+            System.getProperty("user.dir") + path + SUB_DIRECTORY_TWO + PATH_SEPARATOR
+                + SINGLE_LINE_COMMENT_TEST_CPP + CPP_EXT;
         assertFalse(suppressedWarnings.containsKey(fileWithCommentedOutWarning2));
     }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<suppressions>
+<!--    Refer https://github.com/checkstyle/checkstyle/blob/master/config/suppressions.xml -->
+<!--    To Suppress a file -->
+<!--    <suppress files="TheClassToIgnore\.java" checks="[a-zA-Z0-9]*"/>-->
+<!--    <suppress checks="." files="com[\\/]mydomain[\\/]abc[\\/]xyz[\\/]jaxws[\\/]managed[\\/]"/>-->
+</suppressions>

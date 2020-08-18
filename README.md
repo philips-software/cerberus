@@ -4,6 +4,7 @@
 ![Duplicate Blocks 37 Tokens](https://github.com/philips-software/cerberus/workflows/Duplicate%20Blocks%2037%20Tokens/badge.svg)
 ![Checkstyle Adherence](https://github.com/philips-software/cerberus/workflows/Checkstyle%20Adherence/badge.svg)
 ![Compile And Assemble](https://github.com/philips-software/cerberus/workflows/Compile%20And%20Assemble/badge.svg)
+![SpotBugs Scan](https://github.com/philips-software/cerberus/workflows/Spotbugs%20And%20Scan/badge.svg)
 
 # Cerberus
 

@@ -18,6 +18,7 @@ import javax.validation.ValidatorFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import picocli.CommandLine;
 
@@ -41,7 +42,7 @@ public class BaseCommand {
     }
 
     protected void writeToUI(String stuffToWrite) throws IOException {
-        OutputStreamWriter uiWriter = new OutputStreamWriter(System.out);
+        OutputStreamWriter uiWriter = new OutputStreamWriter(System.out, StandardCharsets.UTF_8);
         uiWriter.write(stuffToWrite);
         uiWriter.flush();
     }

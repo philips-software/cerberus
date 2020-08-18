@@ -19,5 +19,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Run all Quality Checks
-        run: mvn clean package pmd:cpd-check
+      - name: Grant execute permission for gradlew
+          run: chmod +x gradlew
+      - name: Run checkstyle on Source and Test
+          run: ./gradlew cpdCheck

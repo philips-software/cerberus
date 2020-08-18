@@ -20,7 +20,7 @@ import picocli.CommandLine;
 
 public class SuppressedWarningsTest extends CerberusBaseTest {
 
-    private String pathToTestSource = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String pathToTestSource = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
 
     @BeforeEach
     public void beforeEach() {
@@ -54,7 +54,9 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
         int exitCode = new CommandLine(suppressedWarnings)
             .execute("--files", pathToTestSource, "--language", "go");
         assertEquals(2, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Unsupported language, Please specify 'java' for java language, 'cs' for csharp language and 'cpp' for C++"));
+        assertTrue(getModifiedErrorStream().toString().contains(
+            "ERROR: Unsupported language, Please specify 'java' for java language, 'cs' for "
+                + "csharp language and 'cpp' for C++"));
     }
 
     @Test
@@ -105,7 +107,8 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString()
             .contains("Line No 11 = @SuppressWarnings(\"squid:S00112\")"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Line No 1 = @java.lang.SuppressWarnings(\"Some warning suppressed With Full package name\")"));
+            "Line No 1 = @java.lang.SuppressWarnings(\"Some warning suppressed With Full package "
+                + "name\")"));
 
     }
 

@@ -18,9 +18,9 @@ import picocli.CommandLine;
 
 class FindProgrammingMistakesTest extends BaseCommandTest {
 
-    private String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
 
-    private String externalRuleSet = RESOURCES + PATH_SEPARATOR + "java_practices.xml";
+    private final String externalRuleSet = RESOURCES + PATH_SEPARATOR + "java_practices.xml";
 
 
     @BeforeEach

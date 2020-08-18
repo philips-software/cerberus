@@ -24,12 +24,12 @@ import java.util.stream.Stream;
 
 public class CodeMetricsDiffServiceTest {
 
-    private String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
-    private String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
-    private String configPath = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private final String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
+    private final String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
+    private final String configPath = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
     private CodeMetricsDiffService codeMetricsDiffService;
     private List<CodeMetricsClassResult> codeMetricsClassResultList;
-    private Function<String, CodeMetricsClassResult> javaCodeMetricsResultToTest =
+    private final Function<String, CodeMetricsClassResult> javaCodeMetricsResultToTest =
         (filename) -> codeMetricsClassResultList.stream()
             .filter(f -> f.getFile().equalsIgnoreCase(filename)).findFirst().get();
 
@@ -230,7 +230,7 @@ public class CodeMetricsDiffServiceTest {
 
 
     @Test
-    public void MethodLevelMetricsRecordedShouldHaveOldAndNewCyclometicComplexity()
+    public void methodLevelMetricsRecordedShouldHaveOldAndNewCyclometicComplexity()
         throws Exception {
         CodeMetricsMethodResult codeMetricsMethodResult =
             javaCodeMetricsResultToTest.apply("Circle.java").getMethodMetrics().get(0);
@@ -239,7 +239,7 @@ public class CodeMetricsDiffServiceTest {
     }
 
     @Test
-    public void MethodLevelMetricsRecordedShouldHaveOldAndNewCyclometicComplexityForNonExistantInCurrent()
+    public void methodLevelMetricsRecordedShouldHaveOldAndNewCyclometicComplexityForNonExistantInCurrent()
         throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
             codeMetricsDiffService.getMetricsFromSourceCode();
@@ -250,7 +250,7 @@ public class CodeMetricsDiffServiceTest {
     }
 
     @Test
-    public void MethodLevelMetricsRecordedShouldHaveOldAndNewLinesOfCode() throws Exception {
+    public void methodLevelMetricsRecordedShouldHaveOldAndNewLinesOfCode() throws Exception {
         CodeMetricsMethodResult codeMetricsMethodResult =
             javaCodeMetricsResultToTest.apply("Circle.java").getMethodMetrics().get(0);
         assertEquals(3, codeMetricsMethodResult.getLinesOfCode().getNewValue());
@@ -258,7 +258,7 @@ public class CodeMetricsDiffServiceTest {
     }
 
     @Test
-    public void MethodLevelMetricsRecordedShouldHaveOldAndNewLinesOfCodeForNonExistantInCurrent()
+    public void methodLevelMetricsRecordedShouldHaveOldAndNewLinesOfCodeForNonExistantInCurrent()
         throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
             codeMetricsDiffService.getMetricsFromSourceCode();
@@ -269,7 +269,7 @@ public class CodeMetricsDiffServiceTest {
     }
 
     @Test
-    public void MethodLevelMetricsRecordedShouldHaveOldAndNewStartLineNo() throws Exception {
+    public void methodLevelMetricsRecordedShouldHaveOldAndNewStartLineNo() throws Exception {
         CodeMetricsMethodResult codeMetricsMethodResult =
             javaCodeMetricsResultToTest.apply("Circle.java").getMethodMetrics().get(0);
         assertEquals(6, codeMetricsMethodResult.getStartLineNo().getNewValue());
@@ -277,7 +277,7 @@ public class CodeMetricsDiffServiceTest {
     }
 
     @Test
-    public void MethodLevelMetricsRecordedShouldHaveOldAndNewStartLineNoForNonExistantInCurrent()
+    public void methodLevelMetricsRecordedShouldHaveOldAndNewStartLineNoForNonExistantInCurrent()
         throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
             codeMetricsDiffService.getMetricsFromSourceCode();
