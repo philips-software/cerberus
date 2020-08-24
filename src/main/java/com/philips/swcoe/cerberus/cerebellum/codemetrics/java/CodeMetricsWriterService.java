@@ -81,7 +81,7 @@ public class CodeMetricsWriterService {
         Builder tableBuilder = new Builder();
         tableBuilder.withAlignments(Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER,
             Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER);
-        tableBuilder.addRow(getReportHeaders());
+        tableBuilder.addRow((Object[]) getReportHeaders());
         return tableBuilder;
     }
 

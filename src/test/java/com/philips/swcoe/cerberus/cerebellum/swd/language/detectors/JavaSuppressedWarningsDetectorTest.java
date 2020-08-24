@@ -46,12 +46,12 @@ public class JavaSuppressedWarningsDetectorTest {
         aswd.detect(tokenizer);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         String fileWithCommentedOutWarning1 =
-            System.getProperty("user.dir") + path + COMMENTED_OUT_SUPPRESSED_WARNINGS_JAVA + DOT +
-                JAVA_EXT;
+            System.getProperty("user.dir") + path + COMMENTED_OUT_SUPPRESSED_WARNINGS_JAVA + DOT
+                + JAVA_EXT;
         assertFalse(suppressedWarnings.containsKey(fileWithCommentedOutWarning1));
         String fileWithCommentedOutWarning2 =
-            System.getProperty("user.dir") + path + MULTI_LINE_COMMENTED_SUPPRESSED_WARNINGS_JAVA +
-                DOT + JAVA_EXT;
+            System.getProperty("user.dir") + path + MULTI_LINE_COMMENTED_SUPPRESSED_WARNINGS_JAVA
+                + DOT + JAVA_EXT;
         assertFalse(suppressedWarnings.containsKey(fileWithCommentedOutWarning2));
     }
 

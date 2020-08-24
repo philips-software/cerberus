@@ -52,7 +52,7 @@ public class SuppressedWarnings extends BaseCommand implements Callable<Integer>
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf(languageOfSource.toUpperCase()));
         aswd.detect(tokenizer);
-        MapUtils.verbosePrint(new PrintStream(System.out), RESULTS_OF_SWD,
+        MapUtils.verbosePrint(new PrintStream(System.out, false,  "UTF-8"), RESULTS_OF_SWD,
             aswd.getSuppressedWarnings());
         return 0;
     }

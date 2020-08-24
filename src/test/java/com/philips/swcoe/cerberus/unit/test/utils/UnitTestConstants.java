@@ -7,7 +7,8 @@ package com.philips.swcoe.cerberus.unit.test.utils;
 import java.io.File;
 
 public class UnitTestConstants {
-    // Unit test constants that are also present in ProgramConstants.java. Intentionally kept separate!
+    // Unit test constants that are also present in ProgramConstants.java. Intentionally kept
+    // separate!
     public static final String RESOURCES = "resources";
     public static final String PATH_SEPARATOR = File.separator;
     public static final String NEW_LINE = String.format("%n");
@@ -58,6 +59,7 @@ public class UnitTestConstants {
     public static final String JAVA_EXT = "java";
     public static final String CSHARP_EXT = "cs";
     public static final String JAVASCRIPT_EXT = "js";
+
     private UnitTestConstants() {
     }
 

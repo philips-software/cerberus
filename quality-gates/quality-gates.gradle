@@ -1,0 +1,146 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        jcenter()
+    }
+    dependencies {
+        classpath 'de.aaschmid:gradle-cpd-plugin:3.1'
+        classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.0.5'
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.5.1'
+    }
+
+}
+
+apply plugin: 'jacoco'
+apply plugin: 'pmd'
+apply plugin: 'checkstyle'
+apply plugin: 'project-report'
+apply plugin: de.aaschmid.gradle.plugins.cpd.CpdPlugin
+apply plugin: com.github.spotbugs.snom.SpotBugsPlugin
+apply plugin: info.solidsoft.gradle.pitest.PitestPlugin
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'BUNDLE'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.98
+            }
+//          We are excluding data objects from coverage, since they don't have any behaviours defined
+//          Instead their behaviours are added from Lombak on runtime
+            excludes = [
+               'com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.*'
+            ]
+        }
+    }
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['com/philips/swcoe/cerberus/cerebellum/codemetrics/java/results/**'])
+        }))
+    }
+}
+
+pmd {
+    consoleOutput = true
+    toolVersion = "6.22.0"
+    ruleSets = [
+        "category/java/bestpractices.xml",
+        "${rootDir}/quality-gates/static-analysis-rules/pmd-cerberus-rules.xml"
+    ]
+}
+// This disables running PMD on test files ,
+// I (aravind666) are doing intentionally here, because some times to test some things efficiantly we have to take
+// Bad routes, We do agree that it is not so great to have some programming mistakes in test and it has to follow some standards
+// But to follow standards of code with respect to form-matting and style we enforce it using Checkstyle.
+// I might enable it in near future once we refactor tests to make it better for ever.
+pmdTest.enabled = false
+
+cpd {
+    language = 'java'
+    toolVersion = '6.19.0'
+    ignoreLiterals = false
+    ignoreFailures = false
+}
+
+cpdCheck {
+    minimumTokenCount = 34
+    reports {
+        csv.enabled = false
+        text {
+            enabled = true
+            destination = file("${buildDir}/reports/cpd.txt")
+        }
+    }
+    source = files('src/main/java')
+}
+
+spotbugs {
+    toolVersion = '4.0.2'
+    effort = "max"
+    ignoreFailures = false
+    showProgress = true
+}
+// This disables running spotbugs on test files ,
+// by default Spotbugs runs on tests also when ran with gradle check goal
+// I (aravind666) really did not see a need for running this on tests, because, tests will have some
+// error prone code because you expect obvious things pre-defined and assert absolute thing  you define.
+spotbugsTest.enabled = false
+
+spotbugsMain {
+    description("Runs spot bugs on production source code")
+    reports {
+        html {
+            enabled = true
+            destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+checkstyle {
+    toolVersion '8.35'
+    configFile file("${rootDir}/quality-gates/static-analysis-rules/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("${rootDir}/quality-gates/static-analysis-rules/checkstyle-suppressions.xml").absolutePath
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+pitest {
+    junit5PluginVersion = '0.12'
+    targetClasses = ['com.philips.swcoe.cerberus.*']
+    testSourceSets = [sourceSets.test]
+    mainSourceSets = [sourceSets.main]
+    avoidCallsTo = ['java.util.logging', 'org.apache.log4j',
+                    'org.slf4j', 'org.apache.commons.logging',
+                    'com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results']
+    jvmArgs = ['-Xmx1024m']
+    pitestVersion = '1.5.2'
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    mutationThreshold = 97
+    coverageThreshold = 97
+    exportLineCoverage = true
+}

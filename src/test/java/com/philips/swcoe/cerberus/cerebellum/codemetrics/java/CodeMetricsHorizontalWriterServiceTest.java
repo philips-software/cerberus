@@ -26,11 +26,11 @@ class CodeMetricsHorizontalWriterServiceTest {
 
     List<String> classConfig;
     List<String> methodConfig;
-    private String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
-    private String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
-    private String classConfigPath =
+    private final String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
+    private final String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
+    private final String classConfigPath =
         RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
-    private String methodConfigPath =
+    private final String methodConfigPath =
         RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
     private CodeMetricsDiffService codeMetricsDiffService;
     private CodeMetricsHorizontalWriterService codeMetricsHorizontalWriterService;

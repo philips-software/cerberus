@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import com.beust.jcommander.JCommander;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 import net.sourceforge.pmd.cpd.CPD;
 import net.sourceforge.pmd.cpd.CPDConfiguration;
@@ -62,7 +63,8 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
         cpd.go();
 
         arguments.getCPDRenderer()
-            .render(cpd.getMatches(), new BufferedWriter(new OutputStreamWriter(System.out)));
+            .render(cpd.getMatches(), new BufferedWriter(new OutputStreamWriter(System.out,
+                StandardCharsets.UTF_8)));
 
         return 0;
     }

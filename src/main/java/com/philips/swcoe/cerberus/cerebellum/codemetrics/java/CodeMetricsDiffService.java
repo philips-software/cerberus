@@ -354,7 +354,7 @@ public class CodeMetricsDiffService {
         codeMetricsDiffResult.setFileName(filename);
         codeMetricsDiffResult.setConstructType(constructType);
         codeMetricsDiffResult.setMetricName(metricName);
-        if (type == "new") {
+        if ("new".equals(type)) {
             codeMetricsDiffResult.setNewValue(value);
         } else {
             codeMetricsDiffResult.setOldValue(value);

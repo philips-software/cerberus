@@ -23,7 +23,7 @@ import picocli.CommandLine;
 
 public class DuplicatesTest extends CerberusBaseTest {
 
-    private String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
 
     @BeforeEach
     public void beforeEach() {
