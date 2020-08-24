@@ -67,12 +67,12 @@ class CodeMetricsVerticalWriterServiceTest {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
             codeMetricsDiffService.getMetricsFromSourceCode();
         String csvData = metricsCSVWriterService.generateMetricsReport(codeMetricsClassResultList);
-        assertTrue(csvData.contains("FILE,CLASS,TYPE,METRIC,NEW_VALUE,OLD_VALUE"));
-        assertTrue(csvData.contains("Rhombus.java,Shapes.Rhombus,CLASS,NO_OF_MODIFIERS,0,1"));
+        assertTrue(csvData.contains("FILE,TYPE,METRIC,NEW_VALUE,OLD_VALUE,CLASS"));
+        assertTrue(csvData.contains("Rhombus.java,CLASS,NO_OF_MODIFIERS,0,1,Shapes.Rhombus"));
         assertTrue(
-            csvData.contains("Triangle.java,Shapes.Triangle,CLASS,COUPLING_BETWEEN_OBJECTS,1,0"));
+            csvData.contains("Triangle.java,CLASS,COUPLING_BETWEEN_OBJECTS,1,0,Shapes.Triangle"));
         assertTrue(
-            csvData.contains("Rectangle.java,Shapes.Rectangle,CLASS,COUPLING_BETWEEN_OBJECTS,3,2"));
+            csvData.contains("Rectangle.java,CLASS,COUPLING_BETWEEN_OBJECTS,3,2,Shapes.Rectangle"));
     }
 
     @Test
