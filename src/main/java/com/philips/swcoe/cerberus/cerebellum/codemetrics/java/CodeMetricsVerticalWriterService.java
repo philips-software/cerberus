@@ -61,11 +61,14 @@ public class CodeMetricsVerticalWriterService extends CodeMetricsWriterService {
     }
 
     private Object[] getCodeMetricsDiffResultToWrite(CodeMetricsDiffResult codeMetricsDiffResult) {
-        return new Object[] {codeMetricsDiffResult.getFileName(),
-            codeMetricsDiffResult.getConstructName(),
+        return new Object[] {
+            codeMetricsDiffResult.getFileName(),
             codeMetricsDiffResult.getConstructType(),
             codeMetricsDiffResult.getMetricName(),
-            codeMetricsDiffResult.getNewValue(), codeMetricsDiffResult.getOldValue()};
+            codeMetricsDiffResult.getNewValue(),
+            codeMetricsDiffResult.getOldValue(),
+            codeMetricsDiffResult.getConstructName()
+        };
     }
 
     private void writeMetricsInCSV(CodeMetricsDiffResult codeMetricsDiffResult, List<String> config)

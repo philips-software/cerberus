@@ -90,7 +90,7 @@ public class CodeMetricsWriterService {
     }
 
     private String[] getReportHeaders() {
-        return new String[] {"FILE", "CLASS", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE"};
+        return new String[] {"FILE", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE", "CLASS"};
     }
 
 }

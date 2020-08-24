@@ -89,18 +89,19 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
             "--structure", "vertical");
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString()
-            .contains("FILE,CLASS,TYPE,METRIC,NEW_VALUE,OLD_VALUE"));
+            .contains("FILE,TYPE,METRIC,NEW_VALUE,OLD_VALUE,CLASS"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Triangle.java,Shapes.Triangle,CLASS,LINES_OF_CODE,17,0"));
+            .contains("Triangle.java,CLASS,LINES_OF_CODE,17,0,Shapes.Triangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rectangle.java,Shapes.Rectangle,CLASS,LINES_OF_CODE,37,27"));
+            .contains("Rectangle.java,CLASS,LINES_OF_CODE,37,27,Shapes.Rectangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rhombus.java,Shapes.Rhombus,CLASS,LINES_OF_CODE,0,27"));
+            .contains("Rhombus.java,CLASS,LINES_OF_CODE,0,27,Shapes.Rhombus"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Triangle.java,Shapes.Triangle::getHeight/0,METHOD,COMPLEXITY_OF_METHOD,1,0"));
+            "Triangle.java,METHOD,COMPLEXITY_OF_METHOD,1,0,Shapes.Triangle::getHeight/0"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Rectangle.java,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]\",METHOD,"
-                + "COMPLEXITY_OF_METHOD,0,1"));
+            "Rectangle.java,METHOD,"
+                + "COMPLEXITY_OF_METHOD,0,1,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,"
+                + "double]\""));
     }
 
     @Test
@@ -110,20 +111,20 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
             "--structure", "vertical");
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString()
-            .contains("FILE|CLASS|TYPE|METRIC|NEW_VALUE|OLD_VALUE"));
+            .contains("FILE|TYPE|METRIC|NEW_VALUE|OLD_VALUE|CLASS"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Triangle.java|Shapes.Triangle|CLASS|LINES_OF_CODE|17|0"));
+            .contains("Triangle.java|CLASS|LINES_OF_CODE|17|0|Shapes.Triangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rectangle.java|Shapes.Rectangle|CLASS|LINES_OF_CODE|37|27"));
+            .contains("Rectangle.java|CLASS|LINES_OF_CODE|37|27|Shapes.Rectangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rhombus.java|Shapes.Rhombus|CLASS|LINES_OF_CODE|0|27"));
+            .contains("Rhombus.java|CLASS|LINES_OF_CODE|0|27|Shapes.Rhombus"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Triangle.java|Shapes.Triangle::getHeight/0|METHOD|COMPLEXITY_OF_METHOD|1|0"));
+            "Triangle.java|METHOD|COMPLEXITY_OF_METHOD|1|0|Shapes.Triangle::getHeight/0"));
         assertTrue(getModifiedOutputStream().toString().contains(
-            "Rectangle.java|Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,"
-                + "double]|METHOD|COMPLEXITY_OF_METHOD|0|1"));
+            "Rectangle.java|METHOD|COMPLEXITY_OF_METHOD|0|1|Shapes.Rectangle:CONSTRUCTOR"
+                + ":Rectangle/2[double,double]"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rhombus.java|Shapes.Rhombus::setHeight/1[double]|METHOD|LINES_OF_CODE|0|3"));
+            .contains("Rhombus.java|METHOD|LINES_OF_CODE|0|3|Shapes.Rhombus::setHeight/1[double]"));
     }
 
 

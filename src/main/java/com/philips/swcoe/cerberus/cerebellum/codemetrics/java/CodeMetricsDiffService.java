@@ -80,11 +80,7 @@ public class CodeMetricsDiffService {
                 .orElseGet(Stream::empty)
                 .filter(methodMetrics -> methodMetrics.getMethodName()
                     .contains(ckMethodResult.getMethodName())).findFirst();
-        if (existingMethodMetrics.isPresent()) {
-            return existingMethodMetrics.get();
-        } else {
-            return new CodeMetricsMethodResult();
-        }
+        return existingMethodMetrics.orElseGet(CodeMetricsMethodResult::new);
     }
 
     private void setupMethodMetrics(CKClassResult result, String valueType,
