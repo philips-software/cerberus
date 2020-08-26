@@ -1,4 +1,4 @@
-#JCMD : - Java Code Metrics Detection
+# JCMD : - Java Code Metrics Detection
 
 This feature of Cerberus helps you to gather CK metrics in two modes 
 
@@ -6,7 +6,7 @@ This feature of Cerberus helps you to gather CK metrics in two modes
 2. Difference in Metrics of two different versions of same set of files.
 
 
-###Below are the Metrics that could be gathered at both method and class level
+### Below are the Metrics that could be gathered at both method and class level
 
 **COUPLING_BETWEEN_OBJECTS** : Counts the number of dependencies a class has. The tools checks for any type used in the entire class (field declaration, method return types, variable declarations, etc). It ignores dependencies to Java itself (e.g. java.lang.String).
 
@@ -47,7 +47,7 @@ Quantity of Anonymous classes, inner classes, and lambda expressions. The name s
 
 **NO_OF_MODIFIERS**: - Number of public/abstract/private/protected/native modifiers of classes/methods 
 
-####Metrics on Number of Methods based on its type : - 
+#### Metrics on Number of Methods based on its type : - 
 Specific numbers for total number of methods, static, public, abstract, private, protected, default, final, and synchronized methods. Constructor methods also count here . The format is NO_OF_METHOD-TYPE_METHODS
 
 	NO_OF_METHODS : - Number of methods
@@ -60,7 +60,7 @@ Specific numbers for total number of methods, static, public, abstract, private,
 	NO_OF_PUBLIC_METHODS : - Number of methods which are Public
 	NO_OF_PROTECTED_METHODS : - Number of methods which are Protected
 
-####Metrics on Number of Fields based on its type : - 
+#### Metrics on Number of Fields based on its type : - 
 Specific numbers for total number of fields, static, public, private, protected, default, final, and synchronized fields. The format is NO_OF_FIELD-TYPE_FIELDS
 
 	NO_OF_STATIC_FIELDS : - Number of methods which are Static
@@ -73,7 +73,7 @@ Specific numbers for total number of fields, static, public, private, protected,
 **COMPLEXITY_OF_METHOD** : - McCabe's complexity. It counts the number of branch instructions in a specific Method .
 
 
-####Below are the sample commands to run this feature
+#### Below are the sample commands to run this feature
 
     java -jar cereberus-executable.jar JCMD-DIFF --class-config=/your/path/class-metrics.config --method-config=/your/path/method-metrics.config --current=/your/path/current --previous=/your/path/previous --format=csv --structure=horizontal
 

@@ -19,5 +19,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Run all Quality Checks
-        run: mvn clean package pitest:mutationCoverage pitest:report
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Run Mutation Analysis
+        run: ./gradlew pitest

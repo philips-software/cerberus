@@ -57,16 +57,21 @@ public class BaseSuppressedWarningsDetector {
         List<String> listOfCode = entry.getValue().getCode();
         Map<String, String> suppressorsInCode = new TreeMap<>();
         int sizeOfListOfCode = listOfCode.size();
-        for (int j = 0; j < sizeOfListOfCode; j++) {
-            String line = listOfCode.get(j);
-            String previousLine = (j != 0) ? listOfCode.get(j - 1) : StringUtils.EMPTY;
+        for (int lineNo = 0; lineNo < sizeOfListOfCode; lineNo++) {
+            String line = listOfCode.get(lineNo);
+            String previousLine = (lineNo != 0) ? listOfCode.get(lineNo - 1) : StringUtils.EMPTY;
             String nextLine =
-                ((j + 1) >= sizeOfListOfCode) ? StringUtils.EMPTY : listOfCode.get(j + 1);
-            if (Stream.of(this.waysToSuppress).anyMatch(line::startsWith)
-                && isWithInComment(previousLine, nextLine)) {
-                suppressorsInCode.put(LINE + SPACE + NO + SPACE + j, line);
-            }
+                ((lineNo + 1) >= sizeOfListOfCode) ? StringUtils.EMPTY : listOfCode.get(lineNo + 1);
+            gatherSuppressions(suppressorsInCode, lineNo, line, previousLine, nextLine);
         }
         return suppressorsInCode;
+    }
+
+    private void gatherSuppressions(Map<String, String> suppressorsInCode, int lineNo, String line,
+                                    String previousLine, String nextLine) {
+        if (Stream.of(this.waysToSuppress).anyMatch(line::startsWith)
+            && isWithInComment(previousLine, nextLine)) {
+            suppressorsInCode.put(LINE + SPACE + NO + SPACE + lineNo, line);
+        }
     }
 }

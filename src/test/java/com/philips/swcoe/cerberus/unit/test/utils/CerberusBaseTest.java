@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 public class CerberusBaseTest {
-    private ByteArrayOutputStream modifiedOutputStream = new ByteArrayOutputStream();
-    private ByteArrayOutputStream modifiedErrorStream = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream modifiedOutputStream = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream modifiedErrorStream = new ByteArrayOutputStream();
     private PrintStream originalOutputStream;
     private PrintStream originalErrorStream;
 

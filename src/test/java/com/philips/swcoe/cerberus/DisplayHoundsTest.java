@@ -1,12 +1,13 @@
 package com.philips.swcoe.cerberus;
 
-import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import picocli.CommandLine;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
+import picocli.CommandLine;
 
 class DisplayHoundsTest extends CerberusBaseTest {
 
@@ -31,10 +32,14 @@ class DisplayHoundsTest extends CerberusBaseTest {
     public void testFormatRenderingHoundsOfCerberus() {
         String textTableString = getHelpStringToTest();
         String[] arrayOfHelpStringsDisplayed = textTableString.split("\n");
-        assertTrue(arrayOfHelpStringsDisplayed[0].contains("CPD            Detect duplicated blocks of code in your source code"));
-        assertTrue(arrayOfHelpStringsDisplayed[1].contains("SWD            Detect all the warnings which are suppressed in your code"));
-        assertTrue(arrayOfHelpStringsDisplayed[2].contains("JCMD           Java Code Metrics Detector"));
-        assertTrue(arrayOfHelpStringsDisplayed[3].contains("JCMD-DIFF      Java Code Metrics Detector with Diff"));
+        assertTrue(arrayOfHelpStringsDisplayed[0]
+            .contains("CPD            Detect duplicated blocks of code in your source code"));
+        assertTrue(arrayOfHelpStringsDisplayed[1]
+            .contains("SWD            Detect all the warnings which are suppressed in your code"));
+        assertTrue(
+            arrayOfHelpStringsDisplayed[2].contains("JCMD           Java Code Metrics Detector"));
+        assertTrue(arrayOfHelpStringsDisplayed[3]
+            .contains("JCMD-DIFF      Java Code Metrics Detector with Diff"));
     }
 
     private String getHelpStringToTest() {

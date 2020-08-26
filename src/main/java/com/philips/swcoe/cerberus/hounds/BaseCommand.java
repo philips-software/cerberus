@@ -18,6 +18,7 @@ import javax.validation.ValidatorFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import picocli.CommandLine;
 
@@ -30,27 +31,28 @@ public class BaseCommand {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<BaseCommand>> violations = validator.validate(this);
-
         if (!violations.isEmpty()) {
             StringBuilder errorMsg = new StringBuilder();
-            for (ConstraintViolation<BaseCommand> violation : violations) {
+            violations.stream().forEach(violation -> {
                 errorMsg.append(ERROR).append(COLON).append(SPACE).append(violation.getMessage())
                     .append(NEW_LINE);
-            }
+            });
             throw new CommandLine.ParameterException(spec.commandLine(), errorMsg.toString());
         }
     }
 
     protected void writeToUI(String stuffToWrite) throws IOException {
-        OutputStreamWriter uiWriter = new OutputStreamWriter(System.out);
+        OutputStreamWriter uiWriter = new OutputStreamWriter(System.out, StandardCharsets.UTF_8);
         uiWriter.write(stuffToWrite);
         uiWriter.flush();
     }
 
     protected void validateFilePath(String filePath) {
         File file = new File(filePath);
-        if ((!file.exists() || file.isDirectory())) {
+        if ((!file.canRead())) {
             throw new CommandLine.ParameterException(spec.commandLine(), INVALID_FILE_PATH);
         }
     }
+
+
 }

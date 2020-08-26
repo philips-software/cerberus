@@ -21,10 +21,11 @@ import picocli.CommandLine;
 
 public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
-    private String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
-    private String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
-    private String classConfig = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
-    private String methodConfig = RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
+    private final String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
+    private final String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
+    private final String classConfig = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private final String methodConfig =
+        RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
     private JavaCodeMetricsWithDiff javaCodeMetricsWithDiff;
 
     @BeforeEach
@@ -40,104 +41,185 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
 
     @Test
     public void testJavacodeMetricsHoundWithNoParameter() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute();
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify Absolute Path to your source code which has previous version"));
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the format of the report"));
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify the absolute path to your source code which has current version"));
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify report structure vertical or horizontal"));
+        assertTrue(getModifiedErrorStream().toString().contains(
+            "ERROR: Specify Absolute Path to your source code which has previous version"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("ERROR: Specify the format of the report"));
+        assertTrue(getModifiedErrorStream().toString().contains(
+            "ERROR: Specify the absolute path to your source code which has current version"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("ERROR: Specify report structure vertical or horizontal"));
     }
 
     @Test
     public void testJCMDWithMissedOutParameterCurrent() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--previous", previousPath});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff)
+            .execute("--previous", previousPath);
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("Specify the absolute path to your source code which has current version"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("Specify the absolute path to your source code which has current version"));
     }
 
     @Test
     public void testJCMDWithMissedOutTwoParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", previousPath, "--format", "abc"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff)
+            .execute("--current", previousPath, "--format", "abc");
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("Specify Absolute Path to your source code which has previous version"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("Specify Absolute Path to your source code which has previous version"));
     }
 
     @Test
     public void testJSCMDWithInvalidReportDelimiter() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "abc"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            "--current", currentPath, "--previous", previousPath, "--format", "abc");
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: must match \"csv|psv|md|html\""));
-        assertTrue(getModifiedErrorStream().toString().contains("ERROR: Specify report structure vertical or horizontal"));
+        assertTrue(
+            getModifiedErrorStream().toString().contains("ERROR: must match \"csv|psv|md|html\""));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("ERROR: Specify report structure vertical or horizontal"));
     }
 
     @Test
     public void shouldPrintCSVReportInVerticalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--structure", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            "--current", currentPath, "--previous", previousPath, "--format", "csv",
+            "--structure", "vertical");
         assertEquals(0, exitCode);
-        assertTrue(getModifiedOutputStream().toString().contains("FILE,CLASS,TYPE,METRIC,NEW_VALUE,OLD_VALUE"));
-        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle,CLASS,LINES_OF_CODE,17,0"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java,Shapes.Rectangle,CLASS,LINES_OF_CODE,37,27"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java,Shapes.Rhombus,CLASS,LINES_OF_CODE,0,27"));
-        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java,Shapes.Triangle::getHeight/0,METHOD,COMPLEXITY_OF_METHOD,1,0"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]\",METHOD,COMPLEXITY_OF_METHOD,0,1"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("FILE,TYPE,METRIC,NEW_VALUE,OLD_VALUE,CLASS"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Triangle.java,CLASS,LINES_OF_CODE,17,0,Shapes.Triangle"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Rectangle.java,CLASS,LINES_OF_CODE,37,27,Shapes.Rectangle"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Rhombus.java,CLASS,LINES_OF_CODE,0,27,Shapes.Rhombus"));
+        assertTrue(getModifiedOutputStream().toString().contains(
+            "Triangle.java,METHOD,COMPLEXITY_OF_METHOD,1,0,Shapes.Triangle::getHeight/0"));
+        assertTrue(getModifiedOutputStream().toString().contains(
+            "Rectangle.java,METHOD,"
+                + "COMPLEXITY_OF_METHOD,0,1,\"Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,"
+                + "double]\""));
     }
 
     @Test
     public void shouldPrintPSVReportInVerticalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--structure", "vertical"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            "--current", currentPath, "--previous", previousPath, "--format", "psv",
+            "--structure", "vertical");
         assertEquals(0, exitCode);
-        assertTrue(getModifiedOutputStream().toString().contains("FILE|CLASS|TYPE|METRIC|NEW_VALUE|OLD_VALUE"));
-        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle|CLASS|LINES_OF_CODE|17|0"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java|Shapes.Rectangle|CLASS|LINES_OF_CODE|37|27"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus|CLASS|LINES_OF_CODE|0|27"));
-        assertTrue(getModifiedOutputStream().toString().contains("Triangle.java|Shapes.Triangle::getHeight/0|METHOD|COMPLEXITY_OF_METHOD|1|0"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rectangle.java|Shapes.Rectangle:CONSTRUCTOR:Rectangle/2[double,double]|METHOD|COMPLEXITY_OF_METHOD|0|1"));
-        assertTrue(getModifiedOutputStream().toString().contains("Rhombus.java|Shapes.Rhombus::setHeight/1[double]|METHOD|LINES_OF_CODE|0|3"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("FILE|TYPE|METRIC|NEW_VALUE|OLD_VALUE|CLASS"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Triangle.java|CLASS|LINES_OF_CODE|17|0|Shapes.Triangle"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Rectangle.java|CLASS|LINES_OF_CODE|37|27|Shapes.Rectangle"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Rhombus.java|CLASS|LINES_OF_CODE|0|27|Shapes.Rhombus"));
+        assertTrue(getModifiedOutputStream().toString().contains(
+            "Triangle.java|METHOD|COMPLEXITY_OF_METHOD|1|0|Shapes.Triangle::getHeight/0"));
+        assertTrue(getModifiedOutputStream().toString().contains(
+            "Rectangle.java|METHOD|COMPLEXITY_OF_METHOD|0|1|Shapes.Rectangle:CONSTRUCTOR"
+                + ":Rectangle/2[double,double]"));
+        assertTrue(getModifiedOutputStream().toString()
+            .contains("Rhombus.java|METHOD|LINES_OF_CODE|0|3|Shapes.Rhombus::setHeight/1[double]"));
     }
 
 
     @Test
     public void shouldPrintCSVReportInHorizontalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "csv", "--structure", "horizontal"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            "--current", currentPath, "--previous", previousPath, "--format", "csv",
+            "--structure", "horizontal");
         assertEquals(0, exitCode);
-        List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(getModifiedOutputStream().toString());
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("NO_OF_MODIFIERS,1,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("LINES_OF_CODE,17,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("NO_OF_ASSIGNMENTS,2,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("NO_OF_UNIQUE_WORDS,8,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("DEPTH_INHERITANCE_TREE,2,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("WEIGHT_METHOD_CLASS,4,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("COUPLING_BETWEEN_OBJECTS,1,0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java,Shapes.Triangle,CLASS").contains("NO_OF_RETURNS,2,0"));
-        assertTrue(getLineToAssert(listOfData,"Rectangle.java,Shapes.Rectangle::calculatePerimeter/0,METHOD").contains("START_LINE_NO,39,29"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD").contains("COMPLEXITY_OF_METHOD,0,1"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD").contains("LINES_OF_CODE,0,3"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD").contains("START_LINE_NO,0,29"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD").contains("NO_OF_NOS,0,1"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD").contains("NO_OF_MATH_OPERATIONS,0,1"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD").contains("NO_OF_UNIQUE_WORDS,0,2"));
+        List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults()
+            .splitToList(getModifiedOutputStream().toString());
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("NO_OF_MODIFIERS,1,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("LINES_OF_CODE,17,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("NO_OF_ASSIGNMENTS,2,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("NO_OF_UNIQUE_WORDS,8,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("DEPTH_INHERITANCE_TREE,2,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("WEIGHT_METHOD_CLASS,4,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("COUPLING_BETWEEN_OBJECTS,1,0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
+            .contains("NO_OF_RETURNS,2,0"));
+        assertTrue(getLineToAssert(listOfData,
+            "Rectangle.java,Shapes.Rectangle::calculatePerimeter/0,METHOD")
+            .contains("START_LINE_NO,39,29"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD")
+                .contains("COMPLEXITY_OF_METHOD,0,1"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD")
+                .contains("LINES_OF_CODE,0,3"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD")
+                .contains("START_LINE_NO,0,29"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD")
+                .contains("NO_OF_NOS,0,1"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD")
+                .contains("NO_OF_MATH_OPERATIONS,0,1"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java,Shapes.Rhombus::calculatePerimeter/0,METHOD")
+                .contains("NO_OF_UNIQUE_WORDS,0,2"));
     }
 
     @Test
     public void shouldPrintPSVReportInHorizontalForValidParameters() throws Exception {
-        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(new String[]{"--current", currentPath, "--previous", previousPath, "--format", "psv", "--structure", "horizontal"});
+        int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
+            "--current", currentPath, "--previous", previousPath, "--format", "psv",
+            "--structure", "horizontal");
         assertEquals(0, exitCode);
-        List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults().splitToList(getModifiedOutputStream().toString());
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("NO_OF_MODIFIERS|1|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("LINES_OF_CODE|17|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("NO_OF_ASSIGNMENTS|2|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("NO_OF_UNIQUE_WORDS|8|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("DEPTH_INHERITANCE_TREE|2|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("WEIGHT_METHOD_CLASS|4|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("COUPLING_BETWEEN_OBJECTS|1|0"));
-        assertTrue(getLineToAssert(listOfData,"Triangle.java|Shapes.Triangle|CLASS").contains("NO_OF_RETURNS|2|0"));
-        assertTrue(getLineToAssert(listOfData,"Rectangle.java|Shapes.Rectangle::calculatePerimeter/0|METHOD").contains("START_LINE_NO|39|29"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD").contains("COMPLEXITY_OF_METHOD|0|1"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD").contains("LINES_OF_CODE|0|3"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD").contains("START_LINE_NO|0|29"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD").contains("NO_OF_NOS|0|1"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD").contains("NO_OF_MATH_OPERATIONS|0|1"));
-        assertTrue(getLineToAssert(listOfData,"Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD").contains("NO_OF_UNIQUE_WORDS|0|2"));
+        List<String> listOfData = Splitter.on(System.lineSeparator()).trimResults()
+            .splitToList(getModifiedOutputStream().toString());
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("NO_OF_MODIFIERS|1|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("LINES_OF_CODE|17|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("NO_OF_ASSIGNMENTS|2|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("NO_OF_UNIQUE_WORDS|8|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("DEPTH_INHERITANCE_TREE|2|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("WEIGHT_METHOD_CLASS|4|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("COUPLING_BETWEEN_OBJECTS|1|0"));
+        assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
+            .contains("NO_OF_RETURNS|2|0"));
+        assertTrue(getLineToAssert(listOfData,
+            "Rectangle.java|Shapes.Rectangle::calculatePerimeter/0|METHOD")
+            .contains("START_LINE_NO|39|29"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD")
+                .contains("COMPLEXITY_OF_METHOD|0|1"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD")
+                .contains("LINES_OF_CODE|0|3"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD")
+                .contains("START_LINE_NO|0|29"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD")
+                .contains("NO_OF_NOS|0|1"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD")
+                .contains("NO_OF_MATH_OPERATIONS|0|1"));
+        assertTrue(
+            getLineToAssert(listOfData, "Rhombus.java|Shapes.Rhombus::calculatePerimeter/0|METHOD")
+                .contains("NO_OF_UNIQUE_WORDS|0|2"));
     }
 
     @Test
@@ -195,7 +277,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
             getArgsForHound("csv", classConfig, "blahblah", "blahblah"));
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("must match \"vertical|horizontal\""));
+        assertTrue(
+            getModifiedErrorStream().toString().contains("must match \"vertical|horizontal\""));
     }
 
     @Test
@@ -203,7 +286,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
             getArgsForHound("md", classConfig, methodConfig, "horizontal"));
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("Markdown and HTML format can be used only with vertical metrics structure"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("Markdown and HTML format can be used only with vertical metrics structure"));
     }
 
     @Test
@@ -211,7 +295,8 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         int exitCode = new CommandLine(javaCodeMetricsWithDiff).execute(
             getArgsForHound("html", classConfig, methodConfig, "horizontal"));
         assertNotEquals(0, exitCode);
-        assertTrue(getModifiedErrorStream().toString().contains("Markdown and HTML format can be used only with vertical metrics structure"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("Markdown and HTML format can be used only with vertical metrics structure"));
     }
 
     private String getLineToAssert(List<String> listOfData, String s) {
@@ -239,7 +324,9 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
             assertTrue(getModifiedOutputStream().toString().contains(prefix + metric));
         });
 
-        List<String> metricsWhichShouldNotDisplay = Arrays.asList("NO_OF_FIELDS", "NO_OF_COMPARISONS", "NO_OF_PARENTHESIZED_EXPRESSIONS", "DEPTH_INHERITANCE_TREE");
+        List<String> metricsWhichShouldNotDisplay = Arrays
+            .asList("NO_OF_FIELDS", "NO_OF_COMPARISONS", "NO_OF_PARENTHESIZED_EXPRESSIONS",
+                "DEPTH_INHERITANCE_TREE");
         metricsWhichShouldNotDisplay.stream().forEach(metric -> {
             assertFalse(getModifiedOutputStream().toString().contains(prefix + metric));
         });

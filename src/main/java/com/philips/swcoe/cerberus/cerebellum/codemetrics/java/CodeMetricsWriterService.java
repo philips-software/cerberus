@@ -81,7 +81,7 @@ public class CodeMetricsWriterService {
         Builder tableBuilder = new Builder();
         tableBuilder.withAlignments(Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER,
             Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER);
-        tableBuilder.addRow(getReportHeaders());
+        tableBuilder.addRow((Object[]) getReportHeaders());
         return tableBuilder;
     }
 
@@ -90,7 +90,7 @@ public class CodeMetricsWriterService {
     }
 
     private String[] getReportHeaders() {
-        return new String[] {"FILE", "CLASS", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE"};
+        return new String[] {"FILE", "TYPE", "METRIC", "NEW_VALUE", "OLD_VALUE", "CLASS"};
     }
 
 }

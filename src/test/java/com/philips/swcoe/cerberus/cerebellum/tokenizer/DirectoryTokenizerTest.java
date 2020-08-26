@@ -1,20 +1,33 @@
+
 /*
  * Copyright of Koninklijke Philips N.V. 2020
  */
+
 package com.philips.swcoe.cerberus.cerebellum.tokenizer;
 
-import net.sourceforge.pmd.cpd.Language;
-import net.sourceforge.pmd.cpd.SourceCode;
-import net.sourceforge.pmd.cpd.Tokens;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.DOT;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVASCRIPT_EXT;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA_EXT;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_MIX_CODE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
-
-import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import net.sourceforge.pmd.cpd.Language;
+import net.sourceforge.pmd.cpd.SourceCode;
+import net.sourceforge.pmd.cpd.Tokens;
 
 public class DirectoryTokenizerTest {
 
@@ -34,7 +47,7 @@ public class DirectoryTokenizerTest {
 
     @Test
     public void testInvalidDirectory() throws Exception {
-        assertThrows(FileNotFoundException.class,() -> {
+        assertThrows(FileNotFoundException.class, () -> {
             DirectoryTokenizer tokenizer = new DirectoryTokenizer();
             String badPath = "bad/path/";
             tokenizer.tokenize(new File(badPath), JAVA);
