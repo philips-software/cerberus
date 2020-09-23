@@ -6,6 +6,7 @@ package com.philips.swcoe.cerberus.hounds;
 
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -21,6 +22,7 @@ import picocli.CommandLine;
 public class SuppressedWarningsTest extends CerberusBaseTest {
 
     private final String pathToTestSource = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String exclusionPath = pathToTestSource + PATH_SEPARATOR + TEST_EXCLUSION_CODE;
 
     @BeforeEach
     public void beforeEach() {
@@ -36,7 +38,7 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
     public void testSuppressedWarningsWithParams() throws Exception {
         SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
         int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "JAVA");
+            .execute("--files", pathToTestSource, "--language", "JAVA", "--exclude", exclusionPath);
         assertEquals(0, exitCode);
     }
 
@@ -44,7 +46,15 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
     public void shouldNotThrowErrorWhenLanguageIsSpecifiedInLowerCase() throws Exception {
         SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
         int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "java");
+            .execute("--files", pathToTestSource, "--language", "java", "--exclude", exclusionPath);
+        assertEquals(0, exitCode);
+    }
+    
+    @Test
+    public void shouldNotThrowErrorWhenExclusionPresent() throws Exception {
+        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
+        int exitCode = new CommandLine(suppressedWarnings)
+            .execute("--files", pathToTestSource, "--language", "java", "--exclude", exclusionPath);
         assertEquals(0, exitCode);
     }
 
@@ -94,7 +104,7 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
     public void testSuppressedWarningsReportWithParams() throws Exception {
         SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
         int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "JAVA");
+            .execute("--files", pathToTestSource, "--language", "JAVA", "--exclude", exclusionPath);
         assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString().contains("GenericSuppressedWarnings.java"));
         assertTrue(

@@ -2,6 +2,7 @@ package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_CURRENT;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_PREVIOUS;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -32,6 +33,7 @@ class CodeMetricsHorizontalWriterServiceTest {
         RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
     private final String methodConfigPath =
         RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
+    private final String exclusionPath = RESOURCES + PATH_SEPARATOR + TEST_EXCLUSION_CODE;
     private CodeMetricsDiffService codeMetricsDiffService;
     private CodeMetricsHorizontalWriterService codeMetricsHorizontalWriterService;
     private List<CodeMetricsClassResult> codeMetricsClassResultList;
@@ -56,7 +58,7 @@ class CodeMetricsHorizontalWriterServiceTest {
     private void getCodeClassResult(String format) throws IOException {
         codeMetricsHorizontalWriterService =
             new CodeMetricsHorizontalWriterService(classConfig, methodConfig, format);
-        codeMetricsClassResultList = codeMetricsDiffService.getMetricsFromSourceCode();
+        codeMetricsClassResultList = codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
     }
 
     @Test

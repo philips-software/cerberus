@@ -19,15 +19,16 @@ public class CodeMetricsDiffService {
 
     private String previousPath;
     private String currentPath;
+    private CodeMetricsDiffServiceHelper codeMetricsDiffServiceHelper;
 
     public CodeMetricsDiffService(String previousPath, String currentPath) {
         this.previousPath = previousPath;
         this.currentPath = currentPath;
+        this.codeMetricsDiffServiceHelper = new CodeMetricsDiffServiceHelper();
     }
 
-    public List<CodeMetricsClassResult> getMetricsFromSourceCode() {
-        List<CodeMetricsClassResult> codeMetricsClassResultsList =
-            new ArrayList<CodeMetricsClassResult>();
+    public List<CodeMetricsClassResult> getMetricsFromSourceCode(String exclusionFiles) {
+        List<CodeMetricsClassResult> codeMetricsClassResultsList = new ArrayList<CodeMetricsClassResult>();
         new CK().calculate(currentPath, false, result -> {
             CodeMetricsClassResult codeMetricsClassResult = new CodeMetricsClassResult();
             transformResults(result, codeMetricsClassResult, "new");
@@ -48,8 +49,7 @@ public class CodeMetricsDiffService {
                 codeMetricsClassResultsList.add(codeMetricsClassResult);
             }
         });
-
-        return codeMetricsClassResultsList;
+        return codeMetricsDiffServiceHelper.getMetricsAfterExclusion(exclusionFiles, codeMetricsClassResultsList);
     }
 
     private void transformResults(CKClassResult result,

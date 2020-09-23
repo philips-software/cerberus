@@ -9,6 +9,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.DOT;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA_EXT;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,6 +25,7 @@ import picocli.CommandLine;
 public class JavaCodeMetricsTest extends CerberusBaseTest {
 
     private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String exclusionPath = path + PATH_SEPARATOR + TEST_EXCLUSION_CODE;
 
     @BeforeEach
     public void beforeEach() {
@@ -47,14 +49,14 @@ public class JavaCodeMetricsTest extends CerberusBaseTest {
     @Test
     public void testJCMDWithInvalidParameter() throws Exception {
         JavaCodeMetrics javaCodeMetrics = new JavaCodeMetrics();
-        int exitCode = new CommandLine(javaCodeMetrics).execute("--files", path);
+        int exitCode = new CommandLine(javaCodeMetrics).execute("--files", path, "--exclude", exclusionPath);
         assertEquals(0, exitCode);
     }
 
     @Test
     public void testGatheringOfMetrics() throws Exception {
         JavaCodeMetrics javaCodeMetrics = new JavaCodeMetrics();
-        int exitCode = new CommandLine(javaCodeMetrics).execute("--files", path);
+        int exitCode = new CommandLine(javaCodeMetrics).execute("--files", path, "--exclude", exclusionPath);
         assertEquals(0, exitCode);
         String actualString = getModifiedOutputStream().toString();
         String expectedFileName = COMMENTED_OUT_SUPPRESSED_WARNINGS_JAVA + DOT + JAVA_EXT;

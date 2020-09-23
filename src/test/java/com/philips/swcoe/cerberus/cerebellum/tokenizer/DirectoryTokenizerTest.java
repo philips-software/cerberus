@@ -11,6 +11,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVAS
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA_EXT;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_MIX_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,13 +33,14 @@ import net.sourceforge.pmd.cpd.Tokens;
 public class DirectoryTokenizerTest {
 
     private final String path = RESOURCES + PATH_SEPARATOR + TEST_MIX_CODE;
+    private final String exclusionPath = path + PATH_SEPARATOR  + TEST_EXCLUSION_CODE;
 
     @Test
     public void testTokenizeSpecifiedLanguage() throws Exception {
         DirectoryTokenizer tokenizer = new DirectoryTokenizer();
         File pathToTestSource = new File(path);
         tokenizer.tokenize(pathToTestSource, JAVA_EXT);
-        Map<String, SourceCode> source = tokenizer.getSource();
+        Map<String, SourceCode> source = tokenizer.getSource(exclusionPath);
         for (Map.Entry<String, SourceCode> entry : source.entrySet()) {
             assertTrue(entry.getKey().endsWith(DOT + JAVA_EXT));
             assertFalse(entry.getKey().endsWith(DOT + JAVASCRIPT_EXT));
@@ -67,12 +69,12 @@ public class DirectoryTokenizerTest {
         tokenizer.setTokens(expectedTokens);
         assertEquals(expectedTokens, tokenizer.getTokens());
 
-        Map<String, SourceCode> expectedSource = tokenizer.getSource();
+        Map<String, SourceCode> expectedSource = tokenizer.getSource(exclusionPath);
         assertNotNull(expectedSource);
         tokenizer.setSource(null);
-        assertNull(tokenizer.getSource());
+        assertNull(tokenizer.getSource(null));
         tokenizer.setSource(expectedSource);
-        assertEquals(expectedSource, tokenizer.getSource());
+        assertEquals(expectedSource, tokenizer.getSource(exclusionPath));
 
         Language expectedLanguage = tokenizer.getLanguage();
         assertNotNull(expectedLanguage);

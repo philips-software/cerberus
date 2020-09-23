@@ -9,6 +9,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA_
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.SUPPRESSED_WARNINGS_WITH_FULL_PACKAGE_NAME_JAVA;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,6 +25,7 @@ import picocli.CommandLine;
 public class DuplicatesTest extends CerberusBaseTest {
 
     private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String exclusionPath = path + PATH_SEPARATOR  + TEST_EXCLUSION_CODE;
 
     @BeforeEach
     public void beforeEach() {
@@ -54,7 +56,7 @@ public class DuplicatesTest extends CerberusBaseTest {
         Duplicates duplicateHound = new Duplicates();
         int exitCode = new CommandLine(duplicateHound).execute(
             "--files", path, "--format", "text", "--minimum-tokens", "5",
-            "--language", "java");
+            "--language", "java", "--exclude", exclusionPath);
         assertEquals(0, exitCode);
     }
 
@@ -63,7 +65,7 @@ public class DuplicatesTest extends CerberusBaseTest {
         Duplicates duplicateHound = new Duplicates();
         int exitCode = new CommandLine(duplicateHound).execute(
             "--files", path, "--format", "text", "--minimum-tokens", "3",
-            "--language", "java");
+            "--language", "java", "--exclude", exclusionPath);
         assertEquals(0, exitCode);
         String actualString = getModifiedOutputStream().toString();
         assertTrue(actualString.contains("duplication in the following files"));

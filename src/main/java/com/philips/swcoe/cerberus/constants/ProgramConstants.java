@@ -66,6 +66,7 @@ public final class ProgramConstants {
     public static final String MINIMUM_TOKENS_OPTION = "--minimum-tokens";
     public static final String LANGUAGE_OPTION = "--language";
     public static final String STRUCTURE_OPTION = "--structure";
+    public static final String EXCLUDE = "--exclude";
     // Version control of jars
     public static final String VERSION = "1.0";
 

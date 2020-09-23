@@ -9,6 +9,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.MAIN;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.SONARQUBE_SUPPRESSED_WARNINGS_JAVA;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,17 +20,20 @@ import org.junit.jupiter.api.Test;
 import com.github.mauricioaniche.ck.CKClassResult;
 import com.github.mauricioaniche.ck.CKMethodResult;
 import com.google.common.collect.Iterables;
+
 import java.util.List;
 
 public class CodeMetricsServiceTest {
 
     private String path;
+    private String exclusionPath;
     private List<CKClassResult> metrics;
 
     @BeforeEach
     public void beforeEachTest() throws Exception {
         path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
-        metrics = CodeMetricsService.getCodeMetrics(path);
+        exclusionPath = path + PATH_SEPARATOR  + TEST_EXCLUSION_CODE;
+        metrics = CodeMetricsService.getCodeMetrics(path, exclusionPath);
     }
 
     @Test

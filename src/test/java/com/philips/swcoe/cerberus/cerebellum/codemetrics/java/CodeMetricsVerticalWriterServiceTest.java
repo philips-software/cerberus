@@ -2,6 +2,7 @@ package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_CURRENT;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_PREVIOUS;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -28,6 +29,7 @@ class CodeMetricsVerticalWriterServiceTest {
         RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
     private final String methodConfigPath =
         RESOURCES + PATH_SEPARATOR + "method_metrics_to_display.properties";
+    private final String exclusionPath = RESOURCES + PATH_SEPARATOR + TEST_EXCLUSION_CODE;
 
     private CodeMetricsDiffService codeMetricsDiffService;
     private CodeMetricsVerticalWriterService metricsCSVWriterService;
@@ -56,7 +58,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void shouldWriteClassMetricsandMethodMetricsInVerticalFashion() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String csvData = metricsCSVWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertEquals(44, csvData.split(System.getProperty("line.separator")).length);
     }
@@ -65,7 +67,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void shouldWriteClassMetricsWhichAreChangedInCSVFormat() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String csvData = metricsCSVWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertTrue(csvData.contains("FILE,TYPE,METRIC,NEW_VALUE,OLD_VALUE,CLASS"));
         assertTrue(csvData.contains("Rhombus.java,CLASS,NO_OF_MODIFIERS,0,1,Shapes.Rhombus"));
@@ -78,7 +80,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void shouldNotWriteClassMetricsWhichAreNotChangedInCSVFormat() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String csvData = metricsCSVWriterService.generateMetricsReport(codeMetricsClassResultList);
         assertFalse(csvData.contains("Circle.java"));
         assertFalse(csvData.contains("Shape.java"));
@@ -88,7 +90,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void reportsDataInCSVFormatThrowsException() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         assertDoesNotThrow(
             () -> metricsCSVWriterService.generateMetricsReport(codeMetricsClassResultList));
     }
@@ -96,7 +98,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void reportsDataInCSVFormatBasedOnClassFilter() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String csvData = metricsCSVWriterService.generateMetricsReport(codeMetricsClassResultList);
         List<String> expectedMetricsToDisplay =
             Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
@@ -115,7 +117,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void reportsDataInPSVFormatBasedOnClassFilter() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String csvData = metricsPSVWriterService.generateMetricsReport(codeMetricsClassResultList);
         List<String> expectedMetricsToDisplay =
             Arrays.asList("NO_OF_MODIFIERS", "NO_OF_PRIVATE_METHODS", "COUPLING_BETWEEN_OBJECTS");
@@ -134,7 +136,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void reportsDataInMDFormatBasedOnClassFilter() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String markdownData =
             metricsMDWriterService.generateMetricsReport(codeMetricsClassResultList);
         List<String> expectedMetricsToDisplay =
@@ -154,7 +156,7 @@ class CodeMetricsVerticalWriterServiceTest {
     @Test
     public void reportsDataInHTMLFormatBasedOnClassFilter() throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         String htmlData =
             metricsHTMLWriterService.generateMetricsReport(codeMetricsClassResultList);
         List<String> expectedMetricsToDisplay =

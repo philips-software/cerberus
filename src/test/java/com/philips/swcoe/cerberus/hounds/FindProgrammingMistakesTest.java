@@ -2,6 +2,7 @@ package com.philips.swcoe.cerberus.hounds;
 
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,6 +22,7 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
     private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
 
     private final String externalRuleSet = RESOURCES + PATH_SEPARATOR + "java_practices.xml";
+    private final String exclusionPath = path + PATH_SEPARATOR + TEST_EXCLUSION_CODE;
 
 
     @BeforeEach
@@ -88,7 +90,8 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
         return new CommandLine(findProgrammingMistakes).execute("--files", path,
             "--language", java,
             "--java-version", s,
-            "--rulesets", s2);
+            "--rulesets", s2,
+            "--exclude", exclusionPath);
     }
 
     private void assertErrorOutputFromFPM() {

@@ -7,6 +7,7 @@ package com.philips.swcoe.cerberus.hounds;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.CONFIG_CMD_LINE_OPTION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.CURRENT_FILES_CMD_LINE_OPTION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.CURRENT_FILES_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
+import static com.philips.swcoe.cerberus.constants.DescriptionConstants.EXCLUSION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.INVALID_REPORT_FORMAT;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.JAVA_CODE_METRICS_DETECTOR_DESCRIPTION_WITH_DIFF;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.PREVIOUS_FILES_CMD_LINE_OPTION_DESCRIPTION;
@@ -17,6 +18,7 @@ import static com.philips.swcoe.cerberus.constants.DescriptionConstants.REPORT_S
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.REPORT_STRUCTURE_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.CLASS_CONFIG;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.CURRENT_FILES_OPTION;
+import static com.philips.swcoe.cerberus.constants.ProgramConstants.EXCLUDE;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.FORMAT_OPTION;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.JAVA_CODE_METRICS_DETECTOR_WITH_DIFF;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.METHOD_CONFIG;
@@ -64,6 +66,9 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
 
     @CommandLine.Option(names = METHOD_CONFIG, description = CONFIG_CMD_LINE_OPTION_DESCRIPTION)
     private String methodConfigFile;
+    
+    @CommandLine.Option(names = EXCLUDE, description = EXCLUSION_DESCRIPTION)
+    private String exclusionFiles;
 
     @Override
     public Integer call() throws Exception {
@@ -76,7 +81,7 @@ public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Int
         CodeMetricsDiffService codeMetricsDiffService =
             new CodeMetricsDiffService(pathToPrevious, pathToCurrent);
         List<CodeMetricsClassResult> metricsResult =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionFiles);
         this.writeToUI(ReportWriters.valueOf(metricFormat).get(classConfig, methodConfig,
             reportFormat, metricsResult));
         return 0;

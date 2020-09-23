@@ -24,11 +24,13 @@ public class DirectoryTokenizer implements Tokenizer {
     private Tokens tokens;
     private String encoding;
     private Map<String, SourceCode> source;
+    private DirectoryTokenizerHelper directoryTokenizerHelper;
 
     public DirectoryTokenizer() {
         tokens = new Tokens();
         encoding = System.getProperty("file.encoding");
         source = new TreeMap<>();
+        directoryTokenizerHelper = new DirectoryTokenizerHelper();
     }
 
     public Language getLanguage() {
@@ -47,8 +49,8 @@ public class DirectoryTokenizer implements Tokenizer {
         this.tokens = tokens;
     }
 
-    public Map<String, SourceCode> getSource() {
-        return source;
+    public Map<String, SourceCode> getSource(String exclusionLists) {
+        return directoryTokenizerHelper.getSource(source, exclusionLists);
     }
 
     public void setSource(Map<String, SourceCode> source) {

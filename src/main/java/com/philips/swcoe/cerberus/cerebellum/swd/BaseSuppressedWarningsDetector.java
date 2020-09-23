@@ -32,9 +32,9 @@ public class BaseSuppressedWarningsDetector {
         this.suppressedWarnings = suppressedWarnings;
     }
 
-    public void detect(DirectoryTokenizer tokenizer) {
+    public void detect(DirectoryTokenizer tokenizer, String exclusionFiles) {
         this.setSuppressedWarnings(new TreeMap<String, Map<String, String>>());
-        Map<String, SourceCode> source = tokenizer.getSource();
+        Map<String, SourceCode> source = tokenizer.getSource(exclusionFiles);
         for (Map.Entry<String, SourceCode> entry : source.entrySet()) {
             Map<String, String> suppressionsInCode = this.getSuppressorsInSourceFile(entry);
             this.collectDetectedSuppressedWarnings(entry, suppressionsInCode);

@@ -2,6 +2,7 @@ package com.philips.swcoe.cerberus.cerebellum.codemetrics.java;
 
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_CURRENT;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE_PREVIOUS;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -27,6 +28,8 @@ public class CodeMetricsDiffServiceTest {
     private final String previousPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_PREVIOUS;
     private final String currentPath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE_CURRENT;
     private final String configPath = RESOURCES + PATH_SEPARATOR + "class_metrics_to_display.properties";
+    private final String exclusionPath = RESOURCES + PATH_SEPARATOR + TEST_EXCLUSION_CODE;
+    
     private CodeMetricsDiffService codeMetricsDiffService;
     private List<CodeMetricsClassResult> codeMetricsClassResultList;
     private final Function<String, CodeMetricsClassResult> javaCodeMetricsResultToTest =
@@ -36,7 +39,7 @@ public class CodeMetricsDiffServiceTest {
     @BeforeEach
     public void setupJavaCodeMetricsWithDiff() {
         codeMetricsDiffService = new CodeMetricsDiffService(previousPath, currentPath);
-        codeMetricsClassResultList = codeMetricsDiffService.getMetricsFromSourceCode();
+        codeMetricsClassResultList = codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
     }
 
     @Test
@@ -242,7 +245,7 @@ public class CodeMetricsDiffServiceTest {
     public void methodLevelMetricsRecordedShouldHaveOldAndNewCyclometicComplexityForNonExistantInCurrent()
         throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         CodeMetricsMethodResult codeMetricsMethodResult =
             javaCodeMetricsResultToTest.apply("Rhombus.java").getMethodMetrics().get(0);
         assertEquals(0, codeMetricsMethodResult.getComplexity().getNewValue());
@@ -261,7 +264,7 @@ public class CodeMetricsDiffServiceTest {
     public void methodLevelMetricsRecordedShouldHaveOldAndNewLinesOfCodeForNonExistantInCurrent()
         throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         CodeMetricsMethodResult codeMetricsMethodResult =
             javaCodeMetricsResultToTest.apply("Rhombus.java").getMethodMetrics().get(0);
         assertEquals(0, codeMetricsMethodResult.getLinesOfCode().getNewValue());
@@ -280,7 +283,7 @@ public class CodeMetricsDiffServiceTest {
     public void methodLevelMetricsRecordedShouldHaveOldAndNewStartLineNoForNonExistantInCurrent()
         throws Exception {
         List<CodeMetricsClassResult> codeMetricsClassResultList =
-            codeMetricsDiffService.getMetricsFromSourceCode();
+            codeMetricsDiffService.getMetricsFromSourceCode(exclusionPath);
         CodeMetricsMethodResult codeMetricsMethodResult =
             javaCodeMetricsResultToTest.apply("Rhombus.java").getMethodMetrics().get(0);
         assertEquals(0, codeMetricsMethodResult.getStartLineNo().getNewValue());

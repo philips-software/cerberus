@@ -5,11 +5,13 @@
 package com.philips.swcoe.cerberus.hounds;
 
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.ALLOWED_LANGUAGES_EXCEPTION_MESSAGE;
+import static com.philips.swcoe.cerberus.constants.DescriptionConstants.EXCLUSION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.FILES_CMD_LINE_OPTION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.FILES_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.LANGUAGE_CMD_LINE_OPTION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.LANGUAGE_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.SUPPRESSED_WARNINGS_DETECTOR_DESCRIPTION;
+import static com.philips.swcoe.cerberus.constants.ProgramConstants.EXCLUDE;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.FILES_OPTION;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.LANGUAGE_OPTION;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.RESULTS_OF_SWD;
@@ -40,6 +42,8 @@ public class SuppressedWarnings extends BaseCommand implements Callable<Integer>
     @Pattern(regexp = "cs|java|cpp", flags = Pattern.Flag.CASE_INSENSITIVE, message = ALLOWED_LANGUAGES_EXCEPTION_MESSAGE)
     @CommandLine.Option(names = LANGUAGE_OPTION, description = LANGUAGE_CMD_LINE_OPTION_DESCRIPTION)
     private String languageOfSource;
+    @CommandLine.Option(names = EXCLUDE, description = EXCLUSION_DESCRIPTION)
+    private String exclusionFiles;
 
     public SuppressedWarnings() {
         tokenizer = new DirectoryTokenizer();
@@ -51,7 +55,7 @@ public class SuppressedWarnings extends BaseCommand implements Callable<Integer>
         tokenizer.tokenize(new File(pathToSource), languageOfSource);
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf(languageOfSource.toUpperCase()));
-        aswd.detect(tokenizer);
+        aswd.detect(tokenizer, exclusionFiles);
         MapUtils.verbosePrint(new PrintStream(System.out, false,  "UTF-8"), RESULTS_OF_SWD,
             aswd.getSuppressedWarnings());
         return 0;

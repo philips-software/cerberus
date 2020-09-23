@@ -13,6 +13,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.SUB_DIRECTORY_1;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_CSHARP_CODE;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -31,10 +32,12 @@ public class CsharpSuppressedWarningsDetectorTest {
     private DirectoryTokenizer tokenizer;
     private String language;
     private String path;
+    private String exclusionPath;
 
     @BeforeEach
     public void beforeEachTest() throws Exception {
         path = RESOURCES + PATH_SEPARATOR + TEST_CSHARP_CODE + PATH_SEPARATOR;
+        exclusionPath = path + PATH_SEPARATOR  + TEST_EXCLUSION_CODE;
         tokenizer = new DirectoryTokenizer();
         language = CSHARP;
         tokenizer.tokenize(new File(path), language);
@@ -44,7 +47,7 @@ public class CsharpSuppressedWarningsDetectorTest {
     public void testDoesNotDetectCommentedOut() throws Exception {
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf(language));
-        aswd.detect(tokenizer);
+        aswd.detect(tokenizer, exclusionPath);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         String fileWithCommentedOutWarning1 =
             System.getProperty("user.dir") + path + DIRECTORY_3 + PATH_SEPARATOR + SUB_DIRECTORY_1
@@ -56,7 +59,7 @@ public class CsharpSuppressedWarningsDetectorTest {
     public void testDetectAllTypes() throws Exception {
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf(language));
-        aswd.detect(tokenizer);
+        aswd.detect(tokenizer, exclusionPath);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         assertEquals(3, suppressedWarnings.size());
     }

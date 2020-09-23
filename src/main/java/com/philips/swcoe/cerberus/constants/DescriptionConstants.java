@@ -61,6 +61,7 @@ public final class DescriptionConstants {
     public static final String MINIMUM_TOKEN_CMD_LINE_OPTION_DESCRIPTION =
         "The minimum token length which should be reported as a duplicate.";
     public static final String LANGUAGE_CMD_LINE_OPTION_DESCRIPTION = "Sources code language. ";
+    public static final String EXCLUSION_DESCRIPTION = "The List of files/folders to be excluded ";
     // Other errors
     public static final String INVALID_REPORT_FORMAT =
         "Markdown and HTML format can be used only with vertical metrics structure";

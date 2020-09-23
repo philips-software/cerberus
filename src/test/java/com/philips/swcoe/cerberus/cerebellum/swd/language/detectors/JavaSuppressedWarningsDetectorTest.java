@@ -11,6 +11,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA_
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.MULTI_LINE_COMMENTED_SUPPRESSED_WARNINGS_JAVA;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_EXCLUSION_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,10 +31,12 @@ public class JavaSuppressedWarningsDetectorTest {
     private DirectoryTokenizer tokenizer;
     private String language;
     private String path;
+    private String exclusionPath;
 
     @BeforeEach
     public void beforeEachTest() throws Exception {
         path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE + PATH_SEPARATOR;
+        exclusionPath = path + TEST_EXCLUSION_CODE;
         tokenizer = new DirectoryTokenizer();
         language = JAVA;
         tokenizer.tokenize(new File(path), language);
@@ -43,7 +46,7 @@ public class JavaSuppressedWarningsDetectorTest {
     public void testDoesNotDetectCommentedOut() throws Exception {
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf("JAVA"));
-        aswd.detect(tokenizer);
+        aswd.detect(tokenizer, exclusionPath);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         String fileWithCommentedOutWarning1 =
             System.getProperty("user.dir") + path + COMMENTED_OUT_SUPPRESSED_WARNINGS_JAVA + DOT
@@ -59,7 +62,7 @@ public class JavaSuppressedWarningsDetectorTest {
     public void testDetectAllTypes() throws Exception {
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf("JAVA"));
-        aswd.detect(tokenizer);
+        aswd.detect(tokenizer, exclusionPath);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
         assertEquals(3, suppressedWarnings.size());
     }
