@@ -5,6 +5,13 @@
 
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - dependency-update
+
   - package-ecosystem: "gradle"
     directory: "/"
     target-branch: "develop"
@@ -12,6 +19,8 @@ updates:
       interval: "daily"
     allow:
       - dependency-type: "all"
+    labels:
+      - dependency-update
     assignees:
       - "aravind666"
     reviewers:
