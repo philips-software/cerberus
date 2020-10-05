@@ -2,8 +2,7 @@ name: PR-Automation
 
 on:
   pull_request:
-    branches: [ master, development, testing ]
-    types: [opened]
+    branches: [ master, development]
 
 jobs:
   build:
