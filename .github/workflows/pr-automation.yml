@@ -21,7 +21,7 @@ jobs:
       run: ./gradlew clean build pitest shadowJar 
     - name: Fail it when failed due to quality checks 
       if: ${{ failure() }}
-      uses: superbrothers/close-pull-request@v2
+      uses: superbrothers/close-pull-request@v2.0.0
       with: 
         comment: "Many thanks for your contribution. Our automated PR checks picked up some great opportunities to avoid a bounce-back from continuous integration and improve quality and early defect detection. We auto-rejected the PR so that you can work on this in your fork and re-submit. Our maintainer team would be happy to assist you in making a successful PR if you want any further support – just let us know how we can help."
       env:
