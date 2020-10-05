@@ -1,8 +1,8 @@
 name: PR-Automation
 
 on:
-  pull_request_target:
-    branches: [ master, development]
+  pull_request:
+    branches: [master, development]
 
 jobs:
   build:
