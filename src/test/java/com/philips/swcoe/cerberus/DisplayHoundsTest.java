@@ -35,7 +35,7 @@ class DisplayHoundsTest extends CerberusBaseTest {
         assertTrue(arrayOfHelpStringsDisplayed[0]
             .contains("CPD            Detect duplicated blocks of code in your source code"));
         assertTrue(arrayOfHelpStringsDisplayed[1]
-            .contains("SWD            Detect all the warnings which are suppressed in your code"));
+            .contains("SWD            Detects all the warnings which are suppressed in your code"));
         assertTrue(
             arrayOfHelpStringsDisplayed[2].contains("JCMD           Java Code Metrics Detector"));
         assertTrue(arrayOfHelpStringsDisplayed[3]
