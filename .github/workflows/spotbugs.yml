@@ -4,9 +4,9 @@ name: Spotbugs Scan
 
 on:
   push:
-    branches: [ master, development ]
+    branches: [ main, proceeding, betterment ]
   pull_request:
-    branches: [ master, development ]
+    branches: [ main, proceeding, betterment ]
 
 jobs:
   build:

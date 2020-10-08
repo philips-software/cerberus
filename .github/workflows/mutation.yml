@@ -4,9 +4,9 @@ name: Mutation Analysis 96%
 
 on:
   push:
-    branches: [ master, development ]
+    branches: [ main, proceeding, betterment ]
   pull_request:
-    branches: [ master, development ]
+    branches: [ main, proceeding, betterment ]
 
 jobs:
   build:
