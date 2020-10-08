@@ -1,16 +1,14 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](https://opensource.org/licenses/MIT)
-![PMD Best Practices](https://github.com/philips-software/cerberus/workflows/PMD%20Best%20Practices/badge.svg)
-![Mutation Analysis 96%](https://github.com/philips-software/cerberus/workflows/Mutation%20Analysis%2096%25/badge.svg)
-![Duplicate Blocks 37 Tokens](https://github.com/philips-software/cerberus/workflows/Duplicate%20Blocks%2037%20Tokens/badge.svg)
-![Checkstyle Adherence](https://github.com/philips-software/cerberus/workflows/Checkstyle%20Adherence/badge.svg)
-![Compile And Assemble](https://github.com/philips-software/cerberus/workflows/Compile%20And%20Assemble/badge.svg)
-![Spotbugs Scan](https://github.com/philips-software/cerberus/workflows/Spotbugs%20Scan/badge.svg)
+
+| PMD  | Mutation Analysis | Duplicate Code | Checkstyle  | Compile and Assemble | Spotbugs  | Coverage |
+| ------------- | ------------- |------------ | ------------- |------------ | ------------- |------------ | 
+| ![PMD Best Practices](https://github.com/philips-software/cerberus/workflows/PMD%20Best%20Practices/badge.svg) | ![Mutation Analysis 96%](https://github.com/philips-software/cerberus/workflows/Mutation%20Analysis%2096%25/badge.svg) | ![Duplicate Blocks 37 Tokens](https://github.com/philips-software/cerberus/workflows/Duplicate%20Blocks%2037%20Tokens/badge.svg) | ![Checkstyle Adherence](https://github.com/philips-software/cerberus/workflows/Checkstyle%20Adherence/badge.svg) | ![Compile And Assemble](https://github.com/philips-software/cerberus/workflows/Compile%20And%20Assemble/badge.svg) | ![Spotbugs Scan](https://github.com/philips-software/cerberus/workflows/Spotbugs%20Scan/badge.svg) | ![Code Coverage 98%](https://github.com/philips-software/cerberus/workflows/Code%20Coverage%2098%25/badge.svg) | 
 
 # Cerberus
 
 Cerberus is a tool to measure code quality parameters, which can be used as a watch dog to observe code quality parameters like copy paste errors, suppressed warnings etc., and also to gate builds when the allowed thresholds for the parameters being observed is breached.
 
 ### Why another tool? 
+
 We asked ourselves the same question! Why create a new tool when there were many industry standard tools like SonarQube, Coverity, Fortify etc. Here's why we think Cerberus works better for us. 
 
 
@@ -107,7 +105,7 @@ To prevent build breaks run the same quality checks using gradle that we run in 
 
 ## License
 
-[MIT](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](https://opensource.org/licenses/MIT)
 
 ## Credits and references
 
