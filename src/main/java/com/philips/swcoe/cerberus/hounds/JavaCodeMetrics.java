@@ -12,6 +12,8 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.JAVA_CODE_ME
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.stereotype.Component;
+
 import com.github.mauricioaniche.ck.CKClassResult;
 import com.google.gson.GsonBuilder;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.CodeMetricsService;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
+@Component
 @CommandLine.Command(name = JAVA_CODE_METRICS_DETECTOR, description = JAVA_CODE_METRICS_DETECTOR_DESCRIPTION)
 public class JavaCodeMetrics extends BaseCommand implements Callable<Integer> {
 

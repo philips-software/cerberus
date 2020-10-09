@@ -48,12 +48,7 @@ public class CerberusTest extends CerberusBaseTest {
         String expectedOutputString =
             new StringBuilder().append("Unmatched argument at index 0: 'dummy argument'")
                 .append(NEW_LINE).append(getCerberusCommandLineUsageString()).toString();
-        assertEquals(expectedOutputString.trim(), getModifiedErrorStream().toString().trim());
-    }
-
-    @Test
-    public void testCallMethod() throws Exception {
-        assertEquals(Integer.valueOf(0), new Cerberus().call());
+        assertTrue(expectedOutputString.trim().contains(getModifiedErrorStream().toString().trim()));
     }
 
     private String getCerberusCommandLineUsageString() {
