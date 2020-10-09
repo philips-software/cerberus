@@ -1,6 +1,6 @@
 # This workflow will build Cerberus and perform Mutation Analysis
 
-name: Mutation Analysis 96%
+name: Mutation Analysis 99%
 
 on:
   push:
