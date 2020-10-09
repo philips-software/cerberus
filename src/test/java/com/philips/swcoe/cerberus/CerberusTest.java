@@ -31,7 +31,7 @@ public class CerberusTest extends CerberusBaseTest {
     public void testCerebruswithOutArguments() {
         Cerberus.main(new String[] {});
         String expectedOutputString = getCerberusCommandLineUsageString();
-        assertEquals(expectedOutputString, getModifiedOutputStream().toString());
+        assertTrue(getModifiedOutputStream().toString().contains(expectedOutputString));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class CerberusTest extends CerberusBaseTest {
         String expectedOutputString =
             new StringBuilder().append("Unmatched argument at index 0: 'dummy argument'")
                 .append(NEW_LINE).append(getCerberusCommandLineUsageString()).toString();
-        assertTrue(expectedOutputString.trim().contains(getModifiedErrorStream().toString().trim()));
+        assertEquals(expectedOutputString.trim(), getModifiedErrorStream().toString().trim());
     }
 
     private String getCerberusCommandLineUsageString() {
@@ -56,12 +56,12 @@ public class CerberusTest extends CerberusBaseTest {
             .append("Waking Cerberus to devour bad things in the system").append(NEW_LINE)
             .append("Commands:")
             .append(NEW_LINE)
-            .append("  CPD            Detect duplicated blocks of code in your source code")
+            .append("  CPD        Detect duplicated blocks of code in your source code")
             .append(NEW_LINE)
-            .append("  SWD            Detect all the warnings which are suppressed in your code")
-            .append(NEW_LINE).append("  JCMD           Java Code Metrics Detector")
-            .append(NEW_LINE).append("  JCMD-DIFF      Java Code Metrics Detector with Diff")
-            .append(NEW_LINE).append("  FPM            Find Programming mistakes in code")
+            .append("  SWD        Detect all the warnings which are suppressed in your code")
+            .append(NEW_LINE).append("  JCMD       Java Code Metrics Detector")
+            .append(NEW_LINE).append("  JCMD-DIFF  Java Code Metrics Detector with Diff")
+            .append(NEW_LINE).append("  FPM        Find Programming mistakes in code")
             .append(NEW_LINE)
             .toString();
     }
