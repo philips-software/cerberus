@@ -22,11 +22,13 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
 
     private final String externalRuleSet = RESOURCES + PATH_SEPARATOR + "java_practices.xml";
 
+    private FindProgrammingMistakes findProgrammingMistakes;
 
     @BeforeEach
     public void beforeEach() {
         super.setUpStreams();
         FileUtils.deleteQuietly(new File(path + PATH_SEPARATOR + "mistakes-report.html"));
+        findProgrammingMistakes = new FindProgrammingMistakes();
     }
 
     @AfterEach
@@ -37,26 +39,20 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
 
     @Test
     public void findProgrammingMistakesShouldThrowErrorsForEmptyArguments() throws Exception {
-        FindProgrammingMistakes findProgrammingMistakes = new FindProgrammingMistakes();
-        int exitCode = executeFindProgrammingMistakes(findProgrammingMistakes, "", "", "", "");
-        assertNotEquals(0, exitCode);
+        executeFindProgrammingMistakes(findProgrammingMistakes, "", "", "", "");
         assertErrorOutputFromFPM();
     }
 
     @Test
     public void findProgrammingMistakesShouldThrowErrorsWithNullArguments() throws Exception {
-        FindProgrammingMistakes findProgrammingMistakes = new FindProgrammingMistakes();
-        int exitCode = new CommandLine(findProgrammingMistakes).execute();
-        assertNotEquals(0, exitCode);
+        new CommandLine(findProgrammingMistakes).execute();
         assertErrorOutputFromFPM();
     }
 
     @Test
     public void findProgrammingMistakesShouldGenerateReportWithCorrectArguments() throws Exception {
-        FindProgrammingMistakes findProgrammingMistakes = new FindProgrammingMistakes();
-        int exitCode = executeFindProgrammingMistakes(findProgrammingMistakes, path, "java", "8",
+        executeFindProgrammingMistakes(findProgrammingMistakes, path, "java", "8",
             "category/java/documentation.xml");
-        assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString()
             .contains("Found 57 violations in the specified source path"));
         assertTrue(new File(path + PATH_SEPARATOR + "mistakes-report.html").exists());
@@ -64,10 +60,8 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
 
     @Test
     public void findProgrammingMistakesShouldGenerateReportWithExternalRuleSet() throws Exception {
-        FindProgrammingMistakes findProgrammingMistakes = new FindProgrammingMistakes();
-        int exitCode = executeFindProgrammingMistakes(findProgrammingMistakes, path, "java", "8",
+        executeFindProgrammingMistakes(findProgrammingMistakes, path, "java", "8",
             externalRuleSet);
-        assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString()
             .contains("Found 18 violations in the specified source path"));
         assertTrue(new File(path + PATH_SEPARATOR + "mistakes-report.html").exists());
@@ -75,12 +69,27 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
 
     @Test
     public void findProgrammingMistakesShouldNotFindErrorsForCleanestJavaCode() throws Exception {
-        FindProgrammingMistakes findProgrammingMistakes = new FindProgrammingMistakes();
-        int exitCode = executeFindProgrammingMistakes(findProgrammingMistakes,
+        executeFindProgrammingMistakes(findProgrammingMistakes,
             path + PATH_SEPARATOR + "CleanestJavaCode", "java", "8", externalRuleSet);
-        assertEquals(0, exitCode);
         assertTrue(getModifiedOutputStream().toString().contains("No Violations Found"));
         assertFalse(new File(path + PATH_SEPARATOR + "mistakes-report.html").exists());
+    }
+
+    @Test
+    public void shouldReturnZeroExitCodeWhenViolationsAreNotFound() throws Exception {
+        assertEquals(0,  executeFindProgrammingMistakes(findProgrammingMistakes,
+            path + PATH_SEPARATOR + "CleanestJavaCode", "java", "8", externalRuleSet));
+    }
+
+    @Test
+    public void shouldReturnNonZeroExitCodeWhenViolationsAreFound() throws Exception {
+        assertNotEquals(0, executeFindProgrammingMistakes(findProgrammingMistakes, path, "java", "8",
+            externalRuleSet));
+    }
+
+    @Test
+    public void shouldReturnNonZeroExitCodeWithInvalidArguments() throws Exception {
+        assertNotEquals(0, executeFindProgrammingMistakes(findProgrammingMistakes, "", "", "", ""));
     }
 
     private int executeFindProgrammingMistakes(FindProgrammingMistakes findProgrammingMistakes,

@@ -52,7 +52,7 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
     @NotNull(message = LANGUAGE_OPTION_NOT_NULL_ARGUMENT_MESSAGE)
     @CommandLine.Option(names = LANGUAGE_OPTION, description = LANGUAGE_CMD_LINE_OPTION_DESCRIPTION)
     private String languageOfSource;
-
+    
     @Override
     public Integer call() throws Exception {
         this.validate();
@@ -69,7 +69,6 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
         arguments.getCPDRenderer()
             .render(cpd.getMatches(), new BufferedWriter(new OutputStreamWriter(System.out,
                 StandardCharsets.UTF_8)));
-
         return Lists.newArrayList(cpd.getMatches()).size();
     }
 

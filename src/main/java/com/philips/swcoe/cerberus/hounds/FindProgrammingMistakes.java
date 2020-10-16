@@ -71,6 +71,6 @@ public class FindProgrammingMistakes extends BaseCommand implements Callable<Int
         } else {
             this.writeToUI("No Violations Found");
         }
-        return 0;
+        return violations;
     }
 }
