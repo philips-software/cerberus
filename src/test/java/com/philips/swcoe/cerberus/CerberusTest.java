@@ -31,7 +31,7 @@ public class CerberusTest extends CerberusBaseTest {
     public void testCerebruswithOutArguments() {
         Cerberus.main(new String[] {});
         String expectedOutputString = getCerberusCommandLineUsageString();
-        assertEquals(expectedOutputString, getModifiedOutputStream().toString());
+        assertTrue(getModifiedErrorStream().toString().contains(expectedOutputString));
     }
 
     @Test
@@ -51,22 +51,17 @@ public class CerberusTest extends CerberusBaseTest {
         assertEquals(expectedOutputString.trim(), getModifiedErrorStream().toString().trim());
     }
 
-    @Test
-    public void testCallMethod() throws Exception {
-        assertEquals(Integer.valueOf(0), new Cerberus().call());
-    }
-
     private String getCerberusCommandLineUsageString() {
         return new StringBuilder().append("Usage: Cerberus [COMMAND]").append(NEW_LINE)
             .append("Waking Cerberus to devour bad things in the system").append(NEW_LINE)
             .append("Commands:")
             .append(NEW_LINE)
-            .append("  CPD            Detect duplicated blocks of code in your source code")
+            .append("  CPD        Detect duplicated blocks of code in your source code")
             .append(NEW_LINE)
-            .append("  SWD            Detect all the warnings which are suppressed in your code")
-            .append(NEW_LINE).append("  JCMD           Java Code Metrics Detector")
-            .append(NEW_LINE).append("  JCMD-DIFF      Java Code Metrics Detector with Diff")
-            .append(NEW_LINE).append("  FPM            Find Programming mistakes in code")
+            .append("  SWD        Detect all the warnings which are suppressed in your code")
+            .append(NEW_LINE).append("  JCMD       Java Code Metrics Detector")
+            .append(NEW_LINE).append("  JCMD-DIFF  Java Code Metrics Detector with Diff")
+            .append(NEW_LINE).append("  FPM        Find Programming mistakes in code")
             .append(NEW_LINE)
             .toString();
     }
