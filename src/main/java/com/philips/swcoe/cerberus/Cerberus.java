@@ -27,10 +27,10 @@ import picocli.CommandLine;
         FindProgrammingMistakes.class
     }
 )
-public class Cerberus {
+public class Cerberus  {
     public static void main(String[] args) {
         SpringApplication.run(Cerberus.class, args);
         CommandLine cmd = new CommandLine(new Cerberus());
-        cmd.execute(args);
+        System.exit(cmd.execute(args));
     }
 }
