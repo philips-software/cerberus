@@ -60,7 +60,7 @@ public class DuplicatesTest extends CerberusBaseTest {
     }
 
     @Test
-    public void shouldReturnZeroExitCodeWhenDuplicatesAreFound() throws Exception {
+    public void shouldReturnZeroExitCodeWhenDuplicatesAreNotFound() throws Exception {
         assertEquals(0, getExitCode("300"));
     }
 

@@ -27,6 +27,7 @@ import com.philips.swcoe.cerberus.cerebellum.swd.SuppressedWarningsDetectorFacto
 import com.philips.swcoe.cerberus.cerebellum.tokenizer.DirectoryTokenizer;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
@@ -54,9 +55,11 @@ public class SuppressedWarnings extends BaseCommand implements Callable<Integer>
         BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
             .newInstance(SuppressedWarningDetectors.valueOf(languageOfSource.toUpperCase()));
         aswd.detect(tokenizer);
+        Map<String, Map<String, String>> suppressedWarnings =
+            aswd.getSuppressedWarnings();
         MapUtils.verbosePrint(new PrintStream(System.out, false,  "UTF-8"), RESULTS_OF_SWD,
-            aswd.getSuppressedWarnings());
-        return 0;
+            suppressedWarnings);
+        return suppressedWarnings.size();
     }
 
 }

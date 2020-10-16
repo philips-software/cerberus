@@ -4,6 +4,7 @@
 
 package com.philips.swcoe.cerberus.hounds;
 
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.CLEAN_JAVA_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
@@ -32,28 +33,10 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
         super.restoreStreams();
     }
 
-    @Test
-    public void testSuppressedWarningsWithParams() throws Exception {
-        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
-        int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "JAVA");
-        assertEquals(0, exitCode);
-    }
-
-    @Test
-    public void shouldNotThrowErrorWhenLanguageIsSpecifiedInLowerCase() throws Exception {
-        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
-        int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "java");
-        assertEquals(0, exitCode);
-    }
 
     @Test
     public void shouldThrowErrorWhenUnSupportedLanguageIsSpecified() throws Exception {
-        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
-        int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "go");
-        assertEquals(2, exitCode);
+        getExitCode("go", pathToTestSource);
         assertTrue(getModifiedErrorStream().toString().contains(
             "ERROR: Unsupported language, Please specify 'java' for java language, 'cs' for "
                 + "csharp language and 'cpp' for C++"));
@@ -92,16 +75,12 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
 
     @Test
     public void testSuppressedWarningsReportWithParams() throws Exception {
-        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
-        int exitCode = new CommandLine(suppressedWarnings)
-            .execute("--files", pathToTestSource, "--language", "JAVA");
-        assertEquals(0, exitCode);
+        getExitCode("JAVA", pathToTestSource);
         assertTrue(getModifiedOutputStream().toString().contains("GenericSuppressedWarnings.java"));
         assertTrue(
             getModifiedOutputStream().toString().contains("SonarQubeSuppressedWarnings.java"));
         assertTrue(getModifiedOutputStream().toString()
             .contains("SuppressedWarningWithFullPackageName.java"));
-
         assertTrue(getModifiedOutputStream().toString()
             .contains("Line No 12 = @SuppressWarnings(\"JmsConsumer Warning Disabled\")"));
         assertTrue(getModifiedOutputStream().toString()
@@ -110,6 +89,29 @@ public class SuppressedWarningsTest extends CerberusBaseTest {
             "Line No 1 = @java.lang.SuppressWarnings(\"Some warning suppressed With Full package "
                 + "name\")"));
 
+    }
+
+
+    @Test
+    public void shouldReturnZeroExitCodeWhenSuppressionsAreFound() throws Exception {
+        assertNotEquals(0, getExitCode("JAVA", pathToTestSource));
+    }
+
+    @Test
+    public void shouldReturnZeroExitCodeWhenSuppressionsAreNotFound() throws Exception {
+        assertEquals(0, getExitCode("JAVA", pathToTestSource + PATH_SEPARATOR + CLEAN_JAVA_CODE));
+    }
+
+    @Test
+    public void shouldReturnNonZeroExitCodeWithInvalidArguments() throws Exception {
+        assertNotEquals(0, getExitCode("go", pathToTestSource));
+    }
+
+
+    private int getExitCode(String language, String pathToTestSource) {
+        SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
+        return new CommandLine(suppressedWarnings)
+            .execute("--files", pathToTestSource, "--language", language);
     }
 
 }
