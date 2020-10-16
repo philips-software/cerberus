@@ -31,7 +31,7 @@ public class CerberusTest extends CerberusBaseTest {
     public void testCerebruswithOutArguments() {
         Cerberus.main(new String[] {});
         String expectedOutputString = getCerberusCommandLineUsageString();
-        assertTrue(getModifiedOutputStream().toString().contains(expectedOutputString));
+        assertTrue(getModifiedErrorStream().toString().contains(expectedOutputString));
     }
 
     @Test

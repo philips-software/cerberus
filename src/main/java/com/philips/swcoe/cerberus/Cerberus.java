@@ -31,10 +31,6 @@ public class Cerberus {
     public static void main(String[] args) {
         SpringApplication.run(Cerberus.class, args);
         CommandLine cmd = new CommandLine(new Cerberus());
-        if (args.length < 1) {
-            cmd.usage(System.out);
-        } else {
-            cmd.execute(args);
-        }
+        cmd.execute(args);
     }
 }
