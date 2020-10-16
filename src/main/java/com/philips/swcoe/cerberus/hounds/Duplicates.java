@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 import com.beust.jcommander.JCommander;
+import com.google.common.collect.Lists;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -69,7 +70,7 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
             .render(cpd.getMatches(), new BufferedWriter(new OutputStreamWriter(System.out,
                 StandardCharsets.UTF_8)));
 
-        return 0;
+        return Lists.newArrayList(cpd.getMatches()).size();
     }
 
 }
