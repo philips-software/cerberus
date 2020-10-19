@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 import com.beust.jcommander.JCommander;
+import com.google.common.collect.Lists;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -51,7 +52,7 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
     @NotNull(message = LANGUAGE_OPTION_NOT_NULL_ARGUMENT_MESSAGE)
     @CommandLine.Option(names = LANGUAGE_OPTION, description = LANGUAGE_CMD_LINE_OPTION_DESCRIPTION)
     private String languageOfSource;
-
+    
     @Override
     public Integer call() throws Exception {
         this.validate();
@@ -68,8 +69,7 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
         arguments.getCPDRenderer()
             .render(cpd.getMatches(), new BufferedWriter(new OutputStreamWriter(System.out,
                 StandardCharsets.UTF_8)));
-
-        return 0;
+        return Lists.newArrayList(cpd.getMatches()).size();
     }
 
 }

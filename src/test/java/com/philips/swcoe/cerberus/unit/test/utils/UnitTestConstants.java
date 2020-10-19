@@ -14,6 +14,7 @@ public class UnitTestConstants {
     public static final String NEW_LINE = String.format("%n");
     // Directories in resources
     public static final String TEST_JAVA_CODE = "testJavaCode";
+    public static final String CLEAN_JAVA_CODE = "CleanestJavaCode";
     public static final String TEST_JAVA_CODE_PREVIOUS =
         TEST_JAVA_CODE + PATH_SEPARATOR + "previous";
     public static final String TEST_JAVA_CODE_CURRENT = TEST_JAVA_CODE + PATH_SEPARATOR + "current";

@@ -38,8 +38,7 @@ public class DuplicatesTest extends CerberusBaseTest {
     @Test
     public void testDuplicateHoundWithNoParameter() throws Exception {
         Duplicates duplicateHound = new Duplicates();
-        int exitCode = new CommandLine(duplicateHound).execute();
-        assertNotEquals(0, exitCode);
+        new CommandLine(duplicateHound).execute();
         assertTrue(getModifiedErrorStream().toString().contains("Specify minimum token length"));
         assertTrue(
             getModifiedErrorStream().toString().contains("Specify the format of the report"));
@@ -50,26 +49,35 @@ public class DuplicatesTest extends CerberusBaseTest {
     }
 
     @Test
-    public void testDuplicateHoundWithInvalidParameter() throws Exception {
-        Duplicates duplicateHound = new Duplicates();
-        int exitCode = new CommandLine(duplicateHound).execute(
-            "--files", path, "--format", "text", "--minimum-tokens", "5",
-            "--language", "java");
-        assertEquals(0, exitCode);
-    }
-
-    @Test
     public void testExecutionofCPD() throws Exception {
-        Duplicates duplicateHound = new Duplicates();
-        int exitCode = new CommandLine(duplicateHound).execute(
-            "--files", path, "--format", "text", "--minimum-tokens", "3",
-            "--language", "java");
-        assertEquals(0, exitCode);
+        getExitCode("3");
         String actualString = getModifiedOutputStream().toString();
         assertTrue(actualString.contains("duplication in the following files"));
         assertTrue(actualString
             .contains(SUPPRESSED_WARNINGS_WITH_FULL_PACKAGE_NAME_JAVA + DOT + JAVA_EXT));
         assertTrue(actualString.contains("Rectangle.java"));
         assertTrue(actualString.contains("Rhombus.java"));
+    }
+
+    @Test
+    public void shouldReturnZeroExitCodeWhenDuplicatesAreNotFound() throws Exception {
+        assertEquals(0, getExitCode("300"));
+    }
+
+    @Test
+    public void shouldReturnNonZeroExitCodeWhenDuplicatesAreFound() throws Exception {
+        assertNotEquals(0, getExitCode("1"));
+    }
+
+    @Test
+    public void shouldReturnNonZeroExitCodeWithInvalidArguments() throws Exception {
+        assertNotEquals(0, getExitCode("5"));
+    }
+
+    private int getExitCode(String tokenSize) {
+        Duplicates duplicateHound = new Duplicates();
+        return new CommandLine(duplicateHound).execute(
+            "--files", path, "--format", "text", "--minimum-tokens", tokenSize,
+            "--language", "java");
     }
 }

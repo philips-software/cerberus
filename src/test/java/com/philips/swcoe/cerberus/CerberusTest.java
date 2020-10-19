@@ -4,18 +4,24 @@
 
 package com.philips.swcoe.cerberus;
 
-import static com.philips.swcoe.cerberus.constants.ProgramConstants.NEW_LINE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.CLEAN_JAVA_CODE;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import com.philips.swcoe.cerberus.unit.test.utils.CerberusBaseTest;
 
 
 public class CerberusTest extends CerberusBaseTest {
+
+    private final String badCodePath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+    private final String goodCodePath = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE + PATH_SEPARATOR + CLEAN_JAVA_CODE;
+    private final String externalRuleSet = RESOURCES + PATH_SEPARATOR + "java_practices.xml";
 
     @BeforeEach
     public void beforeAll() {
@@ -28,41 +34,40 @@ public class CerberusTest extends CerberusBaseTest {
     }
 
     @Test
-    public void testCerebruswithOutArguments() {
+    @ExpectSystemExitWithStatus(2)
+    public void shouldReturnExitStatusForNoArguments()  {
         Cerberus.main(new String[] {});
-        String expectedOutputString = getCerberusCommandLineUsageString();
-        assertTrue(getModifiedErrorStream().toString().contains(expectedOutputString));
     }
 
     @Test
-    public void testCerebrusWithArguments() {
+    @ExpectSystemExitWithStatus(8)
+    public void shouldReturnExitStatusAsNumberOfDuplicatesForCPDHound() {
         getOriginalOutputStream().flush();
-        Cerberus.main(new String[] {"CPD"});
-        assertTrue(getModifiedErrorStream().toString().contains("Usage: Cerberus CPD"));
+        Cerberus.main(new String[] {"CPD", "--files", badCodePath, "--format", "text", "--minimum-tokens", "30",
+            "--language", "java"});
     }
 
     @Test
-    public void testCerebruswithWrongArguments() {
-        String dummyArgument = "dummy argument";
-        Cerberus.main(new String[] {dummyArgument});
-        String expectedOutputString =
-            new StringBuilder().append("Unmatched argument at index 0: 'dummy argument'")
-                .append(NEW_LINE).append(getCerberusCommandLineUsageString()).toString();
-        assertEquals(expectedOutputString.trim(), getModifiedErrorStream().toString().trim());
+    @ExpectSystemExitWithStatus(18)
+    public void shouldReturnExitStatusAsNumberOfViolationsForPMDAnyHound() {
+        getOriginalOutputStream().flush();
+        Cerberus.main(new String[] {"FPM", "--files", badCodePath, "--language", "JAVA", "--java-version", "8", "--rulesets", externalRuleSet});
+
     }
 
-    private String getCerberusCommandLineUsageString() {
-        return new StringBuilder().append("Usage: Cerberus [COMMAND]").append(NEW_LINE)
-            .append("Waking Cerberus to devour bad things in the system").append(NEW_LINE)
-            .append("Commands:")
-            .append(NEW_LINE)
-            .append("  CPD        Detect duplicated blocks of code in your source code")
-            .append(NEW_LINE)
-            .append("  SWD        Detect all the warnings which are suppressed in your code")
-            .append(NEW_LINE).append("  JCMD       Java Code Metrics Detector")
-            .append(NEW_LINE).append("  JCMD-DIFF  Java Code Metrics Detector with Diff")
-            .append(NEW_LINE).append("  FPM        Find Programming mistakes in code")
-            .append(NEW_LINE)
-            .toString();
+    @Test
+    @ExpectSystemExitWithStatus(0)
+    public void shouldReturnExitStatusAsZeroWhenThereAreNoViolations() {
+        getOriginalOutputStream().flush();
+        Cerberus.main(new String[] {"FPM", "--files", goodCodePath, "--language", "JAVA", "--java-version", "8", "--rulesets", externalRuleSet});
     }
+
+
+    @Test
+    @ExpectSystemExitWithStatus(2)
+    public void shouldReturnExitStatusAsNumberOfSuppressions() {
+        getOriginalOutputStream().flush();
+        Cerberus.main(new String[] {"SWD", "--files", badCodePath});
+    }
+
 }
