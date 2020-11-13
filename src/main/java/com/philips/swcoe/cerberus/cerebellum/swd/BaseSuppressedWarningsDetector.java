@@ -62,7 +62,7 @@ public class BaseSuppressedWarningsDetector {
             String previousLine = (lineNo != 0) ? listOfCode.get(lineNo - 1) : StringUtils.EMPTY;
             String nextLine =
                 ((lineNo + 1) >= sizeOfListOfCode) ? StringUtils.EMPTY : listOfCode.get(lineNo + 1);
-            gatherSuppressions(suppressorsInCode, lineNo, line, previousLine, nextLine);
+            gatherSuppressions(suppressorsInCode, lineNo, line.trim(), previousLine.trim(), nextLine.trim());
         }
         return suppressorsInCode;
     }
