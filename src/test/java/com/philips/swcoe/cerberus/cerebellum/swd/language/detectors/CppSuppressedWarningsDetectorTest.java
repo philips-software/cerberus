@@ -64,6 +64,15 @@ public class CppSuppressedWarningsDetectorTest {
             .newInstance(SuppressedWarningDetectors.valueOf(language));
         aswd.detect(tokenizer);
         Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
-        assertEquals(2, suppressedWarnings.size());
+        assertEquals(3, suppressedWarnings.size());
+    }
+
+    @Test
+    public void shouldIdentifySuppressionWithWhiteSpaces() throws Exception {
+        BaseSuppressedWarningsDetector aswd = SuppressedWarningsDetectorFactory
+            .newInstance(SuppressedWarningDetectors.valueOf(language));
+        aswd.detect(tokenizer);
+        Map<String, Map<String, String>> suppressedWarnings = aswd.getSuppressedWarnings();
+        assertEquals(3, suppressedWarnings.size());
     }
 }
