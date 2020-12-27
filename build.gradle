@@ -26,6 +26,7 @@ dependencies {
     implementation("info.picocli:picocli-spring-boot-starter:4.5.1") {
         exclude module: "spring-boot-starter-logging"
     }
+
     implementation 'net.sourceforge.pmd:pmd-java:6.30.0'
     implementation 'net.sourceforge.pmd:pmd-cpp:6.30.0'
     implementation 'net.sourceforge.pmd:pmd-jsp:6.30.0'
