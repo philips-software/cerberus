@@ -26,9 +26,9 @@ dependencies {
     implementation("info.picocli:picocli-spring-boot-starter:4.5.1") {
         exclude module: "spring-boot-starter-logging"
     }
-    implementation 'net.sourceforge.pmd:pmd-java:6.13.0'
-    implementation 'net.sourceforge.pmd:pmd-cpp:6.13.0'
-    implementation 'net.sourceforge.pmd:pmd-jsp:6.13.0'
+    implementation 'net.sourceforge.pmd:pmd-java:6.30.0'
+    implementation 'net.sourceforge.pmd:pmd-cpp:6.30.0'
+    implementation 'net.sourceforge.pmd:pmd-jsp:6.30.0'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.hibernate.validator:hibernate-validator:6.1.0.Final'
     implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:6.1.0.Final'
