@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class CodeMetricsDiffService {
 
     private String previousPath;
-    private String currentPath;
+    private final String currentPath;
 
     public CodeMetricsDiffService(String previousPath, String currentPath) {
         this.previousPath = previousPath;

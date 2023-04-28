@@ -34,8 +34,6 @@ public class FindProgrammingMistakes extends BaseCommand implements Callable<Int
     @CommandLine.Option(names = FILES_OPTION, description = FILES_CMD_LINE_OPTION_DESCRIPTION)
     private String pathToSource;
 
-    private String reportFormat = "html";
-
     @NotEmpty(message = LANGUAGE_OPTION_NOT_NULL_ARGUMENT_MESSAGE)
     @CommandLine.Option(names = LANGUAGE_OPTION, description = PROGRAMMING_LANGUAGE_USED_OPTION)
     private String language;
@@ -51,6 +49,7 @@ public class FindProgrammingMistakes extends BaseCommand implements Callable<Int
     @Override
     public Integer call() throws Exception {
         this.validate();
+        String reportFormat = "html";
         String[] argumentsOfPMD = {
             "-rulesets", pathToRulesets,
             "-dir", pathToSource,

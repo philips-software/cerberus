@@ -2,11 +2,10 @@ buildscript {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        jcenter()
     }
     dependencies {
-        classpath 'de.aaschmid:gradle-cpd-plugin:3.1'
-        classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.0.5'
+        classpath 'de.aaschmid:gradle-cpd-plugin:3.3'
+        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.14'
         classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.5.1'
     }
 
@@ -21,7 +20,7 @@ apply plugin: com.github.spotbugs.snom.SpotBugsPlugin
 apply plugin: info.solidsoft.gradle.pitest.PitestPlugin
 
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "0.8.8"
 }
 
 jacocoTestCoverageVerification {
@@ -45,9 +44,9 @@ jacocoTestCoverageVerification {
 
 jacocoTestReport {
     reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
+        xml.required = false
+        csv.required = false
+        html.outputLocation = file("${buildDir}/jacocoHtml")
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
@@ -82,20 +81,22 @@ cpd {
 cpdCheck {
     minimumTokenCount = 34
     reports {
-        csv.enabled = false
         text {
-            enabled = true
-            destination = file("${buildDir}/reports/cpd.txt")
+            required = true
+            outputLocation = file("${buildDir}/reports/cpd.txt")
         }
     }
     source = files('src/main/java')
 }
 
 spotbugs {
-    toolVersion = '4.0.2'
-    effort = "max"
+    toolVersion = '4.7.3'
     ignoreFailures = false
+    showStackTraces = true
     showProgress = true
+    effort = 'default'
+    reportLevel = 'default'
+    omitVisitors = [ 'FindReturnRef' ]
 }
 // This disables running spotbugs on test files ,
 // by default Spotbugs runs on tests also when ran with gradle check goal
@@ -105,13 +106,6 @@ spotbugsTest.enabled = false
 
 spotbugsMain {
     description("Runs spot bugs on production source code")
-    reports {
-        html {
-            enabled = true
-            destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
-            stylesheet = 'fancy-hist.xsl'
-        }
-    }
 }
 
 checkstyle {
@@ -122,8 +116,8 @@ checkstyle {
 
 tasks.withType(Checkstyle) {
     reports {
-        xml.enabled false
-        html.enabled true
+        xml.required = false
+        html.required = true
     }
 }
 

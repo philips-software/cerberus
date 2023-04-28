@@ -22,7 +22,7 @@ public class DirectoryTokenizer implements Tokenizer {
 
     private Language language;
     private Tokens tokens;
-    private String encoding;
+    private final String encoding;
     private Map<String, SourceCode> source;
 
     public DirectoryTokenizer() {
