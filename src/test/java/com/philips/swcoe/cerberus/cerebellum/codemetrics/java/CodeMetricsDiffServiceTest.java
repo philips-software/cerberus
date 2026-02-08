@@ -73,7 +73,7 @@ public class CodeMetricsDiffServiceTest {
             .findFirst();
         assertEquals("Triangle.java", result.get().getFile());
         assertEquals("Shapes.Triangle", result.get().getClassName());
-        assertEquals(17, result.get().getLinesOfCode().getNewValue());
+        assertEquals(16, result.get().getLinesOfCode().getNewValue());  // CK 0.7.0 counts differently
         assertEquals(4, result.get().getMethodsCount().getNewValue());
         assertEquals(4, result.get().getPublicMethodsCount().getNewValue());
         assertEquals(2, result.get().getReturnCount().getNewValue());
@@ -92,9 +92,9 @@ public class CodeMetricsDiffServiceTest {
 
     @Test
     public void metricsShouldHaveBothOldAndNewValuesForLinesOfCode() throws Exception {
-        assertEquals(27,
+        assertEquals(26,  // CK 0.7.0 counts differently
             javaCodeMetricsResultToTest.apply("Rectangle.java").getLinesOfCode().getOldValue());
-        assertEquals(37,
+        assertEquals(36,  // CK 0.7.0 counts differently
             javaCodeMetricsResultToTest.apply("Rectangle.java").getLinesOfCode().getNewValue());
     }
 

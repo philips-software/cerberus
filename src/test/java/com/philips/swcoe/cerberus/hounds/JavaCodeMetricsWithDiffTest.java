@@ -91,11 +91,11 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString()
             .contains("FILE,TYPE,METRIC,NEW_VALUE,OLD_VALUE,CLASS"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Triangle.java,CLASS,LINES_OF_CODE,17,0,Shapes.Triangle"));
+            .contains("Triangle.java,CLASS,LINES_OF_CODE,16,0,Shapes.Triangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rectangle.java,CLASS,LINES_OF_CODE,37,27,Shapes.Rectangle"));
+            .contains("Rectangle.java,CLASS,LINES_OF_CODE,36,26,Shapes.Rectangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rhombus.java,CLASS,LINES_OF_CODE,0,27,Shapes.Rhombus"));
+            .contains("Rhombus.java,CLASS,LINES_OF_CODE,0,26,Shapes.Rhombus"));
         assertTrue(getModifiedOutputStream().toString().contains(
             "Triangle.java,METHOD,COMPLEXITY_OF_METHOD,1,0,Shapes.Triangle::getHeight/0"));
         assertTrue(getModifiedOutputStream().toString().contains(
@@ -113,11 +113,11 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getModifiedOutputStream().toString()
             .contains("FILE|TYPE|METRIC|NEW_VALUE|OLD_VALUE|CLASS"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Triangle.java|CLASS|LINES_OF_CODE|17|0|Shapes.Triangle"));
+            .contains("Triangle.java|CLASS|LINES_OF_CODE|16|0|Shapes.Triangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rectangle.java|CLASS|LINES_OF_CODE|37|27|Shapes.Rectangle"));
+            .contains("Rectangle.java|CLASS|LINES_OF_CODE|36|26|Shapes.Rectangle"));
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Rhombus.java|CLASS|LINES_OF_CODE|0|27|Shapes.Rhombus"));
+            .contains("Rhombus.java|CLASS|LINES_OF_CODE|0|26|Shapes.Rhombus"));
         assertTrue(getModifiedOutputStream().toString().contains(
             "Triangle.java|METHOD|COMPLEXITY_OF_METHOD|1|0|Shapes.Triangle::getHeight/0"));
         assertTrue(getModifiedOutputStream().toString().contains(
@@ -139,7 +139,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
             .contains("NO_OF_MODIFIERS,1,0"));
         assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
-            .contains("LINES_OF_CODE,17,0"));
+            .contains("LINES_OF_CODE,16,0"));
         assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
             .contains("NO_OF_ASSIGNMENTS,2,0"));
         assertTrue(getLineToAssert(listOfData, "Triangle.java,Shapes.Triangle,CLASS")
@@ -186,7 +186,7 @@ public class JavaCodeMetricsWithDiffTest extends CerberusBaseTest {
         assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
             .contains("NO_OF_MODIFIERS|1|0"));
         assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
-            .contains("LINES_OF_CODE|17|0"));
+            .contains("LINES_OF_CODE|16|0"));
         assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
             .contains("NO_OF_ASSIGNMENTS|2|0"));
         assertTrue(getLineToAssert(listOfData, "Triangle.java|Shapes.Triangle|CLASS")
