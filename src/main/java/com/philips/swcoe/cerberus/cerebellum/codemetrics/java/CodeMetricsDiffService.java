@@ -7,6 +7,7 @@ import com.github.mauricioaniche.ck.CKMethodResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsClassResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsDiffResult;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results.CodeMetricsMethodResult;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,13 +29,13 @@ public class CodeMetricsDiffService {
     public List<CodeMetricsClassResult> getMetricsFromSourceCode() {
         List<CodeMetricsClassResult> codeMetricsClassResultsList =
             new ArrayList<CodeMetricsClassResult>();
-        new CK().calculate(currentPath, false, result -> {
+        new CK().calculate(Paths.get(currentPath), result -> {
             CodeMetricsClassResult codeMetricsClassResult = new CodeMetricsClassResult();
             transformResults(result, codeMetricsClassResult, "new");
             codeMetricsClassResultsList.add(codeMetricsClassResult);
         });
 
-        new CK().calculate(previousPath, false, result -> {
+        new CK().calculate(Paths.get(previousPath), result -> {
             Optional<CodeMetricsClassResult> existingNewResults = codeMetricsClassResultsList
                 .stream()
                 .filter(metrics -> metrics.getFile().contains(
@@ -153,8 +154,9 @@ public class CodeMetricsDiffService {
             getCodeMetricsResultWithValue(methodResult.getAnonymousClassesQty(), valueType,
                 codeMetricsMethodResult.getAnonymousClassesCount(), "NO_OF_ANONYMOUS_CLASSES",
                 constructName, constructType, filename));
+        // Note: getSubClassesQty() removed in CK 0.7.0
         codeMetricsMethodResult.setSubClassesCount(
-            getCodeMetricsResultWithValue(methodResult.getSubClassesQty(), valueType,
+            getCodeMetricsResultWithValue(0, valueType,
                 codeMetricsMethodResult.getSubClassesCount(), "NO_OF_SUBCLASSES", constructName,
                 constructType, filename));
         codeMetricsMethodResult.setLambdasCount(
@@ -253,8 +255,9 @@ public class CodeMetricsDiffService {
             getCodeMetricsResultWithValue(result.getAnonymousClassesQty(), valueType,
                 codeMetricsClassResult.getAnonymousClassesCount(), "NO_OF_ANONYMOUS_CLASSES",
                 constructName, constructType, filename));
+        // Note: getSubClassesQty() removed in CK 0.7.0
         codeMetricsClassResult.setSubClassesCount(
-            getCodeMetricsResultWithValue(result.getSubClassesQty(), valueType,
+            getCodeMetricsResultWithValue(0, valueType,
                 codeMetricsClassResult.getSubClassesCount(), "NO_OF_SUBCLASSES", constructName,
                 constructType, filename));
         codeMetricsClassResult.setLambdasCount(
