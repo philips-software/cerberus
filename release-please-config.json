@@ -1,0 +1,22 @@
+{
+  "release-type": "simple",
+  "package-name": "cerberus",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "changelog-sections": [
+    { "type": "feat", "section": "Features" },
+    { "type": "fix", "section": "Bug Fixes" },
+    { "type": "perf", "section": "Performance Improvements" },
+    { "type": "refactor", "section": "Code Refactoring" },
+    { "type": "test", "section": "Tests" },
+    { "type": "build", "section": "Build System" },
+    { "type": "chore", "section": "Miscellaneous" }
+  ],
+  "extra-files": [
+    {
+      "type": "gradle",
+      "path": "build.gradle",
+      "glob": "version"
+    }
+  ]
+}

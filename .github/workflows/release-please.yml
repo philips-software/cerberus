@@ -1,0 +1,54 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          # Release type for Gradle/Java projects
+          release-type: simple
+          # Package name for the release
+          package-name: cerberus
+          # Bump minor version for features, patch for fixes
+          bump-minor-pre-major: true
+          bump-patch-for-minor-pre-major: true
+          
+      # Build and upload JAR artifact when a release is created
+      - name: Checkout code
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK 17
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+          
+      - name: Setup Gradle
+        if: ${{ steps.release.outputs.release_created }}
+        uses: gradle/actions/setup-gradle@v3
+        
+      - name: Build with Gradle
+        if: ${{ steps.release.outputs.release_created }}
+        run: ./gradlew clean build shadowJar -x spotbugsMain
+        
+      - name: Upload Release Artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} \
+            build/libs/cerberus.project-${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}-all.jar \
+            --clobber
