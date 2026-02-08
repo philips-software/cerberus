@@ -27,7 +27,7 @@ jobs:
       # Build and upload JAR artifact when a release is created
       - name: Checkout code
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         
       - name: Setup asdf and install tools
         if: ${{ steps.release.outputs.release_created }}
