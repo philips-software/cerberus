@@ -16,6 +16,6 @@ jobs:
     - name: Setup asdf and install tools
       uses: asdf-vm/actions/install@v3
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v5
     - name: Build Binary Executable
       run: ./gradlew clean build shadowJar -x spotbugsMain
