@@ -37,3 +37,7 @@ target
 .gradle
 /build/
 
+
+# C# build artifacts
+obj/
+bin/
