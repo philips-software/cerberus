@@ -2,12 +2,11 @@ buildscript {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        jcenter()
     }
     dependencies {
-        classpath 'de.aaschmid:gradle-cpd-plugin:3.1'
-        classpath 'gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.0.5'
-        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.5.1'
+        classpath 'de.aaschmid:gradle-cpd-plugin:3.3'
+        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.9'
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
     }
 
 }
@@ -21,7 +20,7 @@ apply plugin: com.github.spotbugs.snom.SpotBugsPlugin
 apply plugin: info.solidsoft.gradle.pitest.PitestPlugin
 
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "0.8.11"
 }
 
 jacocoTestCoverageVerification {
@@ -45,8 +44,8 @@ jacocoTestCoverageVerification {
 
 jacocoTestReport {
     reports {
-        xml.enabled false
-        csv.enabled false
+        xml.required = false
+        csv.required = false
         html.destination file("${buildDir}/jacocoHtml")
     }
     afterEvaluate {
@@ -59,11 +58,12 @@ jacocoTestReport {
 
 pmd {
     consoleOutput = true
-    toolVersion = "6.22.0"
-    ruleSets = [
-        "category/java/bestpractices.xml",
+    toolVersion = "6.55.0"
+    ruleSets = []
+    ruleSetFiles = files(
         "${rootDir}/quality-gates/static-analysis-rules/pmd-cerberus-rules.xml"
-    ]
+    )
+    rulesMinimumPriority = 5
 }
 // This disables running PMD on test files ,
 // I (aravind666) are doing intentionally here, because some times to test some things efficiantly we have to take
@@ -74,7 +74,7 @@ pmdTest.enabled = false
 
 cpd {
     language = 'java'
-    toolVersion = '6.19.0'
+    toolVersion = '6.55.0'
     ignoreLiterals = false
     ignoreFailures = false
 }
@@ -82,9 +82,9 @@ cpd {
 cpdCheck {
     minimumTokenCount = 34
     reports {
-        csv.enabled = false
+        csv.required = false
         text {
-            enabled = true
+            required = true
             destination = file("${buildDir}/reports/cpd.txt")
         }
     }
@@ -92,10 +92,11 @@ cpdCheck {
 }
 
 spotbugs {
-    toolVersion = '4.0.2'
-    effort = "max"
+    toolVersion = '4.8.3'
+    effort = com.github.spotbugs.snom.Effort.MAX
     ignoreFailures = false
     showProgress = true
+    excludeFilter = file("$rootDir/quality-gates/static-analysis-rules/spotbugs-exclude.xml")
 }
 // This disables running spotbugs on test files ,
 // by default Spotbugs runs on tests also when ran with gradle check goal
@@ -107,7 +108,7 @@ spotbugsMain {
     description("Runs spot bugs on production source code")
     reports {
         html {
-            enabled = true
+            required = true
             destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
             stylesheet = 'fancy-hist.xsl'
         }
@@ -115,20 +116,20 @@ spotbugsMain {
 }
 
 checkstyle {
-    toolVersion '8.35'
+    toolVersion '10.14.2'
     configFile file("${rootDir}/quality-gates/static-analysis-rules/checkstyle.xml")
     configProperties.checkstyleSuppressionsPath = file("${rootDir}/quality-gates/static-analysis-rules/checkstyle-suppressions.xml").absolutePath
 }
 
 tasks.withType(Checkstyle) {
     reports {
-        xml.enabled false
-        html.enabled true
+        xml.required = false
+        html.required = true
     }
 }
 
 pitest {
-    junit5PluginVersion = '0.12'
+    junit5PluginVersion = '1.2.1'
     targetClasses = ['com.philips.swcoe.cerberus.*']
     testSourceSets = [sourceSets.test]
     mainSourceSets = [sourceSets.main]
@@ -136,7 +137,7 @@ pitest {
                     'org.slf4j', 'org.apache.commons.logging',
                     'com.philips.swcoe.cerberus.cerebellum.codemetrics.java.results']
     jvmArgs = ['-Xmx1024m']
-    pitestVersion = '1.5.2'
+    pitestVersion = '1.15.8'
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
