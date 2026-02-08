@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/philips-software/cerberus/compare/v2.0.0...v2.0.1) (2026-02-08)
+
+
+### Bug Fixes
+
+* **pitest:** resolve Spring plugin warning and adjust mutation threshold ([fdb7fc3](https://github.com/philips-software/cerberus/commit/fdb7fc3f586c6a1b81dbd6c5b570fb86ceb895ca))
+
 ## [2.0.0](https://github.com/philips-software/cerberus/compare/v1.0.0...v2.0.0) (2026-02-08)
 
 

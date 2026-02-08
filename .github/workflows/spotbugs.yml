@@ -14,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup asdf and install tools
-        uses: asdf-vm/actions/install@v3
+        uses: asdf-vm/actions/install@v4
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v5
       - name: Run Spotbugs on sources
         run: ./gradlew spotbugsMain
