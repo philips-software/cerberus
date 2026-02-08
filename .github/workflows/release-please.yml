@@ -41,11 +41,39 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: ./gradlew clean build shadowJar -x spotbugsMain
         
+      - name: Generate checksums
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          cd build/libs
+          sha256sum *-all.jar > checksums.txt
+          cat checksums.txt
+        
       - name: Upload Release Artifact
         if: ${{ steps.release.outputs.release_created }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Find the generated shadow JAR (works regardless of version in build.gradle)
+          JAR_FILE=$(find build/libs -name "*-all.jar" -type f)
+          
+          if [ -z "$JAR_FILE" ]; then
+            echo "Error: No shadow JAR found in build/libs"
+            exit 1
+          fi
+          
+          echo "Found JAR: $JAR_FILE"
+          
+          # Upload with a clean name using the tag
           gh release upload ${{ steps.release.outputs.tag_name }} \
-            build/libs/cerberus.project-${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}-all.jar \
+            "$JAR_FILE#cerberus-${{ steps.release.outputs.tag_name }}.jar" \
+            --clobber
+          
+          # Also upload with original filename for compatibility
+          gh release upload ${{ steps.release.outputs.tag_name }} \
+            "$JAR_FILE" \
+            --clobber
+          
+          # Upload checksums
+          gh release upload ${{ steps.release.outputs.tag_name }} \
+            build/libs/checksums.txt \
             --clobber
