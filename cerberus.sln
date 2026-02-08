@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{7F74F24B-7313-8368-FB46-4872DBD77787}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testCsharpCode", "testCsharpCode", "{044B9F38-3021-6AF1-A78B-40264F14CA3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Directory3", "Directory3", "{95277D72-C77E-27E2-41FE-D0CBC9FB0DDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlahBlah", "resources\testCsharpCode\Directory3\BlahBlah.csproj", "{093CA322-0C1D-8937-0C26-9CF80C59A2DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{093CA322-0C1D-8937-0C26-9CF80C59A2DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{093CA322-0C1D-8937-0C26-9CF80C59A2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{093CA322-0C1D-8937-0C26-9CF80C59A2DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{093CA322-0C1D-8937-0C26-9CF80C59A2DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{044B9F38-3021-6AF1-A78B-40264F14CA3F} = {7F74F24B-7313-8368-FB46-4872DBD77787}
+		{95277D72-C77E-27E2-41FE-D0CBC9FB0DDF} = {044B9F38-3021-6AF1-A78B-40264F14CA3F}
+		{093CA322-0C1D-8937-0C26-9CF80C59A2DE} = {95277D72-C77E-27E2-41FE-D0CBC9FB0DDF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61409D3C-16AB-42D1-AA92-2857E24DF2FF}
+	EndGlobalSection
+EndGlobal
