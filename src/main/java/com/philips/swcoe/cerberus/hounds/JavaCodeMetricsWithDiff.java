@@ -23,8 +23,8 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.METHOD_CONFI
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.PREVIOUS_FILES_OPTION;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.STRUCTURE_OPTION;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
 

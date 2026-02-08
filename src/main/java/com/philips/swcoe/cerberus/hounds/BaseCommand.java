@@ -10,10 +10,10 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.ERROR;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.NEW_LINE;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.SPACE;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 import java.io.File;
 import java.io.IOException;

@@ -15,7 +15,7 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.FILES_OPTION
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.FIND_PROGRAMMING_MISTAKES;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.LANGUAGE_OPTION;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import org.springframework.stereotype.Component;
 

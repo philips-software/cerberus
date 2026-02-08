@@ -15,10 +15,10 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.LANGUAGE_OPT
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.RESULTS_OF_SWD;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.SUPPRESSED_WARNINGS_DETECTOR;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Component;
 
 import com.philips.swcoe.cerberus.cerebellum.swd.BaseSuppressedWarningsDetector;
