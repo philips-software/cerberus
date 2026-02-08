@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Enable version updates for Gradle dependencies
+  - package-ecosystem: "gradle"
+    # Look for build.gradle files in the root directory
+    directory: "/"
+    schedule:
+      interval: "daily"
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

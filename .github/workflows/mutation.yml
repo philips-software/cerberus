@@ -15,19 +15,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Extract Java version from .tool-versions
-        id: java-version
-        run: |
-          TOOL_VERSION=$(grep '^java' .tool-versions | awk '{print $2}')
-          JAVA_DIST=$(echo $TOOL_VERSION | cut -d'-' -f1)
-          JAVA_VERSION=$(echo $TOOL_VERSION | cut -d'-' -f2)
-          echo "distribution=$JAVA_DIST" >> $GITHUB_OUTPUT
-          echo "version=$JAVA_VERSION" >> $GITHUB_OUTPUT
-      - name: Set up JDK from .tool-versions
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ steps.java-version.outputs.version }}
-          distribution: ${{ steps.java-version.outputs.distribution }}
+      - name: Setup asdf and install tools
+        uses: asdf-vm/actions/install@v3
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Run Mutation Analysis
