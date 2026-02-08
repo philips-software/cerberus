@@ -10,7 +10,7 @@ import static com.philips.swcoe.cerberus.constants.DescriptionConstants.JAVA_COD
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.FILES_OPTION;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.JAVA_CODE_METRICS_DETECTOR;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
@@ -34,6 +34,7 @@ public class JavaCodeMetrics extends BaseCommand implements Callable<Integer> {
         this.validate();
         List<CKClassResult> metricsResult = CodeMetricsService.getCodeMetrics(pathToSource);
         GsonBuilder gson = new GsonBuilder();
+        gson.serializeSpecialFloatingPointValues(); // Handle NaN, Infinity values
         this.writeToUI(gson.setPrettyPrinting().create().toJson(metricsResult)); //NOPMD
         return 0;
     }
