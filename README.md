@@ -23,14 +23,27 @@ We asked ourselves the same question! Why create a new tool when there were many
 
 ## How to use Ceberus? 
 ### Build Cerberus from source
-To build Cerberus, you will need a JDK 8 installed in your system. 
-The final output of build is an executable JAR. We have created gradle tasks to achieve the same, review our build.gradle file for more details.  
+Cerberus uses [asdf](https://asdf-vm.com/) for managing Java and Gradle versions. The required tool versions are specified in the `.tool-versions` file.
 
+**Prerequisites:**
+- Install [asdf](https://asdf-vm.com/guide/getting-started.html)
+- Install asdf plugins: `asdf plugin add java` and `asdf plugin add gradle`
+
+**Build Steps:**
 1. Clone the repository
-`git clone https://github.com/philips-software/cerberus.git`
-2. Build it using the following command
-`./gradlew clean build shadowJar`
-The executable jar will be generated in the build/libs folder. 
+   ```bash
+   git clone https://github.com/philips-software/cerberus.git
+   cd cerberus
+   ```
+2. Install tools from .tool-versions
+   ```bash
+   asdf install
+   ```
+3. Build the executable JAR
+   ```bash
+   ./gradlew clean build shadowJar
+   ```
+   The executable jar will be generated in the build/libs folder. 
 
 ### Run Cerberus as a command line tool
 Once the jar gets generated,  use the jar to run Cerberus
