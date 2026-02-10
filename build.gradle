@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.google.guava:guava:33.0.0-jre'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.codehaus.plexus:plexus-resources:1.3.0'
-    implementation 'org.codehaus.plexus:plexus-utils:4.0.0'
+    implementation 'org.codehaus.plexus:plexus-utils:4.0.2'
     implementation 'org.json:json:20240303'
     implementation 'com.github.mauricioaniche:ck:0.7.0'
     implementation 'org.apache.commons:commons-csv:1.14.1'
