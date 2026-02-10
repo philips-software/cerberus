@@ -33,7 +33,7 @@ dependencies {
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:8.0.1.Final'
-    implementation 'jakarta.el:jakarta.el-api:5.0.1'
+    implementation 'jakarta.el:jakarta.el-api:6.0.1'
     implementation 'org.glassfish:jakarta.el:4.0.2'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:33.0.0-jre'
