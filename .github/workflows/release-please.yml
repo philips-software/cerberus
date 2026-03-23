@@ -35,7 +35,7 @@ jobs:
           
       - name: Setup Gradle
         if: ${{ steps.release.outputs.release_created }}
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         
       - name: Build with Gradle
         if: ${{ steps.release.outputs.release_created }}
