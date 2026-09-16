@@ -120,7 +120,7 @@ spotbugsMain {
 }
 
 checkstyle {
-    toolVersion = '10.14.2'
+    toolVersion = '14.1.0'
     configFile file("${rootDir}/quality-gates/static-analysis-rules/checkstyle.xml")
     configProperties.checkstyleSuppressionsPath = file("${rootDir}/quality-gates/static-analysis-rules/checkstyle-suppressions.xml").absolutePath
 }
