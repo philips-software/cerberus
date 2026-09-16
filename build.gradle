@@ -58,17 +58,17 @@ dependencies {
     implementation 'net.steppschuh.markdowngenerator:markdowngenerator:1.3.1.1'
     implementation 'org.commonmark:commonmark:0.30.0'
     implementation 'org.commonmark:commonmark-ext-gfm-tables:0.30.0'
-    testImplementation 'org.mockito:mockito-core:5.11.0'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
     testImplementation 'com.ginsberg:junit5-system-exit:2.0.3'
     // junit5-system-exit 2.x intercepts System.exit with an agent instead of a
     // SecurityManager, which JEP 486 removed as of Java 24.
     systemExitAgent 'com.ginsberg:junit5-system-exit:2.0.3'
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
-    testCompileOnly 'org.projectlombok:lombok:1.18.34'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    compileOnly 'org.projectlombok:lombok:1.18.48'
+    annotationProcessor 'org.projectlombok:lombok:1.18.48'
+    testCompileOnly 'org.projectlombok:lombok:1.18.48'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.48'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.14.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.14.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
