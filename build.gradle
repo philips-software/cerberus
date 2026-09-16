@@ -21,7 +21,9 @@ java {
     }
 }
 
-mainClassName = 'com.philips.swcoe.cerberus.Cerberus'
+application {
+    mainClass = 'com.philips.swcoe.cerberus.Cerberus'
+}
 
 configurations {
     extraLibs
