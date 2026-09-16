@@ -13,7 +13,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
           # Release type for Gradle/Java projects
@@ -27,7 +27,7 @@ jobs:
       # Build and upload JAR artifact when a release is created
       - name: Checkout code
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         
       - name: Setup asdf and install tools
         if: ${{ steps.release.outputs.release_created }}
@@ -35,7 +35,7 @@ jobs:
           
       - name: Setup Gradle
         if: ${{ steps.release.outputs.release_created }}
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         
       - name: Build with Gradle
         if: ${{ steps.release.outputs.release_created }}
