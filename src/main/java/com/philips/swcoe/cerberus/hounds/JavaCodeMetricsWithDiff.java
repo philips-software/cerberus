@@ -26,7 +26,6 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.STRUCTURE_OP
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-import org.springframework.stereotype.Component;
 
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.CodeMetricsDiffService;
 import com.philips.swcoe.cerberus.cerebellum.codemetrics.java.ReportWriters;
@@ -40,7 +39,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
-@Component
 @CommandLine.Command(name = JAVA_CODE_METRICS_DETECTOR_WITH_DIFF, description = JAVA_CODE_METRICS_DETECTOR_DESCRIPTION_WITH_DIFF)
 public class JavaCodeMetricsWithDiff extends BaseCommand implements Callable<Integer> {
 
