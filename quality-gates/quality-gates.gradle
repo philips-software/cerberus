@@ -46,7 +46,7 @@ jacocoTestReport {
     reports {
         xml.required = false
         csv.required = false
-        html.destination file("${buildDir}/jacocoHtml")
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
@@ -85,7 +85,7 @@ cpdCheck {
         csv.required = false
         text {
             required = true
-            destination = file("${buildDir}/reports/cpd.txt")
+            outputLocation = layout.buildDirectory.file("reports/cpd.txt")
         }
     }
     source = files('src/main/java')
@@ -105,18 +105,18 @@ spotbugs {
 spotbugsTest.enabled = false
 
 spotbugsMain {
-    description("Runs spot bugs on production source code")
+    description = "Runs spot bugs on production source code"
     reports {
         html {
             required = true
-            destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            outputLocation = layout.buildDirectory.file("reports/spotbugs/main/spotbugs.html")
             stylesheet = 'fancy-hist.xsl'
         }
     }
 }
 
 checkstyle {
-    toolVersion '10.14.2'
+    toolVersion = '10.14.2'
     configFile file("${rootDir}/quality-gates/static-analysis-rules/checkstyle.xml")
     configProperties.checkstyleSuppressionsPath = file("${rootDir}/quality-gates/static-analysis-rules/checkstyle-suppressions.xml").absolutePath
 }
