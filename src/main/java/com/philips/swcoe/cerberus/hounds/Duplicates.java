@@ -21,7 +21,6 @@ import static net.sourceforge.pmd.cpd.CPDCommandLineInterface.addSourceFilesToCP
 
 import jakarta.validation.constraints.NotNull;
 
-import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
@@ -38,7 +37,6 @@ import net.sourceforge.pmd.cpd.CSVRenderer;
 import net.sourceforge.pmd.cpd.VSRenderer;
 import picocli.CommandLine;
 
-@Component
 @CommandLine.Command(name = COPY_PASTE_DETECTOR, mixinStandardHelpOptions = true, description = "Detect duplicated blocks of code in your source code")
 public class Duplicates extends BaseCommand implements Callable<Integer> {
 

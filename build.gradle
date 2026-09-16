@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.gradleup.shadow' version '9.6.1'
     id 'java'
     id 'application'
 }
@@ -14,49 +14,67 @@ repositories {
 group  'com.philips.swcoe'
 version  '2.0.0'
 description  'Cerberus'
-sourceCompatibility = '17'
-targetCompatibility = '17'
 
-mainClassName = 'com.philips.swcoe.cerberus.Cerberus'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+application {
+    mainClass = 'com.philips.swcoe.cerberus.Cerberus'
+}
 
 configurations {
     extraLibs
+    // Resolved on its own so the agent jar can be pinned as a -javaagent path.
+    systemExitAgent {
+        transitive = false
+    }
 }
 
 dependencies {
-    implementation("info.picocli:picocli-spring-boot-starter:4.7.6") {
-        exclude module: "spring-boot-starter-logging"
-    }
+    implementation 'info.picocli:picocli:4.7.7'
     implementation 'net.sourceforge.pmd:pmd-java:6.55.0'
     implementation 'net.sourceforge.pmd:pmd-cpp:6.55.0'
     implementation 'net.sourceforge.pmd:pmd-jsp:6.55.0'
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
-    implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:8.0.1.Final'
-    implementation 'jakarta.el:jakarta.el-api:5.0.1'
-    implementation 'org.glassfish:jakarta.el:4.0.2'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'org.apache.commons:commons-collections4:4.4'
-    implementation 'org.codehaus.plexus:plexus-resources:1.3.0'
-    implementation 'org.codehaus.plexus:plexus-utils:4.0.0'
-    implementation 'org.json:json:20240303'
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+    implementation 'org.hibernate.validator:hibernate-validator:9.1.3.Final'
+    implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:9.1.3.Final'
+    implementation 'jakarta.el:jakarta.el-api:6.0.1'
+    // Hibernate Validator 9 needs a Jakarta EL 6 implementation for message
+    // interpolation. The Glassfish EL RI was renamed to Expressly for EE 11,
+    // so org.glassfish:jakarta.el stops at EL 5.
+    implementation 'org.glassfish.expressly:expressly:6.0.0'
+    implementation 'com.google.code.gson:gson:2.14.0'
+    implementation 'com.google.guava:guava:33.7.1-jre'
+    implementation 'org.apache.commons:commons-collections4:4.6.0'
+    implementation 'org.codehaus.plexus:plexus-resources:1.4.0'
+    implementation 'org.codehaus.plexus:plexus-utils:4.1.0'
+    implementation 'org.json:json:20260814'
     implementation 'com.github.mauricioaniche:ck:0.7.0'
     implementation 'org.apache.commons:commons-csv:1.14.1'
-    implementation 'io.vavr:vavr:0.10.4'
+    implementation 'io.vavr:vavr:1.0.1'
     implementation 'net.steppschuh.markdowngenerator:markdowngenerator:1.3.1.1'
-    implementation 'org.commonmark:commonmark:0.22.0'
-    implementation 'org.commonmark:commonmark-ext-gfm-tables:0.22.0'
-    testImplementation 'org.mockito:mockito-core:5.11.0'
-    testImplementation 'com.ginsberg:junit5-system-exit:1.1.2'
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
-    testCompileOnly 'org.projectlombok:lombok:1.18.34'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    implementation 'org.commonmark:commonmark:0.30.0'
+    implementation 'org.commonmark:commonmark-ext-gfm-tables:0.30.0'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
+    testImplementation 'com.ginsberg:junit5-system-exit:2.0.3'
+    // junit5-system-exit 2.x intercepts System.exit with an agent instead of a
+    // SecurityManager, which JEP 486 removed as of Java 24.
+    systemExitAgent 'com.ginsberg:junit5-system-exit:2.0.3'
+    compileOnly 'org.projectlombok:lombok:1.18.48'
+    annotationProcessor 'org.projectlombok:lombok:1.18.48'
+    testCompileOnly 'org.projectlombok:lombok:1.18.48'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.48'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.14.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.14.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
     useJUnitPlatform()
+    jvmArgumentProviders.add({
+        ["-javaagent:${configurations.systemExitAgent.singleFile}".toString()]
+    } as CommandLineArgumentProvider)
 }

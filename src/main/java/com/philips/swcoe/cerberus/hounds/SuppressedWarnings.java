@@ -19,7 +19,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import org.apache.commons.collections4.MapUtils;
-import org.springframework.stereotype.Component;
 
 import com.philips.swcoe.cerberus.cerebellum.swd.BaseSuppressedWarningsDetector;
 import com.philips.swcoe.cerberus.cerebellum.swd.SuppressedWarningDetectors;
@@ -31,7 +30,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
-@Component
 @CommandLine.Command(name = SUPPRESSED_WARNINGS_DETECTOR, description = SUPPRESSED_WARNINGS_DETECTOR_DESCRIPTION)
 public class SuppressedWarnings extends BaseCommand implements Callable<Integer> {
 

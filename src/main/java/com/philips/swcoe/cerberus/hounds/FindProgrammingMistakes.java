@@ -17,7 +17,6 @@ import static com.philips.swcoe.cerberus.constants.ProgramConstants.LANGUAGE_OPT
 
 import jakarta.validation.constraints.NotEmpty;
 
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Callable;
 import net.sourceforge.pmd.PMD;
@@ -26,7 +25,6 @@ import net.sourceforge.pmd.cli.PMDCommandLineInterface;
 import net.sourceforge.pmd.cli.PMDParameters;
 import picocli.CommandLine;
 
-@Component
 @CommandLine.Command(name = FIND_PROGRAMMING_MISTAKES, description = FIND_PROGRAMMING_MISTAKES_DESCRIPTION)
 public class FindProgrammingMistakes extends BaseCommand implements Callable<Integer> {
 
