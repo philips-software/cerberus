@@ -27,6 +27,10 @@ application {
 
 configurations {
     extraLibs
+    // Resolved on its own so the agent jar can be pinned as a -javaagent path.
+    systemExitAgent {
+        transitive = false
+    }
 }
 
 dependencies {
@@ -52,7 +56,10 @@ dependencies {
     implementation 'org.commonmark:commonmark:0.22.0'
     implementation 'org.commonmark:commonmark-ext-gfm-tables:0.22.0'
     testImplementation 'org.mockito:mockito-core:5.11.0'
-    testImplementation 'com.ginsberg:junit5-system-exit:1.1.2'
+    testImplementation 'com.ginsberg:junit5-system-exit:2.0.3'
+    // junit5-system-exit 2.x intercepts System.exit with an agent instead of a
+    // SecurityManager, which JEP 486 removed as of Java 24.
+    systemExitAgent 'com.ginsberg:junit5-system-exit:2.0.3'
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
@@ -63,4 +70,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    jvmArgumentProviders.add({
+        ["-javaagent:${configurations.systemExitAgent.singleFile}".toString()]
+    } as CommandLineArgumentProvider)
 }
