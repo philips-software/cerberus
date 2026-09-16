@@ -34,7 +34,7 @@ configurations {
 }
 
 dependencies {
-    implementation 'info.picocli:picocli:4.7.6'
+    implementation 'info.picocli:picocli:4.7.7'
     implementation 'net.sourceforge.pmd:pmd-java:6.55.0'
     implementation 'net.sourceforge.pmd:pmd-cpp:6.55.0'
     implementation 'net.sourceforge.pmd:pmd-jsp:6.55.0'
@@ -46,18 +46,18 @@ dependencies {
     // interpolation. The Glassfish EL RI was renamed to Expressly for EE 11,
     // so org.glassfish:jakarta.el stops at EL 5.
     implementation 'org.glassfish.expressly:expressly:6.0.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'org.apache.commons:commons-collections4:4.4'
-    implementation 'org.codehaus.plexus:plexus-resources:1.3.0'
-    implementation 'org.codehaus.plexus:plexus-utils:4.0.0'
-    implementation 'org.json:json:20240303'
+    implementation 'com.google.code.gson:gson:2.14.0'
+    implementation 'com.google.guava:guava:33.7.1-jre'
+    implementation 'org.apache.commons:commons-collections4:4.6.0'
+    implementation 'org.codehaus.plexus:plexus-resources:1.4.0'
+    implementation 'org.codehaus.plexus:plexus-utils:4.1.0'
+    implementation 'org.json:json:20260814'
     implementation 'com.github.mauricioaniche:ck:0.7.0'
     implementation 'org.apache.commons:commons-csv:1.14.1'
-    implementation 'io.vavr:vavr:0.10.4'
+    implementation 'io.vavr:vavr:1.0.1'
     implementation 'net.steppschuh.markdowngenerator:markdowngenerator:1.3.1.1'
-    implementation 'org.commonmark:commonmark:0.22.0'
-    implementation 'org.commonmark:commonmark-ext-gfm-tables:0.22.0'
+    implementation 'org.commonmark:commonmark:0.30.0'
+    implementation 'org.commonmark:commonmark-ext-gfm-tables:0.30.0'
     testImplementation 'org.mockito:mockito-core:5.11.0'
     testImplementation 'com.ginsberg:junit5-system-exit:2.0.3'
     // junit5-system-exit 2.x intercepts System.exit with an agent instead of a
