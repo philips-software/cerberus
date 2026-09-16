@@ -4,9 +4,9 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'de.aaschmid:gradle-cpd-plugin:3.3'
-        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.9'
-        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
+        classpath 'de.aaschmid:gradle-cpd-plugin:3.5'
+        classpath 'com.github.spotbugs.snom:spotbugs-gradle-plugin:6.5.11'
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.19.0'
     }
 
 }
@@ -20,7 +20,7 @@ apply plugin: com.github.spotbugs.snom.SpotBugsPlugin
 apply plugin: info.solidsoft.gradle.pitest.PitestPlugin
 
 jacoco {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.15"
 }
 
 jacocoTestCoverageVerification {
@@ -92,7 +92,7 @@ cpdCheck {
 }
 
 spotbugs {
-    toolVersion = '4.8.3'
+    toolVersion = '4.10.4'
     effort = com.github.spotbugs.snom.Effort.MAX
     ignoreFailures = false
     showProgress = true
@@ -129,7 +129,7 @@ tasks.withType(Checkstyle) {
 }
 
 pitest {
-    junit5PluginVersion = '1.2.1'
+    junit5PluginVersion = '1.2.3'
     targetClasses = ['com.philips.swcoe.cerberus.*']
     testSourceSets = [sourceSets.test]
     mainSourceSets = [sourceSets.main]
@@ -142,7 +142,7 @@ pitest {
     jvmArgs.set(providers.provider {
         ['-Xmx1024m', "-javaagent:${configurations.systemExitAgent.singleFile}".toString()]
     })
-    pitestVersion = '1.15.8'
+    pitestVersion = '1.30.0'
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
