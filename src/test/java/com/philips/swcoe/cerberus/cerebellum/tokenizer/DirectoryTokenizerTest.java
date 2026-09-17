@@ -24,10 +24,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
-import net.sourceforge.pmd.cpd.Language;
-import net.sourceforge.pmd.cpd.SourceCode;
-import net.sourceforge.pmd.cpd.Tokens;
 
 public class DirectoryTokenizerTest {
 
@@ -38,8 +36,8 @@ public class DirectoryTokenizerTest {
         DirectoryTokenizer tokenizer = new DirectoryTokenizer();
         File pathToTestSource = new File(path);
         tokenizer.tokenize(pathToTestSource, JAVA_EXT);
-        Map<String, SourceCode> source = tokenizer.getSource();
-        for (Map.Entry<String, SourceCode> entry : source.entrySet()) {
+        Map<String, List<String>> source = tokenizer.getSource();
+        for (Map.Entry<String, List<String>> entry : source.entrySet()) {
             assertTrue(entry.getKey().endsWith(DOT + JAVA_EXT));
             assertFalse(entry.getKey().endsWith(DOT + JAVASCRIPT_EXT));
         }
@@ -60,27 +58,12 @@ public class DirectoryTokenizerTest {
         File pathToTestSource = new File(path);
         tokenizer.tokenize(pathToTestSource, JAVA_EXT);
 
-        Tokens expectedTokens = tokenizer.getTokens();
-        assertNotNull(expectedTokens);
-        tokenizer.setTokens(null);
-        assertNull(tokenizer.getTokens());
-        tokenizer.setTokens(expectedTokens);
-        assertEquals(expectedTokens, tokenizer.getTokens());
-
-        Map<String, SourceCode> expectedSource = tokenizer.getSource();
+        Map<String, List<String>> expectedSource = tokenizer.getSource();
         assertNotNull(expectedSource);
         tokenizer.setSource(null);
         assertNull(tokenizer.getSource());
         tokenizer.setSource(expectedSource);
         assertEquals(expectedSource, tokenizer.getSource());
-
-        Language expectedLanguage = tokenizer.getLanguage();
-        assertNotNull(expectedLanguage);
-        tokenizer.setLanguage(null);
-        assertNull(tokenizer.getLanguage());
-        tokenizer.setLanguage(expectedLanguage);
-        assertEquals(expectedLanguage, tokenizer.getLanguage());
-
     }
 
 }

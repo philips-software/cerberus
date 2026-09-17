@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
-import net.sourceforge.pmd.cpd.SourceCode;
 
 public class BaseSuppressedWarningsDetector {
     protected String[] waysToSuppress;
@@ -34,14 +33,14 @@ public class BaseSuppressedWarningsDetector {
 
     public void detect(DirectoryTokenizer tokenizer) {
         this.setSuppressedWarnings(new TreeMap<String, Map<String, String>>());
-        Map<String, SourceCode> source = tokenizer.getSource();
-        for (Map.Entry<String, SourceCode> entry : source.entrySet()) {
+        Map<String, List<String>> source = tokenizer.getSource();
+        for (Map.Entry<String, List<String>> entry : source.entrySet()) {
             Map<String, String> suppressionsInCode = this.getSuppressorsInSourceFile(entry);
             this.collectDetectedSuppressedWarnings(entry, suppressionsInCode);
         }
     }
 
-    protected void collectDetectedSuppressedWarnings(Map.Entry<String, SourceCode> entry,
+    protected void collectDetectedSuppressedWarnings(Map.Entry<String, List<String>> entry,
                                                      Map<String, String> suppressionsInCode) {
         if (!suppressionsInCode.isEmpty()) {
             this.getSuppressedWarnings().put(FILE + SPACE + entry.getKey(), suppressionsInCode);
@@ -53,8 +52,8 @@ public class BaseSuppressedWarningsDetector {
             && !nextLine.endsWith(JAVA_COMMENT_END);
     }
 
-    protected Map<String, String> getSuppressorsInSourceFile(Map.Entry<String, SourceCode> entry) {
-        List<String> listOfCode = entry.getValue().getCode();
+    protected Map<String, String> getSuppressorsInSourceFile(Map.Entry<String, List<String>> entry) {
+        List<String> listOfCode = entry.getValue();
         Map<String, String> suppressorsInCode = new TreeMap<>();
         int sizeOfListOfCode = listOfCode.size();
         for (int lineNo = 0; lineNo < sizeOfListOfCode; lineNo++) {
