@@ -12,6 +12,7 @@ import static com.philips.swcoe.cerberus.constants.DescriptionConstants.MINIMUM_
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.MINIMUM_TOKEN_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.REPORT_FORMAT_CMD_LINE_OPTION_DESCRIPTION;
 import static com.philips.swcoe.cerberus.constants.DescriptionConstants.REPORT_FORMAT_OPTION_NOT_NULL_ARGUMENT_MESSAGE;
+import static com.philips.swcoe.cerberus.constants.DescriptionConstants.UNKNOWN_LANGUAGE_MESSAGE;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.COPY_PASTE_DETECTOR;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.FILES_OPTION;
 import static com.philips.swcoe.cerberus.constants.ProgramConstants.FORMAT_OPTION;
@@ -80,11 +81,14 @@ public class Duplicates extends BaseCommand implements Callable<Integer> {
             ? rendererName : CPDConfiguration.DEFAULT_RENDERER;
     }
 
-    /* The --language option has never reached CPD: PMD 6 was handed a Java
-       tokenizer whatever was passed on the command line. Left as it was so that
-       this change stays a migration and nothing else. */
     private Language languageToTokenizeWith(String languageOfSource) {
-        return LanguageRegistry.CPD.getLanguageById("java");
+        Language language =
+            LanguageRegistry.CPD.getLanguageById(languageOfSource.toLowerCase(Locale.ROOT));
+        if (language == null) {
+            throw new CommandLine.ParameterException(spec.commandLine(),
+                UNKNOWN_LANGUAGE_MESSAGE + languageOfSource);
+        }
+        return language;
     }
 
 }

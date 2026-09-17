@@ -9,6 +9,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.JAVA_
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_SEPARATOR;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.SUPPRESSED_WARNINGS_WITH_FULL_PACKAGE_NAME_JAVA;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_CPP_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,6 +25,8 @@ import picocli.CommandLine;
 public class DuplicatesTest extends CerberusBaseTest {
 
     private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
+
+    private final String cppPath = RESOURCES + PATH_SEPARATOR + TEST_CPP_CODE;
 
     @BeforeEach
     public void beforeEach() {
@@ -74,10 +77,29 @@ public class DuplicatesTest extends CerberusBaseTest {
         assertNotEquals(0, getExitCode("5"));
     }
 
+    @Test
+    public void testExecutionofCPDOnCppSource() throws Exception {
+        assertNotEquals(0, getExitCode(cppPath, "10", "cpp"));
+        String actualString = getModifiedOutputStream().toString();
+        assertTrue(actualString.contains("duplication in the following files"));
+        assertTrue(actualString.contains("singlelineCommentTest.cpp"));
+    }
+
+    @Test
+    public void shouldReportALanguageCPDCannotTokenize() throws Exception {
+        assertNotEquals(0, getExitCode(path, "3", "haskell"));
+        assertTrue(getModifiedErrorStream().toString()
+            .contains("PMD does not know the language haskell"));
+    }
+
     private int getExitCode(String tokenSize) {
+        return getExitCode(path, tokenSize, "java");
+    }
+
+    private int getExitCode(String pathToSource, String tokenSize, String language) {
         Duplicates duplicateHound = new Duplicates();
         return new CommandLine(duplicateHound).execute(
-            "--files", path, "--format", "text", "--minimum-tokens", tokenSize,
-            "--language", "java");
+            "--files", pathToSource, "--format", "text", "--minimum-tokens", tokenSize,
+            "--language", language);
     }
 }
