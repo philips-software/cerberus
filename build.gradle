@@ -72,6 +72,19 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+shadowJar {
+    // PMD discovers its language modules with a ServiceLoader, and every module
+    // declares itself in the same META-INF/services file. Without merging them
+    // the fat jar keeps whichever one is unpacked last, so PMD and CPD end up
+    // knowing about a single language. The duplicates strategy has to be relaxed
+    // for those files as well, or shadow drops them before the transformer that
+    // merges them ever runs.
+    filesMatching('META-INF/services/**') {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    mergeServiceFiles()
+}
+
 test {
     useJUnitPlatform()
     jvmArgumentProviders.add({
