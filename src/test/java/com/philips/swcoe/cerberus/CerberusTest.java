@@ -48,7 +48,7 @@ public class CerberusTest extends CerberusBaseTest {
     }
 
     @Test
-    @ExpectSystemExitWithStatus(15)
+    @ExpectSystemExitWithStatus(13)
     public void shouldReturnExitStatusAsNumberOfViolationsForPMDAnyHound() {
         getOriginalOutputStream().flush();
         Cerberus.main(new String[] {"FPM", "--files", badCodePath, "--language", "JAVA", "--java-version", "8", "--rulesets", externalRuleSet});

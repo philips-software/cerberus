@@ -27,7 +27,7 @@ If you want a sample ruleset refer the file
 
 [java_practices.xml](resources/java_practices.xml)   
 
-The above file has the rules that we follow at SwCOE and the same rule is used to guard the quality of code of Cerberus itself.
+The above file has the rules that we follow at SwCOE. It references PMD's own `category/java/bestpractices.xml` plus a stricter `CyclomaticComplexity`, rather than copying rule definitions, so it keeps working across PMD upgrades.
 
 If you want to use some built in rule sets that are built with in the system. 
 
