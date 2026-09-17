@@ -54,7 +54,7 @@ class FindProgrammingMistakesTest extends BaseCommandTest {
         executeFindProgrammingMistakes(findProgrammingMistakes, path, "java", "8",
             "category/java/documentation.xml");
         assertTrue(getModifiedOutputStream().toString()
-            .contains("Found 57 violations in the specified source path"));
+            .contains("Found 59 violations in the specified source path"));
         assertTrue(new File(path + PATH_SEPARATOR + "mistakes-report.html").exists());
     }
 

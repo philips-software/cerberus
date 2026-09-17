@@ -43,6 +43,9 @@ public final class DescriptionConstants {
         "Specify report structure vertical or horizontal";
     public static final String LANGUAGE_VERSION_OPTION = "Specify Java language version";
     public static final String RULESET_OPTION = "Specify absolute path to your ruleset";
+    public static final String UNKNOWN_LANGUAGE_MESSAGE = "PMD does not know the language ";
+    public static final String UNKNOWN_LANGUAGE_VERSION_MESSAGE = " is not a version of ";
+    public static final String SUPPORTED_VERSIONS_MESSAGE = ", the supported versions are ";
     // Command line option description
     public static final String FILES_CMD_LINE_OPTION_DESCRIPTION =
         "Absolute Path to your source code.";
