@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0](https://github.com/philips-software/cerberus/compare/v2.0.1...v2.1.0) (2026-09-17)
+
+
+### Features
+
+* **cpd:** detect duplicates in C# sources ([17fba5c](https://github.com/philips-software/cerberus/commit/17fba5cb6cc81d91335ac00408fa683ac47a0079))
+
+
+### Bug Fixes
+
+* **cpd:** honour --language instead of tokenizing everything as Java ([4259232](https://github.com/philips-software/cerberus/commit/4259232e645595c475f66a5c5886a337f08a290e))
+* **rulesets:** reference PMD's bestpractices category ([9aa4e98](https://github.com/philips-software/cerberus/commit/9aa4e98304e4aa5352586e278f5ceb5297cdf973))
+
 ## [2.0.1](https://github.com/philips-software/cerberus/compare/v2.0.0...v2.0.1) (2026-02-08)
 
 
