@@ -10,6 +10,7 @@ import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.PATH_
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.RESOURCES;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.SUPPRESSED_WARNINGS_WITH_FULL_PACKAGE_NAME_JAVA;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_CPP_CODE;
+import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_CSHARP_CODE;
 import static com.philips.swcoe.cerberus.unit.test.utils.UnitTestConstants.TEST_JAVA_CODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -27,6 +28,8 @@ public class DuplicatesTest extends CerberusBaseTest {
     private final String path = RESOURCES + PATH_SEPARATOR + TEST_JAVA_CODE;
 
     private final String cppPath = RESOURCES + PATH_SEPARATOR + TEST_CPP_CODE;
+
+    private final String csharpPath = RESOURCES + PATH_SEPARATOR + TEST_CSHARP_CODE;
 
     @BeforeEach
     public void beforeEach() {
@@ -83,6 +86,14 @@ public class DuplicatesTest extends CerberusBaseTest {
         String actualString = getModifiedOutputStream().toString();
         assertTrue(actualString.contains("duplication in the following files"));
         assertTrue(actualString.contains("singlelineCommentTest.cpp"));
+    }
+
+    @Test
+    public void testExecutionofCPDOnCsharpSource() throws Exception {
+        assertNotEquals(0, getExitCode(csharpPath, "25", "cs"));
+        String actualString = getModifiedOutputStream().toString();
+        assertTrue(actualString.contains("duplication in the following files"));
+        assertTrue(actualString.contains("School.cs"));
     }
 
     @Test
